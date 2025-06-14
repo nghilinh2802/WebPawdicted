@@ -1,16 +1,21 @@
 import { TestBed } from '@angular/core/testing';
 import { RouterModule } from '@angular/router';
+import { AngularFireModule } from '@angular/fire/compat';
+import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
+import { environment } from '../environment';
 import { AppComponent } from './app.component';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
-        RouterModule.forRoot([])
+        RouterModule.forRoot([]),
+        AngularFireModule.initializeApp(environment.firebaseConfig),
+        AngularFireDatabaseModule
       ],
       declarations: [
         AppComponent
-      ],
+      ]
     }).compileComponents();
   });
 
