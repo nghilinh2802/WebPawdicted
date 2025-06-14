@@ -1,0 +1,9 @@
+{
+  "rules": {
+    ".read": "now < 1752080400000",  // 2025-7-10
+    ".write": "now < 1752080400000",  // 2025-7-10
+    "customers": {
+      ".indexOn": ["customer_email", "phone_number"]
+    }
+  }
+}
