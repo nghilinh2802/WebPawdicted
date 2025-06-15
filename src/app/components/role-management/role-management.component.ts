@@ -40,7 +40,7 @@ export class RoleManagementComponent implements OnInit {
   }
 
   loadUsers() {
-    const dbRef = ref(this.db, 'customers/customers');
+    const dbRef = ref(this.db, 'customers');
     get(dbRef).then((snapshot) => {
       if (snapshot.exists()) {
         const users = snapshot.val();
@@ -72,7 +72,7 @@ export class RoleManagementComponent implements OnInit {
   }
 
   checkUserExists() {
-    const dbRef = ref(this.db, 'customers/customers');
+    const dbRef = ref(this.db, 'customers');
     get(dbRef).then((snapshot) => {
       if (snapshot.exists()) {
         const users = snapshot.val();
@@ -93,7 +93,7 @@ export class RoleManagementComponent implements OnInit {
   }
 
   confirmAddUser() {
-    const FIXED_PASSWORD = 'admin123'; // Mật khẩu mặc định
+    const FIXED_PASSWORD = 'admin123';
     if (this.adminPassword === FIXED_PASSWORD) {
       this.updateUserRole();
       this.closeConfirmPopup();
@@ -103,13 +103,13 @@ export class RoleManagementComponent implements OnInit {
   }
 
   updateUserRole() {
-    const dbRef = ref(this.db, 'customers/customers');
+    const dbRef = ref(this.db, 'customers');
     get(dbRef).then((snapshot) => {
       if (snapshot.exists()) {
         const users = snapshot.val();
         const userKey = Object.keys(users).find(key => users[key].customer_email === this.newUser.email);
         if (userKey) {
-          const userRef = ref(this.db, `customers/customers/${userKey}`);
+          const userRef = ref(this.db, `customers/${userKey}`);
           set(userRef, { ...users[userKey], role: this.newUser.role }).then(() => {
             alert('Cập nhật vai trò thành công!');
             this.loadUsers();
@@ -124,7 +124,7 @@ export class RoleManagementComponent implements OnInit {
   }
 
   deleteUser(userId: string) {
-    const userRef = ref(this.db, `customers/customers/${userId}`);
+    const userRef = ref(this.db, `customers/${userId}`);
     get(userRef).then((snapshot) => {
       if (snapshot.exists()) {
         const user = snapshot.val();
@@ -159,7 +159,7 @@ export class RoleManagementComponent implements OnInit {
     }
 
     selectedIds.forEach(id => {
-      const userRef = ref(this.db, `customers/customers/${id}`);
+      const userRef = ref(this.db, `customers/${id}`);
       get(userRef).then((snapshot) => {
         if (snapshot.exists()) {
           const user = snapshot.val();

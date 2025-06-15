@@ -8,7 +8,6 @@ import { Observable } from 'rxjs';
 export class DatabaseService {
   constructor(private db: Database, private ngZone: NgZone) {}
 
-  // Ghi dữ liệu vào Firebase Realtime Database
   async writeData(path: string, data: any): Promise<void> {
     const dbRef = ref(this.db, path);
     try {
@@ -20,7 +19,6 @@ export class DatabaseService {
     }
   }
 
-  // Đọc dữ liệu một lần
   async readData(path: string): Promise<any> {
     const dbRef = ref(this.db);
     try {
@@ -37,7 +35,6 @@ export class DatabaseService {
     }
   }
 
-  // Lắng nghe thay đổi dữ liệu theo thời gian thực
   listenData(path: string): Observable<any> {
     const dbRef = ref(this.db, path);
     return new Observable((subscriber) => {
@@ -52,15 +49,13 @@ export class DatabaseService {
     });
   }
 
-  // Lấy danh sách khách hàng
   getCustomers(): Observable<any[]> {
     return new Observable((subscriber) => {
-      const customersRef = ref(this.db, 'customers/customers');
+      const customersRef = ref(this.db, 'customers');
       onValue(customersRef, (snapshot) => {
         this.ngZone.run(() => {
           const customersData = snapshot.val();
           if (customersData) {
-            // Chuyển dữ liệu thành mảng với ID
             const customersArray = Object.keys(customersData).map((key) => ({
               id: key,
               ...customersData[key]
@@ -76,41 +71,13 @@ export class DatabaseService {
     });
   }
 
-  // Cập nhật thông tin khách hàng
   async updateCustomer(customerId: string, data: any): Promise<void> {
-    const customerRef = ref(this.db, `customers/customers/${customerId}`);
+    const customerRef = ref(this.db, `customers/${customerId}`);
     try {
       await this.ngZone.runOutsideAngular(() => update(customerRef, data));
       console.log('Customer updated successfully');
     } catch (error) {
       console.error('Error updating customer:', error);
-      throw error;
-    }
-  }
-
-   // Kiểm tra đăng nhập admin
-  async loginAdmin(email: string, password: string): Promise<any> {
-    const dbRef = ref(this.db);
-    try {
-      const snapshot = await this.ngZone.runOutsideAngular(() => get(child(dbRef, 'customers/customers')));
-      if (snapshot.exists()) {
-        const users = snapshot.val();
-        // Tìm người dùng khớp email, password, và role
-        const user = Object.values(users).find((u: any) => 
-          u.customer_email === email && 
-          u.password === password && 
-          u.role === 'Admin'
-        );
-        if (user) {
-          return user; // Trả về thông tin người dùng
-        } else {
-          throw new Error('Invalid email, password, or not an admin');
-        }
-      } else {
-        throw new Error('No users found');
-      }
-    } catch (error) {
-      console.error('Error during login:', error);
       throw error;
     }
   }

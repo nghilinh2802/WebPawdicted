@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Auth, signInWithEmailAndPassword } from '@angular/fire/auth';
+import { Auth, signInWithEmailAndPassword, UserCredential } from '@angular/fire/auth';
 import { Database, ref, get, child } from '@angular/fire/database';
 import { Observable, from } from 'rxjs';
 import { switchMap, catchError } from 'rxjs/operators';
@@ -19,24 +19,29 @@ export class AuthService {
 
   login(email: string, password: string): Observable<any> {
     return from(signInWithEmailAndPassword(this.auth, email, password)).pipe(
-      switchMap((userCredential) => {
+      switchMap((userCredential: UserCredential) => {
         const dbRef = ref(this.db);
-        return from(get(child(dbRef, 'customers/customers'))).pipe(
+        return from(get(child(dbRef, 'customers'))).pipe(
           switchMap((snapshot) => {
             if (snapshot.exists()) {
+              interface Customer {
+                customer_email: string;
+                role: string;
+                [key: string]: any;
+              }
               const users = snapshot.val();
               const user = Object.values(users).find((u: any) => 
-                u.customer_email === email && u.role === 'Admin'
-              );
-              if (user) {
+                (u as Customer).customer_email === email
+              ) as Customer | undefined;
+              if (user && user.role === 'Admin') {
                 this.currentUser = { ...user, uid: userCredential.user.uid };
                 localStorage.setItem('currentUser', JSON.stringify(this.currentUser));
                 return from([this.currentUser]);
               } else {
-                throw new Error('User is not an admin');
+                throw new Error('User is not an admin or does not exist in customers');
               }
             } else {
-              throw new Error('No users found');
+              throw new Error('No users found in database');
             }
           })
         );
