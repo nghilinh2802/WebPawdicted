@@ -24,7 +24,7 @@ export class LoginComponent {
       next: () => {
         if (this.authService.isAdmin()) {
           alert('🎉 Chào mừng đến với trang quản lý!');
-          this.router.navigate(['/dashboard']);
+          this.router.navigate(['/role-management']);
         }
       },
       error: (error) => {

@@ -1,0 +1,63 @@
+<div class="role-management-container">
+  <h2>QUẢN LÝ PHÂN QUYỀN</h2>
+  <div>
+    <button (click)="openAddUserPopup()">+ Thêm tài khoản</button>
+    <button (click)="updateSelectedUsersRole()">Xóa quyền Admin/Staff</button>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th><input type="checkbox" [(ngModel)]="selectAll" (change)="toggleSelectAll()"></th>
+        <th>#</th>
+        <th>Email</th>
+        <th>Vai trò</th>
+        <th>Thao tác</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of users; let i = index">
+        <td><input type="checkbox" [(ngModel)]="selectedUsers[user.id]"></td>
+        <td>{{ i + 1 }}</td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.role }}</td>
+        <td>
+          <div class="modal-actions">
+            <button class="delete-btn" (click)="deleteUser(user.id)">
+              <i class="fa fa-trash"></i>
+            </button>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="modal" *ngIf="isAddUserPopupOpen">
+    <div class="modal-content">
+      <h3>Thêm tài khoản</h3>
+      <label>Email</label>
+      <input type="email" [(ngModel)]="newUser.email" required>
+      <label>Vai trò</label>
+      <select [(ngModel)]="newUser.role">
+        <option value="Admin">Admin</option>
+        <option value="Staff">Staff</option>
+      </select>
+      <div>
+        <button (click)="checkUserExists()">Xác nhận</button>
+        <button class="close-btn" (click)="closeAddUserPopup()">Hủy</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" *ngIf="isConfirmPopupOpen">
+    <div class="modal-content">
+      <h3>Xác nhận Thêm Người Dùng</h3>
+      <p>Vui lòng nhập mật khẩu để xác nhận:</p>
+      <label>Mật khẩu</label>
+      <input type="password" [(ngModel)]="adminPassword" required>
+      <div>
+        <button (click)="confirmAddUser()">Xác nhận</button>
+        <button class="close-btn" (click)="closeConfirmPopup()">Hủy</button>
+      </div>
+    </div>
+  </div>
+</div>

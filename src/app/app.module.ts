@@ -9,18 +9,25 @@ import { LoginComponent } from './components/login/login.component';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { RoleManagementComponent } from './components/role-management/role-management.component';
+import { AdminGuard } from './guards/admin.guard';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [
+    AppComponent, 
+    ],
   imports: [
     BrowserModule,
     CommonModule,
     FormsModule,
     LoginComponent,
+    RoleManagementComponent,
+    
     RouterModule.forRoot([
       { path: 'login', component: LoginComponent },
-      { path: 'dashboard', component: AppComponent },
-      { path: '', redirectTo: '/login', pathMatch: 'full' }
+      // { path: 'dashboard', component: AppComponent },
+      { path: '', redirectTo: '/login', pathMatch: 'full' },
+      { path: 'role-management', component: RoleManagementComponent, canActivate: [AdminGuard] },
     ])
   ],
   providers: [
