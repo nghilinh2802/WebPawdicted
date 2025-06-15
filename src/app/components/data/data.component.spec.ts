@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CheckFirebaseComponent } from './check-firebase.component';
+import { DataComponent } from './data.component';
 
-describe('CheckFirebaseComponent', () => {
-  let component: CheckFirebaseComponent;
-  let fixture: ComponentFixture<CheckFirebaseComponent>;
+describe('DataComponent', () => {
+  let component: DataComponent;
+  let fixture: ComponentFixture<DataComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [CheckFirebaseComponent]
+      declarations: [DataComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(CheckFirebaseComponent);
+    fixture = TestBed.createComponent(DataComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

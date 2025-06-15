@@ -1,11 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-
-import { CheckFirebaseComponent } from './check-firebase/check-firebase.component'; 
-
+import { DataComponent } from './components/data/data.component';
 const routes: Routes = [
-
-    { path: '', component: CheckFirebaseComponent }, 
+  { path: 'data', component: DataComponent }
 ];
 
 @NgModule({
