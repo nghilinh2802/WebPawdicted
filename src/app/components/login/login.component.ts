@@ -21,14 +21,16 @@ export class LoginComponent {
   login() {
     console.log('Attempting login with:', this.email, this.password);
     this.authService.login(this.email, this.password).subscribe({
-      next: () => {
-        if (this.authService.isAdmin()) {
+      next: (result) => {
+        if (result && 'error' in result) {
+          this.errorMessage = result.error;
+        } else if (this.authService.isAdmin()) {
           alert('🎉 Chào mừng đến với trang quản lý!');
           this.router.navigate(['/role-management']);
         }
       },
       error: (error) => {
-        this.errorMessage = error.message || 'Email hoặc mật khẩu không đúng!';
+        this.errorMessage = error.message || 'Đã xảy ra lỗi không xác định.';
         console.error('Login error:', error);
       }
     });

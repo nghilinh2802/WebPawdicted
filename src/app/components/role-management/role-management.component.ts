@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Database, ref, get, set } from '@angular/fire/database';
+import { Firestore, collection, getDocs, setDoc, doc, updateDoc, query, where, getDoc } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
@@ -22,7 +22,7 @@ export class RoleManagementComponent implements OnInit {
   selectAll: boolean = false;
 
   constructor(
-    private db: Database,
+    private firestore: Firestore,
     private authService: AuthService,
     private router: Router
   ) {}
@@ -39,27 +39,21 @@ export class RoleManagementComponent implements OnInit {
     }
   }
 
-  loadUsers() {
-    const dbRef = ref(this.db, 'customers');
-    get(dbRef).then((snapshot) => {
-      if (snapshot.exists()) {
-        const users = snapshot.val();
-        this.users = Object.keys(users)
-          .map(key => ({
-            id: key,
-            email: users[key].customer_email,
-            role: users[key].role
-          }))
-          .filter(user => user.role === 'Admin' || user.role === 'Staff');
-        console.log('Filtered users (Admin/Staff only):', this.users);
-      } else {
-        this.users = [];
-        console.log('No users found in Firebase');
-      }
-    }).catch(error => {
+  async loadUsers() {
+    try {
+      const customersCollection = collection(this.firestore, 'customers');
+      const q = query(customersCollection, where('role', 'in', ['Admin', 'Staff']));
+      const querySnapshot = await getDocs(q);
+      this.users = querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        email: doc.data()['customer_email'],
+        role: doc.data()['role']
+      }));
+      console.log('Filtered users (Admin/Staff only):', this.users);
+    } catch (error) {
       console.error('Error loading users:', error);
       alert('Lỗi tải danh sách người dùng!');
-    });
+    }
   }
 
   openAddUserPopup() {
@@ -71,25 +65,21 @@ export class RoleManagementComponent implements OnInit {
     this.newUser = { email: '', role: 'Staff' };
   }
 
-  checkUserExists() {
-    const dbRef = ref(this.db, 'customers');
-    get(dbRef).then((snapshot) => {
-      if (snapshot.exists()) {
-        const users = snapshot.val();
-        const user = Object.keys(users).find(key => users[key].customer_email === this.newUser.email);
-        if (user) {
-          this.isAddUserPopupOpen = false;
-          this.isConfirmPopupOpen = true;
-        } else {
-          alert('Email này không tồn tại trong hệ thống!');
-        }
+  async checkUserExists() {
+    try {
+      const customersCollection = collection(this.firestore, 'customers');
+      const q = query(customersCollection, where('customer_email', '==', this.newUser.email));
+      const querySnapshot = await getDocs(q);
+      if (!querySnapshot.empty) {
+        this.isAddUserPopupOpen = false;
+        this.isConfirmPopupOpen = true;
       } else {
-        alert('Không có người dùng nào trong hệ thống!');
+        alert('Email này không tồn tại trong hệ thống!');
       }
-    }).catch(error => {
+    } catch (error) {
       console.error('Error checking user:', error);
       alert('Lỗi kiểm tra tài khoản!');
-    });
+    }
   }
 
   confirmAddUser() {
@@ -102,41 +92,38 @@ export class RoleManagementComponent implements OnInit {
     }
   }
 
-  updateUserRole() {
-    const dbRef = ref(this.db, 'customers');
-    get(dbRef).then((snapshot) => {
-      if (snapshot.exists()) {
-        const users = snapshot.val();
-        const userKey = Object.keys(users).find(key => users[key].customer_email === this.newUser.email);
-        if (userKey) {
-          const userRef = ref(this.db, `customers/${userKey}`);
-          set(userRef, { ...users[userKey], role: this.newUser.role }).then(() => {
-            alert('Cập nhật vai trò thành công!');
-            this.loadUsers();
-            this.closeAddUserPopup();
-          }).catch(error => {
-            console.error('Error updating role:', error);
-            alert('Lỗi cập nhật vai trò!');
-          });
-        }
+  async updateUserRole() {
+    try {
+      const customersCollection = collection(this.firestore, 'customers');
+      const q = query(customersCollection, where('customer_email', '==', this.newUser.email));
+      const querySnapshot = await getDocs(q);
+      if (!querySnapshot.empty) {
+        const userDoc = querySnapshot.docs[0];
+        const userRef = doc(this.firestore, `customers/${userDoc.id}`);
+        await updateDoc(userRef, { role: this.newUser.role });
+        alert('Cập nhật vai trò thành công!');
+        this.loadUsers();
+        this.newUser.email = '';
       }
-    });
+    } catch (error) {
+      console.error('Error updating role:', error);
+      alert('Lỗi cập nhật vai trò!');
+    }
   }
 
-  deleteUser(userId: string) {
-    const userRef = ref(this.db, `customers/${userId}`);
-    get(userRef).then((snapshot) => {
+  async deleteUser(userId: string) {
+    try {
+      const userRef = doc(this.firestore, `customers/${userId}`);
+      const snapshot = await getDoc(userRef);
       if (snapshot.exists()) {
-        const user = snapshot.val();
-        set(userRef, { ...user, role: 'Customer' }).then(() => {
-          alert('Xóa vai trò thành công!');
-          this.loadUsers();
-        }).catch(error => {
-          console.error('Error updating role:', error);
-          alert('Lỗi cập nhật vai trò!');
-        });
+        await updateDoc(userRef, { role: 'Customer' });
+        alert('Xóa vai trò thành công!');
+        this.loadUsers();
       }
-    });
+    } catch (error) {
+      console.error('Error updating role:', error);
+      alert('Lỗi cập nhật vai trò!');
+    }
   }
 
   closeConfirmPopup() {
@@ -151,29 +138,29 @@ export class RoleManagementComponent implements OnInit {
     });
   }
 
-  updateSelectedUsersRole() {
+  async updateSelectedUsersRole() {
     const selectedIds = Object.keys(this.selectedUsers).filter(id => this.selectedUsers[id]);
     if (selectedIds.length === 0) {
       alert('Vui lòng chọn ít nhất một người dùng!');
       return;
     }
 
-    selectedIds.forEach(id => {
-      const userRef = ref(this.db, `customers/${id}`);
-      get(userRef).then((snapshot) => {
+    try {
+      for (const id of selectedIds) {
+        const userRef = doc(this.firestore, `customers/${id}`);
+        const snapshot = await getDoc(userRef);
         if (snapshot.exists()) {
-          const user = snapshot.val();
-          set(userRef, { ...user, role: 'Customer' }).then(() => {
-            console.log(`User ${id} updated to Customer`);
-          }).catch(error => {
-            console.error(`Error updating user ${id}:`, error);
-          });
+          await updateDoc(userRef, { role: 'Customer' });
+          console.log(`User ${id} updated to Customer`);
         }
-      });
-    });
-    alert('Xóa vai trò thành công!');
-    this.loadUsers();
-    this.selectedUsers = {};
-    this.selectAll = false;
+      }
+      alert('Xóa vai trò thành công!');
+      this.loadUsers();
+      this.selectedUsers = {};
+      this.selectAll = false;
+    } catch (error) {
+      console.error('Error updating users:', error);
+      alert('Lỗi cập nhật vai trò!');
+    }
   }
 }

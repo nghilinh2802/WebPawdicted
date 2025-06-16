@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AngularFireDatabase, AngularFireList } from '@angular/fire/compat/database';
+import { Firestore, collection, collectionData, doc, setDoc, updateDoc, deleteDoc } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -8,31 +8,31 @@ import { map } from 'rxjs/operators';
 })
 export class FirebaseService {
 
-  constructor(private db: AngularFireDatabase) {}
+  constructor(private firestore: Firestore) {}
 
   getCustomersData(): Observable<any[]> {
-    return this.db.list('customers').snapshotChanges().pipe(
-      map(changes => 
-        changes.map(c => ({
-          $key: c.payload.key,
-          ...(c.payload.val() as object || {})
-        }))
-      )
+    const customersCollection = collection(this.firestore, 'customers');
+    return collectionData(customersCollection, { idField: '$key' }).pipe(
+      map(customers => customers.map(customer => ({
+        ...customer,
+        $key: customer.$key
+      })))
     );
   }
 
-  addCustomer(customerData: any): Promise<any> {
-    const ref = this.db.list('customers');
-    return Promise.resolve(ref.push(customerData));
+  async addCustomer(customerData: any): Promise<void> {
+    const customersCollection = collection(this.firestore, 'customers');
+    const newDocRef = doc(customersCollection);
+    return setDoc(newDocRef, customerData);
   }
 
-  updateCustomer(customerId: string, updatedData: any): Promise<void> {
-    const ref = this.db.object(`customers/${customerId}`);
-    return ref.update(updatedData);
+  async updateCustomer(customerId: string, updatedData: any): Promise<void> {
+    const customerDoc = doc(this.firestore, `customers/${customerId}`);
+    return updateDoc(customerDoc, updatedData);
   }
 
-  deleteCustomer(customerId: string): Promise<void> {
-    const ref = this.db.object(`customers/${customerId}`);
-    return ref.remove();
+  async deleteCustomer(customerId: string): Promise<void> {
+    const customerDoc = doc(this.firestore, `customers/${customerId}`);
+    return deleteDoc(customerDoc);
   }
 }

@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Auth, signInWithEmailAndPassword, UserCredential } from '@angular/fire/auth';
-import { Database, ref, get, child } from '@angular/fire/database';
-import { Observable, from } from 'rxjs';
-import { switchMap, catchError } from 'rxjs/operators';
+import { Firestore, collection, query, where, getDocs } from '@angular/fire/firestore';
+import { Observable, from, of } from 'rxjs';
+import { switchMap, catchError, map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +10,7 @@ import { switchMap, catchError } from 'rxjs/operators';
 export class AuthService {
   private currentUser: any = null;
 
-  constructor(private auth: Auth, private db: Database) {
+  constructor(private auth: Auth, private firestore: Firestore) {
     const savedUser = localStorage.getItem('currentUser');
     if (savedUser) {
       this.currentUser = JSON.parse(savedUser);
@@ -20,35 +20,37 @@ export class AuthService {
   login(email: string, password: string): Observable<any> {
     return from(signInWithEmailAndPassword(this.auth, email, password)).pipe(
       switchMap((userCredential: UserCredential) => {
-        const dbRef = ref(this.db);
-        return from(get(child(dbRef, 'customers'))).pipe(
-          switchMap((snapshot) => {
-            if (snapshot.exists()) {
-              interface Customer {
-                customer_email: string;
-                role: string;
-                [key: string]: any;
-              }
-              const users = snapshot.val();
-              const user = Object.values(users).find((u: any) => 
-                (u as Customer).customer_email === email
-              ) as Customer | undefined;
-              if (user && user.role === 'Admin') {
-                this.currentUser = { ...user, uid: userCredential.user.uid };
-                localStorage.setItem('currentUser', JSON.stringify(this.currentUser));
-                return from([this.currentUser]);
+        const customersCollection = collection(this.firestore, 'customers');
+        const q = query(customersCollection, where('customer_email', '==', email));
+        return from(getDocs(q)).pipe(
+          map((querySnapshot) => {
+            if (!querySnapshot.empty) {
+              const userDoc = querySnapshot.docs[0].data() as { customer_email: string; role?: string; password: string; [key: string]: any };
+              if (userDoc.password === password) { // Note: In production, hash passwords
+                if (userDoc.role === 'Admin') {
+                  this.currentUser = { ...userDoc, uid: userCredential.user.uid };
+                  localStorage.setItem('currentUser', JSON.stringify(this.currentUser));
+                  return this.currentUser;
+                } else {
+                  throw new Error('Bạn không có quyền truy cập với vai trò này.');
+                }
               } else {
-                throw new Error('User is not an admin or does not exist in customers');
+                throw new Error('Mật khẩu không đúng.');
               }
             } else {
-              throw new Error('No users found in database');
+              throw new Error('Email không tồn tại.');
             }
           })
         );
       }),
       catchError((error) => {
+        if (error.code === 'auth/invalid-credential') {
+          return of({ error: 'Email hoặc mật khẩu không đúng.' });
+        } else if (error.message) {
+          return of({ error: error.message });
+        }
         console.error('Login error:', error);
-        throw error;
+        return of({ error: 'Đã xảy ra lỗi không xác định.' });
       })
     );
   }
