@@ -1,0 +1,43 @@
+/* Sidebar */
+.sidebar {
+    position: fixed;
+    top: 25px;
+    left: 0;
+    width: 200px;
+    height: 100%;
+    background: #F4F1EC;
+    border-right: 1px solid #ddd;
+    padding-top: 20px;
+}
+
+/* Định dạng thẻ <a> */
+.sidebar a {
+    text-decoration: none;
+    color: #5f3e22;
+    display: block; /* Đảm bảo toàn bộ ô có thể bấm */
+    padding: 15px;
+}
+
+/* Danh sách menu */
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+    font-weight: bold;
+}
+
+/* Mục menu */
+.sidebar ul li {
+    cursor: pointer;
+    transition: background 0.3s, color 0.3s; /* Thêm hiệu ứng màu chữ */
+    border-bottom: 1px solid #ddd;
+}
+
+/* Hover - Đổi màu nền & chữ */
+.sidebar ul li:hover {
+    background: #5f3e22;
+}
+
+/* Đổi màu chữ khi hover vào <li> và <a> */
+.sidebar ul li:hover a {
+    color: white !important;
+}

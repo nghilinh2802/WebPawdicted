@@ -1,0 +1,24 @@
+/* Đảm bảo phần nội dung kéo dài đủ chiều cao */
+.content {
+    margin-top: 35px; /* Đảm bảo nội dung không bị đè bởi navbar */
+    margin-left: 193px; /* Đảm bảo không đè sidebar */
+    padding: 20px;
+    background: #FAF7F2; /* Đổi nền để đồng bộ */
+    min-height: 100vh; /* Giúp nội dung luôn phủ hết màn hình */
+    display: flex;
+    flex-direction: column;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden; /* Ngăn cuộn ngang */
+    background: #F4F1EC; /* Đồng bộ màu nền */
+}
+
