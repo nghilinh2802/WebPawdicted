@@ -16,6 +16,7 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { BlogsComponent } from './components/blogs/blogs.component';
 import { provideHttpClient } from '@angular/common/http';
+import { QuillModule } from 'ngx-quill';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { provideHttpClient } from '@angular/common/http';
     LoginComponent,
     RoleManagementComponent,
     AppRoutingModule,
+    QuillModule.forRoot(),
     RouterModule.forRoot(
       [
         { path: 'login', component: LoginComponent },
