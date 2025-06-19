@@ -4,12 +4,14 @@ import { RoleManagementComponent } from './components/role-management/role-manag
 import { LoginComponent } from './components/login/login.component';
 import { DataComponent } from './components/data/data.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { BlogsComponent } from './components/blogs/blogs.component';
 const routes: Routes = 
 [
   { path: 'data', component: DataComponent },
   { path: 'login', component: LoginComponent },
   { path: 'role-management', component: RoleManagementComponent },
-  { path: 'sidebar', component: SidebarComponent }
+  { path: 'blogs', component: BlogsComponent},
+  { path: 'sidebar', component: SidebarComponent },
 ];
 
 @NgModule({

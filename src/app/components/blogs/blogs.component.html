@@ -1,0 +1,29 @@
+<div class="container">
+  <h1>Quản lý Blog</h1>
+
+  <button (click)="showAddForm = true">Thêm mới</button>
+
+<!-- Form thêm mới -->
+<form *ngIf="showAddForm" (ngSubmit)="addBlog(); showAddForm = false">
+  <input [(ngModel)]="newBlog.title" name="title" placeholder="Tiêu đề" required>
+  <input [(ngModel)]="newBlog.description" name="description" placeholder="Mô tả" required>
+  <textarea [(ngModel)]="newBlog.content" name="content" placeholder="Nội dung" required></textarea>
+  <button type="submit">Lưu</button>
+  <button type="button" (click)="showAddForm = false">Hủy</button>
+</form>
+
+  <div class="blog-list">
+    <div *ngFor="let blog of blogs" class="blog-item">
+      <h3>{{ blog.title }}</h3>
+      <p class="description">{{ blog.description }}</p>
+      <p>{{ blog.content }}</p>
+      <div class="blog-actions">
+        <button (click)="editBlog(blog)">Sửa</button>
+        <button (click)="deleteBlog(blog.id)" class="delete-btn">Xóa</button>
+      </div>
+    </div>
+    <div *ngIf="!blogs.length" class="no-blog">
+      Chưa có blog nào.
+    </div>
+  </div>
+</div>

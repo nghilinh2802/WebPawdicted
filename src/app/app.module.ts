@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
+import { AppRoutingModule } from './app-routing.module';
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 import { provideAuth, getAuth } from '@angular/fire/auth';
@@ -13,19 +14,23 @@ import { RoleManagementComponent } from './components/role-management/role-manag
 import { AdminGuard } from './guards/admin.guard';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
+import { BlogsComponent } from './components/blogs/blogs.component';
+import { provideHttpClient } from '@angular/common/http';
 
 @NgModule({
   declarations: [
     AppComponent,
     SidebarComponent,
-    NavbarComponent
+    NavbarComponent,
   ],
   imports: [
     BrowserModule,
     CommonModule,
+    BlogsComponent,
     FormsModule,
     LoginComponent,
     RoleManagementComponent,
+    AppRoutingModule,
     RouterModule.forRoot(
       [
         { path: 'login', component: LoginComponent },
@@ -37,6 +42,7 @@ import { NavbarComponent } from './components/navbar/navbar.component';
   providers: [
     provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
     provideFirestore(() => getFirestore()),
+    provideHttpClient(),
     provideAuth(() => getAuth())
   ],
   bootstrap: [AppComponent]
