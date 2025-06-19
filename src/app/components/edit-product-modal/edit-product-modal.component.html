@@ -1,0 +1,29 @@
+<div class="modal" *ngIf="true">
+  <div class="modal-content">
+    <h2>Sửa Sản Phẩm</h2>
+    <form (ngSubmit)="submitForm()">
+      <label>ID Sản Phẩm</label>
+      <input type="text" [(ngModel)]="product.product_id" name="product_id" readonly>
+      <label>Tên Sản Phẩm</label>
+      <input type="text" [(ngModel)]="product.product_name" name="product_name" required>
+      <label>Mô Tả</label>
+      <textarea [(ngModel)]="product.description" name="description"></textarea>
+      <label>Chi Tiết</label>
+      <textarea [(ngModel)]="product.details" name="details"></textarea>
+      <label>Phân Loại Động Vật</label>
+      <input type="number" [(ngModel)]="product.animal_class_id" name="animal_class_id" required>
+      <label>Danh Mục</label>
+      <input type="text" [(ngModel)]="product.category_id" name="category_id" required>
+      <label>Giá</label>
+      <input type="number" id="edit-price" [(ngModel)]="product.price" name="price" step="0.01">
+      <label>Số Lượng</label>
+      <input type="number" id="edit-quantity" [(ngModel)]="product.quantity" name="quantity">
+      <label>Giảm Giá (%)</label>
+      <input type="number" id="edit-discount" [(ngModel)]="product.discount" name="discount">
+      <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 15px;">
+        <button type="button" class="close-btn" (click)="close.emit()">Đóng</button>
+        <input type="submit" value="Lưu" style="background-color: #28a745; color: white;">
+      </div>
+    </form>
+  </div>
+</div>

@@ -13,12 +13,19 @@ import { RoleManagementComponent } from './components/role-management/role-manag
 import { AdminGuard } from './guards/admin.guard';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
+import { ProductManagementComponent } from './components/product-management/product-management.component';
+import { AddProductModalComponent } from './components/add-product-modal/add-product-modal.component';
+import { EditProductModalComponent } from './components/edit-product-modal/edit-product-modal.component';
+import { EditVariantModalComponent } from './components/edit-variant-modal/edit-variant-modal.component';
+import { ProductDetailsModalComponent } from './components/product-details-modal/product-details-modal.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     SidebarComponent,
-    NavbarComponent
+    NavbarComponent,
+   
+    
   ],
   imports: [
     BrowserModule,
@@ -26,6 +33,12 @@ import { NavbarComponent } from './components/navbar/navbar.component';
     FormsModule,
     LoginComponent,
     RoleManagementComponent,
+    ProductManagementComponent,
+     AddProductModalComponent,
+    EditProductModalComponent,
+    EditVariantModalComponent,
+    ProductDetailsModalComponent,
+    
     RouterModule.forRoot(
       [
         { path: 'login', component: LoginComponent },

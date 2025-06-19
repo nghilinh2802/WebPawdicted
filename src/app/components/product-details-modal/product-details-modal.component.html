@@ -1,0 +1,32 @@
+<div class="modal" *ngIf="true">
+  <div class="modal-content">
+    <h2>Chi Tiết Sản Phẩm</h2>
+    <div>
+      <p><strong>ID:</strong> {{ product.product_id }}</p>
+      <p><strong>Tên Sản Phẩm:</strong> {{ product.product_name }}</p>
+      <p><strong>Mô Tả:</strong> {{ product.description || 'N/A' }}</p>
+      <p><strong>Chi Tiết:</strong> {{ product.details || 'N/A' }}</p>
+      <p><strong>Phân Loại Động Vật:</strong> {{ product.animal_class_id }}</p>
+      <p><strong>Danh Mục:</strong> {{ product.category_id }}</p>
+      <div *ngIf="variants.length > 0">
+        <h3 style="font-size: 18px; margin-top: 15px;">Biến Thể:</h3>
+        <div *ngFor="let variant of variants" style="border-top: 1px solid #ddd; padding-top: 10px;">
+          <p><strong>ID Biến Thể:</strong> {{ variant.variant_id }}</p>
+          <p><strong>Tên Biến Thể:</strong> {{ variant.variant_name }}</p>
+          <p><strong>Giá:</strong> {{ variant.price | currency:'VND' }}</p>
+          <p><strong>Số Lượng:</strong> {{ variant.quantity }}</p>
+          <p><strong>Giảm Giá:</strong> {{ variant.discount || 0 }}%</p>
+          <p><strong>Hình Ảnh:</strong> <img [src]="variant.variant_image || 'https://via.placeholder.com/60'" alt="Hình ảnh" style="width: 60px; height: 60px;"></p>
+        </div>
+      </div>
+      <div *ngIf="variants.length === 0">
+        <p><strong>Giá:</strong> {{ product.price | currency:'VND' }}</p>
+        <p><strong>Số Lượng:</strong> {{ product.quantity }}</p>
+        <p><strong>Giảm Giá:</strong> {{ product.discount || 0 }}%</p>
+      </div>
+    </div>
+    <div style="display: flex; justify-content: flex-end; margin-top: 15px;">
+      <button class="close-btn" (click)="close.emit()">Đóng</button>
+    </div>
+  </div>
+</div>

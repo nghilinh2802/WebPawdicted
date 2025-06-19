@@ -1,0 +1,23 @@
+<div class="modal" *ngIf="true">
+  <div class="modal-content">
+    <h2>Sửa Biến Thể</h2>
+    <form (ngSubmit)="submitForm()">
+      <label>ID Biến Thể</label>
+      <input type="text" [(ngModel)]="variant.variant_id" name="variant_id" readonly>
+      <label>Tên Biến Thể</label>
+      <input type="text" [(ngModel)]="variant.variant_name" name="variant_name" required>
+      <label>Giá</label>
+      <input type="number" [(ngModel)]="variant.price" name="price" step="0.01" required>
+      <label>Số Lượng</label>
+      <input type="number" [(ngModel)]="variant.quantity" name="quantity" required>
+      <label>Giảm Giá (%)</label>
+      <input type="number" [(ngModel)]="variant.discount" name="discount">
+      <label>Hình Ảnh (URL)</label>
+      <input type="text" [(ngModel)]="variant.variant_image" name="variant_image">
+      <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 15px;">
+        <button type="button" class="close-btn" (click)="close.emit()">Đóng</button>
+        <input type="submit" value="Lưu" style="background-color: #28a745; color: white;">
+      </div>
+    </form>
+  </div>
+</div>
