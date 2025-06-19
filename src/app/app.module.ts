@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
+import { AppRoutingModule } from './app-routing.module';
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 import { provideAuth, getAuth } from '@angular/fire/auth';
@@ -16,6 +17,9 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { OrderComponent } from './components/order/order.component';
 import { OrderViewComponent } from './components/order-view/order-view.component';
 import { OrderUpdateComponent } from './components/order-update/order-update.component';
+import { BlogsComponent } from './components/blogs/blogs.component';
+import { provideHttpClient } from '@angular/common/http';
+import { QuillModule } from 'ngx-quill';
 
 @NgModule({
   declarations: [
@@ -24,14 +28,17 @@ import { OrderUpdateComponent } from './components/order-update/order-update.com
     NavbarComponent,
     OrderComponent,
     OrderViewComponent,
-    OrderUpdateComponent
+    OrderUpdateComponent,
   ],
   imports: [
     BrowserModule,
     CommonModule,
+    BlogsComponent,
     FormsModule,
     LoginComponent,
     RoleManagementComponent,
+    AppRoutingModule,
+    QuillModule.forRoot(),
     RouterModule.forRoot(
       [
         { path: 'login', component: LoginComponent },
@@ -46,6 +53,7 @@ import { OrderUpdateComponent } from './components/order-update/order-update.com
   providers: [
     provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
     provideFirestore(() => getFirestore()),
+    provideHttpClient(),
     provideAuth(() => getAuth())
   ],
   bootstrap: [AppComponent]

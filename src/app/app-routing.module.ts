@@ -7,6 +7,7 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { OrderViewComponent } from './components/order-view/order-view.component';
 import { OrderUpdateComponent } from './components/order-update/order-update.component';
 
+import { BlogsComponent } from './components/blogs/blogs.component';
 const routes: Routes = 
 [
   { path: 'data', component: DataComponent },
@@ -15,6 +16,7 @@ const routes: Routes =
   { path: 'sidebar', component: SidebarComponent },
   { path: 'order/:id', component: OrderViewComponent },
   { path: 'order-update/:id', component: OrderUpdateComponent } 
+  { path: 'blogs', component: BlogsComponent},
 ];
 
 @NgModule({
