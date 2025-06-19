@@ -34,7 +34,7 @@ import { ProductDetailsModalComponent } from './components/product-details-modal
     LoginComponent,
     RoleManagementComponent,
     ProductManagementComponent,
-     AddProductModalComponent,
+    AddProductModalComponent,
     EditProductModalComponent,
     EditVariantModalComponent,
     ProductDetailsModalComponent,
