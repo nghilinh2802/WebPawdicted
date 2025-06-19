@@ -15,7 +15,7 @@ const routes: Routes =
   { path: 'role-management', component: RoleManagementComponent },
   { path: 'sidebar', component: SidebarComponent },
   { path: 'order/:id', component: OrderViewComponent },
-  { path: 'order-update/:id', component: OrderUpdateComponent } 
+  { path: 'order-update/:id', component: OrderUpdateComponent }, 
   { path: 'blogs', component: BlogsComponent},
 ];
 
