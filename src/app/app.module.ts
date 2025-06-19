@@ -13,12 +13,18 @@ import { RoleManagementComponent } from './components/role-management/role-manag
 import { AdminGuard } from './guards/admin.guard';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
+import { OrderComponent } from './components/order/order.component';
+import { OrderViewComponent } from './components/order-view/order-view.component';
+import { OrderUpdateComponent } from './components/order-update/order-update.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     SidebarComponent,
-    NavbarComponent
+    NavbarComponent,
+    OrderComponent,
+    OrderViewComponent,
+    OrderUpdateComponent
   ],
   imports: [
     BrowserModule,
@@ -31,6 +37,9 @@ import { NavbarComponent } from './components/navbar/navbar.component';
         { path: 'login', component: LoginComponent },
         { path: '', redirectTo: '/login', pathMatch: 'full' },
         { path: 'role-management', component: RoleManagementComponent, canActivate: [AdminGuard] },
+        { path: 'order', component: OrderComponent },
+        { path: 'order/:id', component: OrderViewComponent },
+        { path: 'order-update/:id', component: OrderUpdateComponent },
       ]
     )
   ],

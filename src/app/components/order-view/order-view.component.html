@@ -1,0 +1,59 @@
+<div class="order-view">
+    <!-- Header -->
+    <div class="order-header">
+      <h2>Chi tiết đơn hàng: {{ order.id }}</h2>
+    </div>
+  
+    <!-- Thông tin đơn -->
+    <div class="order-info">
+      <div class="info-row">
+        <span class="info-label">Khách hàng:</span>
+        <span class="info-value">{{ order.customer }}</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Trạng thái:</span>
+        <span class="info-value">
+          <span class="status-pill" [ngClass]="'status-' + order.status">
+            {{ order.status }}
+          </span>
+        </span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Ngày đặt:</span>
+        <span class="info-value">{{ order.date }}</span>
+      </div>
+    </div>
+  
+    <!-- Danh sách sản phẩm -->
+    <div class="product-list">
+      <div class="product-item header">
+        <div class="product-col image-col">Ảnh</div>
+        <div class="product-col name-col">Tên sản phẩm</div>
+        <div class="product-col center">Số lượng</div>
+        <div class="product-col right">Đơn giá</div>
+        <div class="product-col right">Thành tiền</div>
+      </div>
+  
+      <div *ngFor="let item of order.items" class="product-item">
+        <div class="product-col image-col">
+          <img [src]="item.image" alt="Ảnh" class="product-img" />
+        </div>
+        <div class="product-col name-col">{{ item.name }}</div>
+        <div class="product-col center">{{ item.quantity }}</div>
+        <div class="product-col right">{{ item.price | number:'1.0-0' }} VNĐ</div>
+        <div class="product-col right">{{ item.price * item.quantity | number:'1.0-0' }} VNĐ</div>
+      </div>
+    </div>
+  
+    <!-- Tổng cộng -->
+    <div class="order-total text-right mt-6">
+      <strong>Tổng cộng:  </strong>
+      <span class="total-amount">{{  getTotal() | number:'1.0-0' }} VNĐ</span>
+    </div>
+  
+    <!-- Nút quay lại giữa -->
+    <div class="text-center mt-6">
+      <button class="btn-back" routerLink="/order"> Quay lại danh sách đơn</button>
+    </div>
+  </div>
+  

@@ -1,0 +1,60 @@
+<div class="order-update">
+    <!-- Tiêu đề -->
+    <div class="order-header">
+      <h2>Cập nhật đơn hàng: {{ order.id }}</h2>
+    </div>
+  
+    <!-- Thông tin đơn hàng -->
+    <div class="order-info">
+      <div class="info-row">
+        <span class="info-label">Khách hàng:</span>
+        <input [(ngModel)]="order.customer" class="info-input" />
+      </div>
+      <div class="info-row">
+        <span class="info-label">Trạng thái:</span>
+        <select [(ngModel)]="order.status" class="info-input">
+          <option value="Pending">Đang xử lý</option>
+          <option value="Shipped">Đã gửi</option>
+          <option value="Delivered">Đã giao</option>
+        </select>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Ngày đặt:</span>
+        <input type="date" [(ngModel)]="order.date" class="info-input" />
+      </div>
+    </div>
+  
+    <!-- Danh sách sản phẩm -->
+    <div class="product-list">
+      <div class="product-item header">
+        <div class="product-col image-col">Ảnh</div>
+        <div class="product-col name-col">Tên sản phẩm</div>
+        <div class="product-col center">Số lượng</div>
+        <div class="product-col right">Đơn giá</div>
+        <div class="product-col right">Thành tiền</div>
+      </div>
+  
+      <div *ngFor="let item of order.items" class="product-item">
+        <div class="product-col image-col">
+          <img [src]="item.image" alt="Ảnh" class="product-img" />
+        </div>
+        <div class="product-col name-col">{{ item.name }}</div>
+        <div class="product-col center">{{ item.quantity }}</div>
+        <div class="product-col right">{{ item.price | number:'1.0-0' }} VNĐ</div>
+        <div class="product-col right">{{ item.price * item.quantity | number:'1.0-0' }} VNĐ</div>
+      </div>
+    </div>
+  
+    <!-- Tổng cộng -->
+    <div class="order-total text-right mt-6">
+      <strong>Tổng cộng: </strong>
+      <span class="total-amount">{{ getTotal() | number:'1.0-0' }} VNĐ</span>
+    </div>
+  
+    <!-- Nút thao tác -->
+    <div class="text-center mt-6">
+      <button class="btn-save" (click)="saveOrder()">Lưu thay đổi</button>
+      <button class="btn-cancel" routerLink="/order">Hủy</button>
+    </div>
+  </div>
+  
