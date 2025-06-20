@@ -1,0 +1,87 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+<div class="voucher-container">
+    <h2>MÃ GIẢM GIÁ</h2>
+    <button (click)="openAddModal()" type="button">+ Thêm mã giảm giá</button>
+
+    <div class="filter">
+        <label for="status-filter">Lọc theo:</label>
+        <select id="status-filter" (change)="filterVouchers($event)">
+            <option value="all">Tất cả</option>
+            <option value="active">Đang áp dụng</option>
+            <option value="expired">Đã hết hạn</option>
+            <option value="scheduled">Đã lên lịch</option>
+        </select>
+    </div>
+<table>
+    <thead>
+      <tr>
+        <th>Mã giảm giá</th>
+        <th>Bắt đầu</th>
+        <th>Kết thúc</th>
+        <th>Ưu đãi</th>
+        <th>Điều kiện áp dụng</th>
+        <th>Trạng thái</th>
+        <th>Thao tác</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let voucher of filteredVouchers; let i = index">
+        <td>{{ voucher.code }}</td>
+        <td>{{ voucher.startDate | date: 'yyyy-MM-dd HH:mm' }}</td>
+        <td>{{ voucher.endDate | date: 'yyyy-MM-dd HH:mm' }}</td>
+        <td>{{ voucher.discount }}%</td>
+        <td>{{ voucher.minOrderValue | currency:'VND':' ' }}</td>
+        <td>{{ getVoucherStatus(voucher.startDate, voucher.endDate) }}</td>
+        <td>
+            <div class="modal-actions">
+                <button (click)="editVoucher(i)"><i class="fa-solid fa-pen"></i></button>
+                <button (click)="deleteVoucher(i)"><i class="fa-solid fa-trash"></i></button>
+            </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <!-- Modal thêm voucher -->
+  <div *ngIf="isAddModalOpen" class="modal">
+    <div class="modal-content">
+        <h2>Thêm Mã Giảm Giá</h2>
+        <label>Mã giảm giá</label>
+        <input [(ngModel)]="newVoucher.code" placeholder="Mã giảm giá" />
+        <label>Bắt đầu</label>
+        <input [(ngModel)]="newVoucher.startDate" type="datetime-local" />
+        <label>Kết thúc</label>
+        <input [(ngModel)]="newVoucher.endDate" type="datetime-local" />
+        <label>Ưu đãi</label>
+        <input [(ngModel)]="newVoucher.discount" type="number" placeholder="Ưu đãi (%)" />
+        <label>Điều kiện áp dụng</label>
+        <input [(ngModel)]="newVoucher.minOrderValue" type="number" placeholder="Giá trị tối thiểu" />
+        <div>
+            <button (click)="addVoucher()">Lưu</button>
+            <button class="close-btn" (click)="closeAddModal()">Hủy</button>
+        </div>
+    </div>  
+  </div>
+  
+  <!-- Modal chỉnh sửa voucher -->
+<div *ngIf="isEditModalOpen" class="modal">
+  <div class="modal-content">
+      <h2>Chỉnh Sửa Mã Giảm Giá</h2>
+      <label>Mã giảm giá</label>
+      <input [(ngModel)]="editedVoucher.code" placeholder="Mã giảm giá" />
+      <label>Bắt đầu</label>
+      <input [(ngModel)]="editedVoucher.startDate" type="datetime-local" />
+      <label>Kết thúc</label>
+      <input [(ngModel)]="editedVoucher.endDate" type="datetime-local" />
+      <label>Ưu đãi</label>
+      <input [(ngModel)]="editedVoucher.discount" type="number" placeholder="Ưu đãi (%)" />
+      <label>Điều kiện áp dụng</label>
+      <input [(ngModel)]="editedVoucher.minOrderValue" type="number" placeholder="Giá trị tối thiểu" />
+      <div>
+          <button (click)="updateVoucher()">Cập nhật</button>
+          <button class="close-btn" (click)="isEditModalOpen = false">Hủy</button>
+      </div>
+  </div>    
+</div>
+</div>

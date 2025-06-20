@@ -22,3 +22,20 @@ html, body {
     background: #F4F1EC; /* Đồng bộ màu nền */
 }
 
+/* src/app/app.component.css */
+.app-layout {
+  display: flex;
+}
+
+app-sidebar {
+  flex: 0 0 250px; /* Độ rộng cố định cho sidebar */
+}
+
+.content {
+  flex: 1;
+  padding: 20px;
+}
+
+.dashboard {
+  min-height: 100vh;
+}

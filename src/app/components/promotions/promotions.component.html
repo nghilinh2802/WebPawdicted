@@ -1,0 +1,133 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+<div class="promotions-container">
+  <h2>KHUYẾN MÃI</h2>
+  <button (click)="openAddModal()" type="button">+ Thêm khuyến mãi</button>
+
+  <div class="filter">
+    <label for="status-filter">Lọc theo:</label>
+    <select id="status-filter" (change)="filterPromotions($event)">
+      <option value="all">Tất cả</option>
+      <option value="scheduled">Đã lên lịch</option>
+      <option value="sent">Đã gửi</option>
+    </select>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Tiêu đề</th>
+        <th>Thời gian</th>
+        <th>Trạng thái</th>
+        <th>Ảnh</th>
+        <th>Thao tác</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let promotion of filteredPromotions; let i = index">
+        <td>{{ promotion.title }}</td>
+        <td>{{ promotion.time | date: 'yyyy-MM-dd HH:mm' }}</td>
+        <td>{{ promotion.status }}</td>
+        <td>
+          <img [src]="promotion.imageUrl" alt="{{ promotion.title }}" width="50" />
+        </td>
+        <td>
+          <div class="modal-actions">
+            <button (click)="editPromotion(i)" class="edit-btn">
+              <i class="fa-solid fa-pen"></i>
+            </button>
+            <button (click)="deletePromotion(i)" class="delete-btn">
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Modal thêm khuyến mãi -->
+  <div *ngIf="isAddModalOpen" class="modal">
+    <div class="modal-content">
+      <h2>Thêm Khuyến Mãi</h2>
+      <form #promotionForm="ngForm">
+        <label>Mã khuyến mãi</label>
+        <input
+          [(ngModel)]="newPromotion.title"
+          name="title"
+          placeholder="Tiêu đề"
+          required
+        />
+        <label>Mô tả</label>
+        <input
+          [(ngModel)]="newPromotion.description"
+          name="description"
+          placeholder="Mô tả"
+          required
+        />
+        <label>Thời gian</label>
+        <input
+          [(ngModel)]="newPromotion.time"
+          name="time"
+          type="datetime-local"
+          required
+        />
+        <label>Link ảnh (URL)</label>
+        <input
+          [(ngModel)]="newPromotion.imageUrl"
+          name="imageUrl"
+          placeholder="Nhập URL ảnh"
+          required
+        />
+        <div>
+          <button (click)="addPromotion()" type="button" [disabled]="!promotionForm.valid">
+            Lưu
+          </button>
+          <button class="close-btn" type="button" (click)="closeAddModal()">Hủy</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal chỉnh sửa khuyến mãi (tạm thời để trống, sẽ triển khai sau) -->
+  <div *ngIf="isEditModalOpen" class="modal">
+    <div class="modal-content">
+      <h2>Chỉnh Sửa Khuyến Mãi</h2>
+      <form #editForm="ngForm">
+        <label>Tiêu đề</label>
+        <input
+          [(ngModel)]="editedPromotion.title"
+          name="editTitle"
+          placeholder="Tiêu đề"
+          required
+        />
+        <label>Mô tả</label>
+        <input
+          [(ngModel)]="editedPromotion.description"
+          name="editDescription"
+          placeholder="Mô tả"
+          required
+        />
+        <label>Thời gian</label>
+        <input
+          [(ngModel)]="editedPromotion.time"
+          name="editTime"
+          type="datetime-local"
+          required
+        />
+        <label>Link ảnh (URL)</label>
+        <input
+          [(ngModel)]="editedPromotion.imageUrl"
+          name="editImageUrl"
+          placeholder="Nhập URL ảnh"
+          required
+        />
+        <div>
+          <button (click)="updatePromotion()" type="button" [disabled]="!editForm.valid">
+            Cập nhật
+          </button>
+          <button class="close-btn" type="button" (click)="closeEditModal()">Hủy</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
