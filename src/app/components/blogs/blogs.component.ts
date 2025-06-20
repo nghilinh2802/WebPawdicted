@@ -28,7 +28,9 @@ export class BlogsComponent implements OnInit {
     title: '',
     author: '',
     content: '',
-    description: ''
+    description: '',
+    createdAt: undefined,
+    updatedAt: undefined 
   };
   selectedFile: File | null = null;
   
@@ -77,7 +79,9 @@ export class BlogsComponent implements OnInit {
       title: '', 
       author: '', 
       content: '', 
-      description: '' 
+      description: '' ,
+      createdAt: undefined,
+      updatedAt: undefined
     };
     this.showPopup = true;
   }

@@ -29,14 +29,23 @@ export class BlogsService {
   // Thêm blog mới
   async addBlog(blog: Blog): Promise<void> {
     const blogId = this.generateId();
-    const blogWithId = { ...blog, id: blogId };
+    const timestamp = new Date().toISOString();
+    const blogWithId = 
+    { ...blog, id: blogId,
+      createdAt: timestamp,
+      updatedAt: timestamp };
     await this.databaseService.writeData(`${this.blogsPath}/${blogId}`, blogWithId);
   }
 
   // Sửa blog
   async updateBlog(id: string, blog: Blog): Promise<void> {
-    await this.databaseService.writeData(`${this.blogsPath}/${id}`, blog);
-  }
+  const updatedBlog = {
+    ...blog,
+    updatedAt: new Date().toISOString()
+  };
+
+  await this.databaseService.writeData(`${this.blogsPath}/${id}`, updatedBlog);
+}
 
   // Xóa blog
   async deleteBlog(id: string): Promise<void> {
