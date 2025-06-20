@@ -1,0 +1,135 @@
+.order-update {
+    padding: 32px;
+    font-family: 'Segoe UI', sans-serif;
+  }
+  
+  /* Header */
+  .order-header h2 {
+    font-size: 28px;
+    font-weight: bold;
+    color: #782421;
+    margin-bottom: 24px;
+    border-bottom: 2px solid #faca77;
+    padding-bottom: 8px;
+  }
+  
+  /* Form fields */
+  .order-info {
+    background-color: #ffffff;
+    border-left: 6px solid #782421;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 32px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  }
+  
+  .info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+  
+  .info-label {
+    font-weight: 600;
+    color: #782421;
+    width: 150px;
+  }
+  
+  .info-input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 15px;
+  }
+  
+  /* Product grid */
+  .product-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #eee;
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 20px;
+  }
+
+  .product-item.header {
+    font-weight: bold;
+    background-color: #faca77;
+    color: #782421;
+    border-radius: 6px;
+    padding: 12px;
+  }
+
+  .product-col {
+    padding: 0 8px;
+  }
+
+  .image-col {
+    width: 80px;
+  }
+
+  .name-col {
+    flex: 2;
+  }
+
+  .center {
+    text-align: center;
+    width: 100px;
+  }
+
+  .right {
+    text-align: right;
+    width: 120px;
+  }
+  
+  /* Tổng cộng */
+  .order-total {
+    margin-top: 30px; 
+    text-align: right;
+    margin-bottom: 20px;
+  }
+
+  .total-amount {
+    font-size: 24px;
+    color: #9c162c;
+    font-weight: bold;
+  }
+  
+  .text-center {
+    text-align: center;
+  }
+  
+  /* Buttons */
+  .btn-save {
+    background-color: #782421;
+    color: #f8f1f1;
+    font-weight: bold;
+    padding: 10px 24px;
+    border-radius: 6px;
+    border: none;
+    margin-right: 16px;
+    cursor: pointer;
+  }
+  
+  .btn-save:hover {
+    background-color: #9c162c;
+  }
+  
+  .btn-cancel {
+    background-color: #ec6a44;
+    color: #f8f1f1;
+    font-weight: bold;
+    padding: 10px 24px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .btn-cancel:hover {
+    background-color: #faca77;
+    color: #782421;
+  }
+  

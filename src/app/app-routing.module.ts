@@ -4,14 +4,19 @@ import { RoleManagementComponent } from './components/role-management/role-manag
 import { LoginComponent } from './components/login/login.component';
 import { DataComponent } from './components/data/data.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { OrderViewComponent } from './components/order-view/order-view.component';
+import { OrderUpdateComponent } from './components/order-update/order-update.component';
+
 import { BlogsComponent } from './components/blogs/blogs.component';
 const routes: Routes = 
 [
   { path: 'data', component: DataComponent },
   { path: 'login', component: LoginComponent },
   { path: 'role-management', component: RoleManagementComponent },
-  { path: 'blogs', component: BlogsComponent},
   { path: 'sidebar', component: SidebarComponent },
+  { path: 'order/:id', component: OrderViewComponent },
+  { path: 'order-update/:id', component: OrderUpdateComponent }, 
+  { path: 'blogs', component: BlogsComponent},
 ];
 
 @NgModule({

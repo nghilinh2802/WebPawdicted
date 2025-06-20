@@ -15,6 +15,9 @@ import { RoleManagementComponent } from './components/role-management/role-manag
 import { AdminGuard } from './guards/admin.guard';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
+import { OrderComponent } from './components/order/order.component';
+import { OrderViewComponent } from './components/order-view/order-view.component';
+import { OrderUpdateComponent } from './components/order-update/order-update.component';
 import { BlogsComponent } from './components/blogs/blogs.component';
 import { provideHttpClient } from '@angular/common/http';
 import { QuillModule } from 'ngx-quill';
@@ -25,6 +28,9 @@ import { provideDatabase, getDatabase } from '@angular/fire/database';
     AppComponent,
     SidebarComponent,
     NavbarComponent,
+    OrderComponent,
+    OrderViewComponent,
+    OrderUpdateComponent,
   ],
   imports: [
     BrowserModule,
@@ -40,6 +46,9 @@ import { provideDatabase, getDatabase } from '@angular/fire/database';
         { path: 'login', component: LoginComponent },
         { path: '', redirectTo: '/login', pathMatch: 'full' },
         { path: 'role-management', component: RoleManagementComponent, canActivate: [AdminGuard] },
+        { path: 'order', component: OrderComponent },
+        { path: 'order/:id', component: OrderViewComponent },
+        { path: 'order-update/:id', component: OrderUpdateComponent },
       ]
     )
   ],
