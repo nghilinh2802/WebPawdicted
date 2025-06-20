@@ -16,7 +16,6 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { ProductManagementComponent } from './components/product-management/product-management.component';
 import { AddProductModalComponent } from './components/add-product-modal/add-product-modal.component';
 import { EditProductModalComponent } from './components/edit-product-modal/edit-product-modal.component';
-import { EditVariantModalComponent } from './components/edit-variant-modal/edit-variant-modal.component';
 import { ProductDetailsModalComponent } from './components/product-details-modal/product-details-modal.component';
 
 @NgModule({
@@ -36,7 +35,6 @@ import { ProductDetailsModalComponent } from './components/product-details-modal
     ProductManagementComponent,
     AddProductModalComponent,
     EditProductModalComponent,
-    EditVariantModalComponent,
     ProductDetailsModalComponent,
     
     RouterModule.forRoot(

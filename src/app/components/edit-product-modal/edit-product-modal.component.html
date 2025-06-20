@@ -1,531 +1,178 @@
-<!-- <div class="modal" *ngIf="true">
-  <div class="modal-content">
-    <h2>Sửa Sản Phẩm</h2>
-    <form (ngSubmit)="submitForm()">
-      <label>ID Sản Phẩm</label>
-      <input type="text" [(ngModel)]="product.product_id" name="product_id" readonly>
-      <label>Tên Sản Phẩm</label>
-      <input type="text" [(ngModel)]="product.product_name" name="product_name" required>
-      <label>Mô Tả</label>
-      <textarea [(ngModel)]="product.description" name="description"></textarea>
-      <label>Chi Tiết</label>
-      <textarea [(ngModel)]="product.details" name="details"></textarea>
-      <label>Phân Loại Động Vật</label>
-      <input type="number" [(ngModel)]="product.animal_class_id" name="animal_class_id" required>
-      <label>Danh Mục</label>
-      <input type="text" [(ngModel)]="product.category_id" name="category_id" required>
-      <label>Giá</label>
-      <input type="number" id="edit-price" [(ngModel)]="product.price" name="price" step="0.01">
-      <label>Số Lượng</label>
-      <input type="number" id="edit-quantity" [(ngModel)]="product.quantity" name="quantity">
-      <label>Giảm Giá (%)</label>
-      <input type="number" id="edit-discount" [(ngModel)]="product.discount" name="discount">
-      <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 15px;">
-        <button type="button" class="close-btn" (click)="close.emit()">Đóng</button>
-        <input type="submit" value="Lưu" style="background-color: #28a745; color: white;">
-      </div>
-    </form>
-  </div>
-</div> -->
-
-<!-- <div class="modal">
-  <div class="modal-content">
-    <h2 class="text-2xl font-bold mb-4">Chỉnh Sửa Sản Phẩm</h2>
-    <form (ngSubmit)="submitForm()" class="space-y-4">
-      <div class="form-group">
-        <label class="required">ID Sản Phẩm</label>
-        <input type="text" [(ngModel)]="product.product_id" name="product_id" disabled class="input-field disabled">
-      </div>
-      <div class="form-group">
-        <label class="required">Tên Sản Phẩm</label>
-        <input type="text" [(ngModel)]="product.product_name" name="product_name" required class="input-field">
-      </div>
-      <div class="form-group">
-        <label class="required">Mô Tả</label>
-        <textarea [(ngModel)]="product.description" name="description" required class="input-field textarea"></textarea>
-      </div>
-      <div class="form-group">
-        <label class="required">Chi Tiết</label>
-        <textarea [(ngModel)]="product.details" name="details" required class="input-field textarea"></textarea>
-      </div>
-      <div class="form-group">
-        <label class="required">Phân Loại Động Vật</label>
-        <select [(ngModel)]="product.animal_class_id" name="animal_class_id" required class="input-field">
-          <option value="" disabled>Chọn phân loại</option>
-          <option *ngFor="let animal of animalClasses" [value]="animal.value">{{ animal.label }}</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label class="required">Danh Mục</label>
-        <select [(ngModel)]="product.category_id" name="category_id" (change)="onCategoryChange()" required class="input-field">
-          <option value="" disabled>Chọn danh mục</option>
-          <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label class="required">Danh Mục Con</label>
-        <select [(ngModel)]="product.child_category_id" name="child_category_id" required class="input-field" [disabled]="!product.category_id">
-          <option value="" disabled>Chọn danh mục con</option>
-          <option *ngFor="let child of filteredChildCategories" [value]="child">{{ child }}</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Giá</label>
-        <input type="number" id="price" [(ngModel)]="product.price" name="price" step="0.01" class="input-field">
-      </div>
-      <div class="form-group">
-        <label>Số Lượng</label>
-        <input type="number" id="quantity" [(ngModel)]="product.quantity" name="quantity" class="input-field">
-      </div>
-      <div class="form-group">
-        <label>Giảm Giá (%)</label>
-        <input type="number" id="discount" [(ngModel)]="product.discount" name="discount" class="input-field">
-      </div>
-      <div class="form-group">
-        <label>Hình Ảnh (URL)</label>
-        <input type="text" id="product_image" [(ngModel)]="product.product_image" name="product_image" class="input-field">
-      </div>
-      <div class="variant-list">
-        <h3 class="text-lg font-semibold mb-2">Danh Sách Biến Thể</h3>
-        <p *ngIf="variants.length === 0" class="text-gray-500">Chưa có biến thể</p>
-        <div *ngIf="variants.length > 0" class="variant-table">
-          <table>
-            <thead>
-              <tr>
-                <th>ID Biến Thể</th>
-                <th>Tên Biến Thể</th>
-                <th>Giá</th>
-                <th>Số Lượng</th>
-                <th>Giảm Giá (%)</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let variant of variants">
-                <td>{{ variant.variant_id }}</td>
-                <td>{{ variant.variant_name }}</td>
-                <td>{{ variant.variant_price | number:'1.2-2' }}</td>
-                <td>{{ variant.variant_quantity }}</td>
-                <td>{{ variant.variant_discount || '0' }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <div class="flex gap-2 justify-end mt-4">
-        <button type="button" class="close-btn" (click)="cancel()">Hủy</button>
-        <button type="submit" class="save-btn">Lưu</button>
-      </div>
-    </form>
-  </div>
-</div> -->
-
-
-
-
-<!-- <div class="modal">
-  <div class="modal-content">
-    <h2 class="text-2xl font-bold mb-4">Chỉnh Sửa Sản Phẩm</h2>
-    <form (ngSubmit)="submitForm()" class="space-y-4">
-      <div class="form-group">
-        <label class="required">ID Sản Phẩm</label>
-        <input type="text" [(ngModel)]="product.product_id" name="product_id" disabled class="input-field disabled">
-      </div>
-      <div class="form-group">
-        <label class="required">Tên Sản Phẩm</label>
-        <input type="text" [(ngModel)]="product.product_name" name="product_name" required class="input-field">
-      </div>
-      <div class="form-group">
-        <label class="required">Mô Tả</label>
-        <textarea [(ngModel)]="product.description" name="description" required class="input-field textarea"></textarea>
-      </div>
-      <div class="form-group">
-        <label class="required">Chi Tiết</label>
-        <textarea [(ngModel)]="product.details" name="details" required class="input-field textarea"></textarea>
-      </div>
-      <div class="form-group">
-        <label class="required">Phân Loại Động Vật</label>
-        <select [(ngModel)]="product.animal_class_id" name="animal_class_id" required class="input-field">
-          <option value="" disabled>Chọn phân loại</option>
-          <option *ngFor="let animal of animalClasses" [value]="animal.value">{{ animal.label }}</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label class="required">Danh Mục</label>
-        <select [(ngModel)]="product.category_id" name="category_id" (change)="onCategoryChange()" required class="input-field">
-          <option value="" disabled>Chọn danh mục</option>
-          <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label class="required">Danh Mục Con</label>
-        <select [(ngModel)]="product.child_category_id" name="child_category_id" required class="input-field" [disabled]="!product.category_id">
-          <option value="" disabled>Chọn danh mục con</option>
-          <option *ngFor="let child of filteredChildCategories" [value]="child">{{ child }}</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Giá</label>
-        <input type="number" id="price" [(ngModel)]="product.price" name="price" step="0.01" class="input-field" [disabled]="variants.length > 0">
-      </div>
-      <div class="form-group">
-        <label>Số Lượng</label>
-        <input type="number" id="quantity" [(ngModel)]="product.quantity" name="quantity" class="input-field" [disabled]="variants.length > 0">
-      </div>
-      <div class="form-group">
-        <label>Giảm Giá (%)</label>
-        <input type="number" id="discount" [(ngModel)]="product.discount" name="discount" class="input-field" [disabled]="variants.length > 0">
-      </div>
-      <div class="form-group">
-        <label>Hình Ảnh (URL)</label>
-        <input type="text" id="product_image" [(ngModel)]="product.product_image" name="product_image" class="input-field" [disabled]="variants.length > 0">
-      </div>
-      <div class="variant-list">
-        <h3 class="text-lg font-semibold mb-2">Danh Sách Biến Thể</h3>
-        <p *ngIf="variants.length === 0" class="text-gray-500">Chưa có biến thể</p>
-        <div *ngIf="variants.length > 0" class="variant-table">
-          <table>
-            <thead>
-              <tr>
-                <th>ID Biến Thể</th>
-                <th>Tên Biến Thể</th>
-                <th>Giá</th>
-                <th>Số Lượng</th>
-                <th>Giảm Giá (%)</th>
-                <th>Hành Động</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let variant of variants">
-                <td>{{ variant.variant_id }}</td>
-                <td>
-                  <input *ngIf="editingVariantId === variant.variant_id" [(ngModel)]="variant.variant_name" name="variant_name_{{variant.variant_id}}" class="input-field inline" required>
-                  <span *ngIf="editingVariantId !== variant.variant_id">{{ variant.variant_name }}</span>
-                </td>
-                <td>
-                  <input *ngIf="editingVariantId === variant.variant_id" type="number" step="0.01" [(ngModel)]="variant.variant_price" name="variant_price_{{variant.variant_id}}" class="input-field inline" required>
-                  <span *ngIf="editingVariantId !== variant.variant_id">{{ variant.variant_price | number:'1.2-2' }}</span>
-                </td>
-                <td>
-                  <input *ngIf="editingVariantId === variant.variant_id" type="number" [(ngModel)]="variant.variant_quantity" name="variant_quantity_{{variant.variant_id}}" class="input-field inline" required>
-                  <span *ngIf="editingVariantId !== variant.variant_id">{{ variant.variant_quantity }}</span>
-                </td>
-                <td>
-                  <input *ngIf="editingVariantId === variant.variant_id" type="number" [(ngModel)]="variant.variant_discount" name="variant_discount_{{variant.variant_id}}" class="input-field inline">
-                  <span *ngIf="editingVariantId !== variant.variant_id">{{ variant.variant_discount || '0' }}</span>
-                </td>
-                <td>
-                  <button *ngIf="editingVariantId !== variant.variant_id" type="button" (click)="editVariant(variant.variant_id)" class="edit-btn">Sửa</button>
-                  <button *ngIf="editingVariantId === variant.variant_id" type="button" (click)="cancelEdit()" class="cancel-btn">Hủy</button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <div class="flex gap-2 justify-end mt-4">
-        <button type="button" class="close-btn" (click)="cancel()">Hủy</button>
-        <button type="submit" class="save-btn">Lưu</button>
-      </div>
-    </form>
-  </div>
-</div> -->
-
-
-
-<!-- <div class="modal">
-  <div class="modal-content">
-    <h2 class="text-2xl font-bold mb-4">Chỉnh Sửa Sản Phẩm</h2>
-    <form (ngSubmit)="submitForm()" class="space-y-4">
-      <div class="form-group">
-        <label class="required">ID Sản Phẩm</label>
-        <input type="text" [(ngModel)]="product.product_id" name="product_id" disabled class="input-field disabled">
-      </div>
-      <div class="form-group">
-        <label class="required">Tên Sản Phẩm</label>
-        <input type="text" [(ngModel)]="product.product_name" name="product_name" required class="input-field">
-      </div>
-      <div class="form-group">
-        <label class="required">Mô Tả</label>
-        <textarea [(ngModel)]="product.description" name="description" required class="input-field textarea"></textarea>
-      </div>
-      <div class="form-group">
-        <label class="required">Chi Tiết</label>
-        <textarea [(ngModel)]="product.details" name="details" required class="input-field textarea"></textarea>
-      </div>
-      <div class="form-group">
-        <label class="required">Phân Loại Động Vật</label>
-        <select [(ngModel)]="product.animal_class_id" name="animal_class_id" required class="input-field">
-          <option value="" disabled>Chọn phân loại</option>
-          <option *ngFor="let animal of animalClasses" [value]="animal.value">{{ animal.label }}</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label class="required">Danh Mục</label>
-        <select [(ngModel)]="product.category_id" name="category_id" (change)="onCategoryChange()" required class="input-field">
-          <option value="" disabled>Chọn danh mục</option>
-          <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label class="required">Danh Mục Con</label>
-        <select [(ngModel)]="product.child_category_id" name="child_category_id" required class="input-field" [disabled]="!product.category_id">
-          <option value="" disabled>Chọn danh mục con</option>
-          <option *ngFor="let child of filteredChildCategories" [value]="child">{{ child }}</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Giá</label>
-        <input type="number" id="price" [(ngModel)]="product.price" name="price" step="0.01" class="input-field" [disabled]="variants.length > 0">
-      </div>
-      <div class="form-group">
-        <label>Số Lượng</label>
-        <input type="number" id="quantity" [(ngModel)]="product.quantity" name="quantity" class="input-field" [disabled]="variants.length > 0">
-      </div>
-      <div class="form-group">
-        <label>Giảm Giá (%)</label>
-        <input type="number" id="discount" [(ngModel)]="product.discount" name="discount" class="input-field" [disabled]="variants.length > 0">
-      </div>
-      <div class="form-group">
-        <label>Hình Ảnh (URL)</label>
-        <input type="text" id="product_image" [(ngModel)]="product.product_image" name="product_image" class="input-field" [disabled]="variants.length > 0">
-      </div>
-      <div class="variant-list">
-        <div class="flex justify-between mb-2">
-          <h3 class="text-lg font-semibold">Danh Sách Biến Thể</h3>
-          <button type="button" (click)="addVariant()" class="add-btn">Thêm Biến Thể</button>
-        </div>
-        <p *ngIf="variants.length === 0" class="text-gray-500">Chưa có biến thể</p>
-        <div *ngIf="variants.length > 0" class="variant-table">
-          <table>
-            <thead>
-              <tr>
-                <th>ID Biến Thể</th>
-                <th>Tên Biến Thể</th>
-                <th>Giá</th>
-                <th>Số Lượng</th>
-                <th>Giảm Giá (%)</th>
-                <th>Hành Động</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let variant of variants">
-                <td>{{ variant.variant_id }}</td>
-                <td>
-                  <input *ngIf="editingVariantId === variant.variant_id" [(ngModel)]="variant.variant_name" name="variant_name_{{variant.variant_id}}" class="input-field inline" required>
-                  <span *ngIf="editingVariantId !== variant.variant_id">{{ variant.variant_name }}</span>
-                </td>
-                <td>
-                  <input *ngIf="editingVariantId === variant.variant_id" type="number" step="0.01" [(ngModel)]="variant.variant_price" name="variant_price_{{variant.variant_id}}" class="input-field inline" required>
-                  <span *ngIf="editingVariantId !== variant.variant_id">{{ variant.variant_price | number:'1.2-2' }}</span>
-                </td>
-                <td>
-                  <input *ngIf="editingVariantId === variant.variant_id" type="number" [(ngModel)]="variant.variant_quantity" name="variant_quantity_{{variant.variant_id}}" class="input-field inline" required>
-                  <span *ngIf="editingVariantId !== variant.variant_id">{{ variant.variant_quantity }}</span>
-                </td>
-                <td>
-                  <input *ngIf="editingVariantId === variant.variant_id" type="number" [(ngModel)]="variant.variant_discount" name="variant_discount_{{variant.variant_id}}" class="input-field inline">
-                  <span *ngIf="editingVariantId !== variant.variant_id">{{ variant.variant_discount || '0' }}</span>
-                </td>
-                <td>
-                  <button *ngIf="editingVariantId !== variant.variant_id" type="button" (click)="editVariant(variant.variant_id)" class="edit-btn">Sửa</button>
-                  <button *ngIf="editingVariantId === variant.variant_id" type="button" (click)="cancelEdit()" class="cancel-btn">Hủy</button>
-                  <button *ngIf="editingVariantId !== variant.variant_id" type="button" (click)="deleteVariant(variant.variant_id)" class="delete-btn">Xóa</button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div *ngIf="showAddVariantForm" class="mt-4">
-          <h4 class="text-md font-semibold mb-2">Thêm Biến Thể Mới</h4>
-          <div class="grid grid-cols-2 gap-4">
-            <div class="form-group">
-              <label>ID Biến Thể</label>
-              <input [(ngModel)]="newVariant.variant_id" name="new_variant_id" required class="input-field">
-            </div>
-            <div class="form-group">
-              <label>Tên Biến Thể</label>
-              <input [(ngModel)]="newVariant.variant_name" name="new_variant_name" required class="input-field">
-            </div>
-            <div class="form-group">
-              <label>Giá</label>
-              <input type="number" step="0.01" [(ngModel)]="newVariant.variant_price" name="new_variant_price" required class="input-field">
-            </div>
-            <div class="form-group">
-              <label>Số Lượng</label>
-              <input type="number" [(ngModel)]="newVariant.variant_quantity" name="new_variant_quantity" required class="input-field">
-            </div>
-
-            <div class="form-group">
-              <label>Image</label>
-              <input type="text" [(ngModel)]="newVariant.variant_image" name="new_variant_image" class="input-field">
-            </div>
-
-            <div class="form-group">
-              <label>Giảm Giá (%)</label>
-              <input type="number" [(ngModel)]="newVariant.variant_discount" name="new_variant_discount" class="input-field">
-            </div>
-          </div>
-          <button type="button" (click)="saveNewVariant()" class="save-btn mt-2">Lưu Biến Thể</button>
-          <button type="button" (click)="cancelAddVariant()" class="close-btn mt-2 ml-2">Hủy</button>
-        </div>
-      </div>
-      <div class="flex gap-2 justify-end mt-4">
-        <button type="button" class="close-btn" (click)="cancel()">Hủy</button>
-        <button type="submit" class="save-btn">Lưu</button>
-      </div>
-    </form>
-  </div>
-</div> -->
-
 <div class="modal">
   <div class="modal-content">
-    <h2 class="text-2xl font-bold mb-4">Chỉnh Sửa Sản Phẩm</h2>
-    <form (ngSubmit)="submitForm()" class="space-y-4">
-      <div class="form-group">
-        <label class="required">ID Sản Phẩm</label>
-        <input type="text" [(ngModel)]="product.product_id" name="product_id" disabled class="input-field disabled">
-      </div>
-      <div class="form-group">
-        <label class="required">Tên Sản Phẩm</label>
-        <input type="text" [(ngModel)]="product.product_name" name="product_name" required class="input-field">
-      </div>
-      <div class="form-group">
-        <label class="required">Mô Tả</label>
-        <textarea [(ngModel)]="product.description" name="description" required class="input-field textarea"></textarea>
-      </div>
-      <div class="form-group">
-        <label class="required">Chi Tiết</label>
-        <textarea [(ngModel)]="product.details" name="details" required class="input-field textarea"></textarea>
-      </div>
-      <div class="form-group">
-        <label class="required">Phân Loại Động Vật</label>
-        <select [(ngModel)]="product.animal_class_id" name="animal_class_id" required class="input-field">
-          <option value="" disabled>Chọn phân loại</option>
-          <option *ngFor="let animal of animalClasses" [value]="animal.value">{{ animal.label }}</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label class="required">Danh Mục</label>
-        <select [(ngModel)]="product.category_id" name="category_id" (change)="onCategoryChange()" required class="input-field">
-          <option value="" disabled>Chọn danh mục</option>
-          <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label class="required">Danh Mục Con</label>
-        <select [(ngModel)]="product.child_category_id" name="child_category_id" required class="input-field" [disabled]="!product.category_id">
-          <option value="" disabled>Chọn danh mục con</option>
-          <option *ngFor="let child of filteredChildCategories" [value]="child">{{ child }}</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Giá</label>
-        <input type="number" id="price" [(ngModel)]="product.price" name="price" step="0.01" class="input-field" [disabled]="variants.length > 0">
-      </div>
-      <div class="form-group">
-        <label>Số Lượng</label>
-        <input type="number" id="quantity" [(ngModel)]="product.quantity" name="quantity" class="input-field" [disabled]="variants.length > 0">
-      </div>
-      <div class="form-group">
-        <label>Giảm Giá (%)</label>
-        <input type="number" id="discount" [(ngModel)]="product.discount" name="discount" class="input-field" [disabled]="variants.length > 0">
-      </div>
-      <div class="form-group">
-        <label>Hình Ảnh</label>
-        <div *ngIf="!isEditingProductImage" class="image-preview">
-          <img [src]="product.product_image || 'https://via.placeholder.com/100'" alt="Product Image" class="preview-image" (click)="toggleEditProductImage()">
-          <button type="button" class="edit-image-btn" (click)="toggleEditProductImage()">Sửa</button>
+    <h2 class="title" [style.color]="'#9c162c'">Edit Product <span class="paw-icon">🐾</span></h2>
+    <form (ngSubmit)="submitForm()" class="form-container">
+      <div class="section">
+        <h3 class="section-title" [style.color]="'#9c162c'">Product Information</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="required-label">Product ID</label>
+            <input type="text" [(ngModel)]="product.product_id" name="product_id" disabled class="input-field disabled">
+          </div>
+          <div class="form-group">
+            <label class="required-label">Product Name</label>
+            <input type="text" [(ngModel)]="product.product_name" name="product_name" required class="input-field">
+          </div>
         </div>
-        <input *ngIf="isEditingProductImage" type="text" id="product_image" [(ngModel)]="product.product_image" name="product_image" class="input-field" (blur)="toggleEditProductImage()">
+        <div class="form-row">
+          <div class="form-group full-width">
+            <label class="required-label">Description</label>
+            <textarea [(ngModel)]="product.description" name="description" required class="input-field textarea"></textarea>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group full-width">
+            <label class="required-label">Details</label>
+            <textarea [(ngModel)]="product.details" name="details" required class="input-field textarea"></textarea>
+          </div>
+        </div>
       </div>
-      <div class="variant-list">
-        <div class="flex justify-between mb-2">
-          <h3 class="text-lg font-semibold">Danh Sách Biến Thể</h3>
-          <button type="button" (click)="addVariant()" class="add-btn">Thêm Biến Thể</button>
+      <div class="section">
+        <h3 class="section-title" [style.color]="'#9c162c'">Category Information</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="required-label">Animal Category</label>
+            <select [(ngModel)]="product.animal_class_id" name="animal_class_id" required class="input-field">
+              <option value="" disabled>Choose Category</option>
+              <option *ngFor="let animal of animalClasses" [value]="animal.value">{{ animal.label }}</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="required-label">Category</label>
+            <select [(ngModel)]="product.category_id" name="category_id" (change)="onCategoryChange()" required class="input-field">
+              <option value="" disabled>Choose Category</option>
+              <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="required-label">Subcategory</label>
+            <select [(ngModel)]="product.child_category_id" name="child_category_id" required class="input-field" [disabled]="!product.category_id">
+              <option value="" disabled>Choose Subcategory</option>
+              <option *ngFor="let child of filteredChildCategories" [value]="child">{{ child }}</option>
+            </select>
+          </div>
         </div>
-        <p *ngIf="variants.length === 0" class="text-gray-500">Chưa có biến thể</p>
-        <div *ngIf="variants.length > 0" class="variant-table">
-          <table>
-            <thead>
-              <tr>
-                <th>ID Biến Thể</th>
-                <th>Tên Biến Thể</th>
-                <th>Giá</th>
-                <th>Số Lượng</th>
-                <th>Giảm Giá (%)</th>
-                <th>Hình Ảnh</th>
-                <th>Hành Động</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let variant of variants">
-                <td>{{ variant.variant_id }}</td>
-                <td>
-                  <input *ngIf="editingVariantId === variant.variant_id" [(ngModel)]="variant.variant_name" name="variant_name_{{variant.variant_id}}" class="input-field inline" required>
-                  <span *ngIf="editingVariantId !== variant.variant_id">{{ variant.variant_name }}</span>
-                </td>
-                <td>
-                  <input *ngIf="editingVariantId === variant.variant_id" type="number" step="0.01" [(ngModel)]="variant.variant_price" name="variant_price_{{variant.variant_id}}" class="input-field inline" required>
-                  <span *ngIf="editingVariantId !== variant.variant_id">{{ variant.variant_price | number:'1.2-2' }}</span>
-                </td>
-                <td>
-                  <input *ngIf="editingVariantId === variant.variant_id" type="number" [(ngModel)]="variant.variant_quantity" name="variant_quantity_{{variant.variant_id}}" class="input-field inline" required>
-                  <span *ngIf="editingVariantId !== variant.variant_id">{{ variant.variant_quantity }}</span>
-                </td>
-                <td>
-                  <input *ngIf="editingVariantId === variant.variant_id" type="number" [(ngModel)]="variant.variant_discount" name="variant_discount_{{variant.variant_id}}" class="input-field inline">
-                  <span *ngIf="editingVariantId !== variant.variant_id">{{ variant.variant_discount || '0' }}</span>
-                </td>
-                <td>
-                  <div *ngIf="editingVariantId !== variant.variant_id" class="image-preview">
-                    <img [src]="variant.variant_image || 'https://via.placeholder.com/50'" alt="Variant Image" class="preview-image">
-                  </div>
-                  <input *ngIf="editingVariantId === variant.variant_id" type="text" [(ngModel)]="variant.variant_image" name="variant_image_{{variant.variant_id}}" class="input-field inline">
-                </td>
-                <td>
-                  <button *ngIf="editingVariantId !== variant.variant_id" type="button" (click)="editVariant(variant.variant_id)" class="edit-btn">Sửa</button>
-                  <button *ngIf="editingVariantId === variant.variant_id" type="button" (click)="cancelEdit()" class="cancel-btn">Hủy</button>
-                  <button *ngIf="editingVariantId !== variant.variant_id" type="button" (click)="deleteVariant(variant.variant_id)" class="delete-btn">Xóa</button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+      </div>
+      <div class="section">
+        <h3 class="section-title" [style.color]="'#9c162c'">Pricing & Inventory</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Price</label>
+            <input type="number" id="price" [(ngModel)]="product.price" name="price" step="0.01" class="input-field" [disabled]="variants.length > 0">
+          </div>
+          <div class="form-group">
+            <label>Quantity</label>
+            <input type="number" id="quantity" [(ngModel)]="product.quantity" name="quantity" class="input-field" [disabled]="variants.length > 0">
+          </div>
+          <div class="form-group">
+            <label>Discount (%)</label>
+            <input type="number" id="discount" [(ngModel)]="product.discount" name="discount" class="input-field" [disabled]="variants.length > 0">
+          </div>
         </div>
-        <div *ngIf="showAddVariantForm" class="mt-4">
-          <h4 class="text-md font-semibold mb-2">Thêm Biến Thể Mới</h4>
-          <div class="grid grid-cols-2 gap-4">
-            <div class="form-group">
-              <label>ID Biến Thể</label>
-              <input [(ngModel)]="newVariant.variant_id" name="new_variant_id" required class="input-field">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Image</label>
+            <div *ngIf="!isEditingProductImage" class="image-preview">
+              <img [src]="product.product_image || 'https://via.placeholder.com/100'" alt="Product Image" class="preview-image" (click)="toggleEditProductImage()">
+              <button type="button" class="edit-image-btn" (click)="toggleEditProductImage()">Edit</button>
             </div>
-            <div class="form-group">
-              <label>Tên Biến Thể</label>
-              <input [(ngModel)]="newVariant.variant_name" name="new_variant_name" required class="input-field">
+            <input *ngIf="isEditingProductImage" type="text" id="product_image" [(ngModel)]="product.product_image" name="product_image" class="input-field" (blur)="toggleEditProductImage()">
+          </div>
+        </div>
+      </div>
+      <div class="section">
+        <h3 class="section-title" [style.color]="'#9c162c'">Variants <span class="paw-icon">🐾</span></h3>
+        <div class="variant-list">
+          <div class="flex justify-between mb-2">
+            <h4 class="variant-title" [style.color]="'#9c162c'">Variant List</h4>
+            <button type="button" (click)="addVariant()" class="add-btn">Add Variant <span class="paw-icon">🐾</span></button>
+          </div>
+          <p *ngIf="variants.length === 0" class="text-gray-500">No variants yet</p>
+          <div *ngIf="variants.length > 0" class="variant-table">
+            <table>
+              <thead>
+                <tr>
+                  <th>Variant ID</th>
+                  <th>Variant Name</th>
+                  <th>Price</th>
+                  <th>Quantity</th>
+                  <th>Discount (%)</th>
+                  <th>Image</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let variant of variants">
+                  <td>{{ variant.variant_id }}</td>
+                  <td>
+                    <input *ngIf="editingVariantId === variant.variant_id" [(ngModel)]="variant.variant_name" name="variant_name_{{variant.variant_id}}" class="input-field inline" required>
+                    <span *ngIf="editingVariantId !== variant.variant_id">{{ variant.variant_name }}</span>
+                  </td>
+                  <td>
+                    <input *ngIf="editingVariantId === variant.variant_id" type="number" step="0.01" [(ngModel)]="variant.variant_price" name="variant_price_{{variant.variant_id}}" class="input-field inline" required>
+                    <span *ngIf="editingVariantId !== variant.variant_id">{{ variant.variant_price | number:'1.2-2' }}</span>
+                  </td>
+                  <td>
+                    <input *ngIf="editingVariantId === variant.variant_id" type="number" [(ngModel)]="variant.variant_quantity" name="variant_quantity_{{variant.variant_id}}" class="input-field inline" required>
+                    <span *ngIf="editingVariantId !== variant.variant_id">{{ variant.variant_quantity }}</span>
+                  </td>
+                  <td>
+                    <input *ngIf="editingVariantId === variant.variant_id" type="number" [(ngModel)]="variant.variant_discount" name="variant_discount_{{variant.variant_id}}" class="input-field inline">
+                    <span *ngIf="editingVariantId !== variant.variant_id">{{ variant.variant_discount || '0' }}</span>
+                  </td>
+                  <td>
+                    <div *ngIf="editingVariantId !== variant.variant_id" class="image-preview">
+                      <img [src]="variant.variant_image || 'https://via.placeholder.com/50'" alt="Variant Image" class="preview-image">
+                    </div>
+                    <input *ngIf="editingVariantId === variant.variant_id" type="text" [(ngModel)]="variant.variant_image" name="variant_image_{{variant.variant_id}}" class="input-field inline wide-input">
+                  </td>
+                  <td>
+                    <button *ngIf="editingVariantId !== variant.variant_id" type="button" (click)="editVariant(variant.variant_id)" class="edit-btn">Edit</button>
+                    <button *ngIf="editingVariantId === variant.variant_id" type="button" (click)="cancelEdit()" class="cancel-btn">Cancel</button>
+                    <button *ngIf="editingVariantId !== variant.variant_id" type="button" (click)="deleteVariant(variant.variant_id)" class="delete-btn">Delete</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div *ngIf="showAddVariantForm" class="mt-4 variant-form">
+            <h4 class="variant-title" [style.color]="'#9c162c'">Add New Variant</h4>
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Variant ID</label>
+                <input [(ngModel)]="newVariant.variant_id" name="new_variant_id" required class="input-field">
+              </div>
+              <div class="form-group">
+                <label>Variant Name</label>
+                <input [(ngModel)]="newVariant.variant_name" name="new_variant_name" required class="input-field">
+              </div>
+              <div class="form-group">
+                <label>Price</label>
+                <input type="number" step="0.01" [(ngModel)]="newVariant.variant_price" name="new_variant_price" required class="input-field">
+              </div>
+              <div class="form-group">
+                <label>Quantity</label>
+                <input type="number" [(ngModel)]="newVariant.variant_quantity" name="new_variant_quantity" required class="input-field">
+              </div>
+              <div class="form-group">
+                <label>Discount (%)</label>
+                <input type="number" [(ngModel)]="newVariant.variant_discount" name="new_variant_discount" class="input-field">
+              </div>
+              <div class="form-group wide-input">
+                <label>Image URL</label>
+                <input type="text" [(ngModel)]="newVariant.variant_image" name="new_variant_image" required class="input-field">
+              </div>
             </div>
-            <div class="form-group">
-              <label>Giá</label>
-              <input type="number" step="0.01" [(ngModel)]="newVariant.variant_price" name="new_variant_price" required class="input-field">
-            </div>
-            <div class="form-group">
-              <label>Số Lượng</label>
-              <input type="number" [(ngModel)]="newVariant.variant_quantity" name="new_variant_quantity" required class="input-field">
-            </div>
-            <div class="form-group">
-              <label>Hình Ảnh (URL)</label>
-              <input type="text" [(ngModel)]="newVariant.variant_image" name="new_variant_image" required class="input-field">
-            </div>
-            <div class="form-group">
-              <label>Giảm Giá (%)</label>
-              <input type="number" [(ngModel)]="newVariant.variant_discount" name="new_variant_discount" class="input-field">
+            <div class="button-group mt-2">
+              <button type="button" (click)="saveNewVariant()" class="save-btn">Save Variant</button>
+              <button type="button" (click)="cancelAddVariant()" class="close-btn">Cancel</button>
             </div>
           </div>
-          <button type="button" (click)="saveNewVariant()" class="save-btn mt-2">Lưu Biến Thể</button>
-          <button type="button" (click)="cancelAddVariant()" class="close-btn mt-2 ml-2">Hủy</button>
         </div>
       </div>
-      <div class="flex gap-2 justify-end mt-4">
-        <button type="button" class="close-btn" (click)="cancel()">Hủy</button>
-        <button type="submit" class="save-btn">Lưu</button>
+      <div class="button-group">
+        <button type="button" class="close-btn" (click)="cancel()">Cancel</button>
+        <button type="submit" class="save-btn">Save</button>
       </div>
     </form>
   </div>

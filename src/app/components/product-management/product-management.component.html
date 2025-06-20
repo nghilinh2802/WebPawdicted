@@ -1,246 +1,62 @@
-<!-- <p>product-management works!</p>
-<div class="container">
-  <h1>Quản Lý Sản Phẩm</h1>
+<div class="container" [style.background-color]="'#f8f1f1'">
+  <h1 class="title" [style.color]="'#9c162c'">Product Management</h1>
 
   <div class="actions">
-    <button class="add-btn" (click)="openAddModal()">Thêm Sản Phẩm</button>
-    <button class="delete-btn" (click)="deleteSelected()">Xóa Hàng Loạt</button>
-    <button class="flashsale-btn" (click)="createFlashsale()">Tạo Flashsale</button>
+    <button class="add-btn" (click)="openAddModal()">Add Product</button>
+    <button class="delete-btn" (click)="deleteSelected()">Delete Selected</button>
+    <button class="flashsale-btn" (click)="createFlashsale()">Create Flashsale</button>
   </div>
 
   <div class="search-filter">
-    <input type="text" [(ngModel)]="searchTerm" (input)="applyFilters()" placeholder="Tìm kiếm theo tên hoặc ID">
-    <select [(ngModel)]="categoryFilter" (change)="applyFilters()">
-      <option value="">Tất cả danh mục</option>
-      <option value="cat_food">Thức ăn mèo</option>
-      <option value="dog_toys">Đồ chơi chó</option>
-      <option value="cat_care">Chăm sóc mèo</option>
+    <select [(ngModel)]="sortFilter" (change)="applyFilters()" class="filter-select">
+      <option value="">Sort By</option>
+      <option value="name_asc">Name (A-Z)</option>
+      <option value="name_desc">Name (Z-A)</option>
+      <option value="date_asc">Oldest</option>
+      <option value="date_desc">Newest</option>
     </select>
-    <select [(ngModel)]="variantFilter" (change)="applyFilters()">
-      <option value="">Tất cả biến thể</option>
-      <option value="has_variant">Có biến thể</option>
-      <option value="no_variant">Không có biến thể</option>
+
+    <select [(ngModel)]="categoryFilter" (change)="applyFilters()" class="filter-select">
+      <option value="">All Categories</option>
+      <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
     </select>
-    <select [(ngModel)]="sortFilter" (change)="applyFilters()">
-      <option value="">Sắp xếp</option>
-      <option value="name_asc">Tên (A-Z)</option>
-      <option value="name_desc">Tên (Z-A)</option>
-      <option value="date_asc">Cũ nhất</option>
-      <option value="date_desc">Mới nhất</option>
-    </select>
+
+    <input type="text" [(ngModel)]="searchTerm" (input)="applyFilters()" placeholder="Search by name or ID" class="search-input">
   </div>
 
   <div class="table-container">
-    <table>
+    <table class="product-table">
       <thead>
         <tr>
           <th><input type="checkbox" (change)="toggleSelectAll($event)"></th>
           <th>ID</th>
-          <th>Tên Sản Phẩm</th>
-          <th>Biến Thể</th>
-          <th>Số Lượng</th>
-          <th>Đơn Giá</th>
-          <th>Phân Loại</th>
-          <th>Hình Ảnh</th>
-          <th>Hành Động</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let product of filteredProducts" [attr.data-product-id]="product.product_id">
-          <td><input type="checkbox" [checked]="selectedProductIds.has(product.product_id)" (change)="toggleProductSelection(product.product_id)"></td>
-          <td>{{ product.product_id }}</td>
-          <td>{{ product.product_name }}</td>
-          <td>
-            <span *ngIf="product.variant_id.length" class="variant-link" (click)="toggleVariants(product.product_id)">Xem {{ product.variant_id.length }} biến thể</span>
-            <span *ngIf="!product.variant_id.length">Không có</span>
-          </td>
-          <td>{{ product.quantity }}</td>
-          <td>{{ product.price | currency:'VND' }}</td>
-          <td>{{ product.category_id }}</td>
-          <td><img [src]="product.product_image || 'https://via.placeholder.com/60'" alt="Product Image"></td>
-          <td class="action-links">
-            <button (click)="openDetailsModal(product.product_id)">Chi Tiết</button>
-            <button class="text-green-600" (click)="openEditModal(product.product_id)">Sửa</button>
-            <button class="text-red-600" (click)="deleteProduct(product.product_id)">Xóa</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
-
-<app-add-product-modal *ngIf="showAddModal" (close)="showAddModal = false"></app-add-product-modal>
-<app-edit-product-modal *ngIf="showEditModal" [productId]="selectedProductId" (close)="showEditModal = false"></app-edit-product-modal>
-<app-product-details-modal *ngIf="showDetailsModal" [productId]="selectedProductId" (close)="showDetailsModal = false"></app-product-details-modal>
- -->
-
-
-
-
- <!-- <p>product-management works!</p>
-<div class="container">
-  <h1>Quản Lý Sản Phẩm</h1>
-
-  <div class="actions">
-    <button class="add-btn" (click)="openAddModal()">Thêm Sản Phẩm</button>
-    <button class="delete-btn" (click)="deleteSelected()">Xóa Hàng Loạt</button>
-    <button class="flashsale-btn" (click)="createFlashsale()">Tạo Flashsale</button>
-  </div>
-
-  <div class="search-filter">
-    <input type="text" [(ngModel)]="searchTerm" (input)="applyFilters()" placeholder="Tìm kiếm theo tên hoặc ID">
-    <select [(ngModel)]="categoryFilter" (change)="applyFilters()">
-      <option value="">Tất cả danh mục</option>
-      <option value="cat_food">Thức ăn mèo</option>
-      <option value="dog_toys">Đồ chơi chó</option>
-      <option value="cat_care">Chăm sóc mèo</option>
-    </select>
-    <select [(ngModel)]="variantFilter" (change)="applyFilters()">
-      <option value="">Tất cả biến thể</option>
-      <option value="has_variant">Có biến thể</option>
-      <option value="no_variant">Không có biến thể</option>
-    </select>
-    <select [(ngModel)]="sortFilter" (change)="applyFilters()">
-      <option value="">Sắp xếp</option>
-      <option value="name_asc">Tên (A-Z)</option>
-      <option value="name_desc">Tên (Z-A)</option>
-      <option value="date_asc">Cũ nhất</option>
-      <option value="date_desc">Mới nhất</option>
-    </select>
-  </div>
-
-  <div class="table-container">
-    <table>
-      <thead>
-        <tr>
-          <th><input type="checkbox" (change)="toggleSelectAll($event)"></th>
-          <th>ID</th>
-          <th>Tên Sản Phẩm</th>
-          <th>Biến Thể</th>
-          <th>Số Lượng</th>
-          <th>Đơn Giá</th>
-          <th>Phân Loại</th>
-          <th>Hình Ảnh</th>
-          <th>Hành Động</th>
+          <th>Product Name</th>
+          <th>Variants</th>
+          <th>Quantity</th>
+          <th>Price</th>
+          <th>Category</th>
+          <th>Image</th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
         <ng-container *ngFor="let product of filteredProducts">
-          <tr [attr.data-product-id]="product.product_id">
+          <tr [attr.data-product-id]="product.product_id" class="product-row">
             <td><input type="checkbox" [checked]="selectedProductIds.has(product.product_id)" (change)="toggleProductSelection(product.product_id)"></td>
             <td>{{ product.product_id }}</td>
             <td>{{ product.product_name }}</td>
             <td>
-              <span *ngIf="product.variant_id.length" class="variant-link" (click)="toggleVariants(product.product_id)">{{ product.variant_id.length }} biến thể</span>
-              <span *ngIf="!product.variant_id.length">Không có</span>
+              <span *ngIf="product.variant_id.length" class="variant-link" (click)="toggleVariants(product.product_id)" [style.color]="'#9c162c'">{{ product.variant_id.length }} variants</span>
+              <span *ngIf="!product.variant_id.length">None</span>
             </td>
             <td>{{ product.quantity }}</td>
             <td>{{ product.price | currency:'VND' }}</td>
             <td>{{ product.category_id }}</td>
-            <td><img [src]="product.product_image || 'https://via.placeholder.com/60'" alt="Product Image"></td>
+            <td><img [src]="product.product_image || 'https://via.placeholder.com/60'" alt="Product Image" class="product-image"></td>
             <td class="action-links">
-              <button (click)="openDetailsModal(product.product_id)">Chi Tiết</button>
-              <button class="text-green-600" (click)="openEditModal(product.product_id)">Sửa</button>
-              <button class="text-red-600" (click)="deleteProduct(product.product_id)">Xóa</button>
-            </td>
-          </tr>
-          <tr *ngIf="expandedProductIds.has(product.product_id) && product.variants?.length > 0" [attr.data-parent-id]="product.product_id" class="variant-row">
-            <td><input type="checkbox" [checked]="selectedVariantIds.has(variant.variant_id)" (change)="toggleVariantSelection(variant.variant_id)" *ngFor="let variant of product.variants"></td>
-            <td *ngFor="let variant of product.variants">{{ variant.variant_id }}</td>
-            <td *ngFor="let variant of product.variants"></td>
-            <td *ngFor="let variant of product.variants">{{ variant.variant_name }}</td>
-            <td *ngFor="let variant of product.variants">{{ variant.quantity }}</td>
-            <td *ngFor="let variant of product.variants">{{ variant.price | currency:'VND' }}</td>
-            <td *ngFor="let variant of product.variants"></td>
-            <td *ngFor="let variant of product.variants"><img [src]="variant.image || 'https://via.placeholder.com/60'" alt="Variant Image"></td>
-            <td *ngFor="let variant of product.variants" class="action-links">
-              <button (click)="openDetailsModal(variant.variant_id)">Chi Tiết</button>
-              <button class="text-green-600" (click)="openEditModal(variant.variant_id)">Sửa</button>
-              <button class="text-red-600" (click)="deleteProduct(variant.variant_id)">Xóa</button>
-            </td>
-          </tr>
-        </ng-container>
-      </tbody>
-    </table>
-  </div>
-</div>
-
-<app-add-product-modal *ngIf="showAddModal" (close)="showAddModal = false"></app-add-product-modal>
-<app-edit-product-modal *ngIf="showEditModal" [productId]="selectedProductId" (close)="showEditModal = false"></app-edit-product-modal>
-<app-product-details-modal *ngIf="showDetailsModal" [productId]="selectedProductId" (close)="showDetailsModal = false"></app-product-details-modal> -->
-
-
-
-
-<p>product-management works!</p>
-<div class="container">
-  <h1>Quản Lý Sản Phẩm</h1>
-
-  <div class="actions">
-    <button class="add-btn" (click)="openAddModal()">Thêm Sản Phẩm</button>
-    <button class="delete-btn" (click)="deleteSelected()">Xóa Hàng Loạt</button>
-    <button class="flashsale-btn" (click)="createFlashsale()">Tạo Flashsale</button>
-  </div>
-
-  <div class="search-filter">
-    
-
-    <!-- <select [(ngModel)]="variantFilter" (change)="applyFilters()">
-      <option value="">Tất cả biến thể</option>
-      <option value="has_variant">Có biến thể</option>
-      <option value="no_variant">Không có biến thể</option>
-    </select> -->
-    <select [(ngModel)]="sortFilter" (change)="applyFilters()">
-      <option value="">Sắp xếp</option>
-      <option value="name_asc">Tên (A-Z)</option>
-      <option value="name_desc">Tên (Z-A)</option>
-      <option value="date_asc">Cũ nhất</option>
-      <option value="date_desc">Mới nhất</option>
-    </select>
-
-    <select [(ngModel)]="categoryFilter" (change)="applyFilters()">
-  <option value="">Tất cả danh mục</option>
-  <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
-</select>
-
-    <input type="text" [(ngModel)]="searchTerm" (input)="applyFilters()" placeholder="Tìm kiếm theo tên hoặc ID">
-     </div>
-
-  
-
-  <div class="table-container">
-    <table>
-      <thead>
-        <tr>
-          <th><input type="checkbox" (change)="toggleSelectAll($event)"></th>
-          <th>ID</th>
-          <th>Tên Sản Phẩm</th>
-          <th>Biến Thể</th>
-          <th>Số Lượng</th>
-          <th>Đơn Giá</th>
-          <th>Phân Loại</th>
-          <th>Hình Ảnh</th>
-          <th>Hành Động</th>
-        </tr>
-      </thead>
-      <tbody>
-        <ng-container *ngFor="let product of filteredProducts">
-          <tr [attr.data-product-id]="product.product_id">
-            <td><input type="checkbox" [checked]="selectedProductIds.has(product.product_id)" (change)="toggleProductSelection(product.product_id)"></td>
-            <td>{{ product.product_id }}</td>
-            <td>{{ product.product_name }}</td>
-            <td>
-              <span *ngIf="product.variant_id.length" class="variant-link" (click)="toggleVariants(product.product_id)">{{ product.variant_id.length }} biến thể</span>
-              <span *ngIf="!product.variant_id.length">Không có</span>
-            </td>
-            <td>{{ product.quantity }}</td>
-            <td>{{ product.price | currency:'VND' }}</td>
-            <td>{{ product.category_id }}</td>
-            <td><img [src]="product.product_image || 'https://via.placeholder.com/60'" alt="Product Image"></td>
-            <td class="action-links">
-              <button (click)="openDetailsModal(product.product_id)">Chi Tiết</button>
-              <button class="text-green-600" (click)="openEditModal(product.product_id)">Sửa</button>
-              <button class="text-red-600" (click)="deleteProduct(product.product_id)">Xóa</button>
+              <button class="details-btn" (click)="openDetailsModal(product.product_id)">Details</button>
+              <button class="edit-btn" (click)="openEditModal(product.product_id)">Edit</button>
+              <button class="delete-btn" (click)="deleteProduct(product.product_id)">Delete</button>
             </td>
           </tr>
           <tr *ngFor="let variant of product.variants" [attr.data-parent-id]="product.product_id" [attr.data-variant-id]="variant.variant_id" class="variant-row" [class.show]="expandedProductIds.has(product.product_id)">
@@ -251,10 +67,8 @@
             <td>{{ variant.quantity }}</td>
             <td>{{ variant.price | currency:'VND' }}</td>
             <td></td>
-            <td><img [src]="variant.image || 'https://via.placeholder.com/60'" alt="Variant Image"></td>
-            <td class="action-links">
-              
-            </td>
+            <td><img [src]="variant.image || 'https://via.placeholder.com/60'" alt="Variant Image" class="variant-image"></td>
+            <td></td>
           </tr>
         </ng-container>
       </tbody>

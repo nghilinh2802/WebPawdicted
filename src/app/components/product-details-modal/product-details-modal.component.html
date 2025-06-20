@@ -1,90 +1,65 @@
-<!-- <div class="modal" *ngIf="true">
-  <div class="modal-content">
-    <h2>Chi Tiết Sản Phẩm</h2>
-    <div>
-      <p><strong>ID:</strong> {{ product.product_id }}</p>
-      <p><strong>Tên Sản Phẩm:</strong> {{ product.product_name }}</p>
-      <p><strong>Mô Tả:</strong> {{ product.description || 'N/A' }}</p>
-      <p><strong>Chi Tiết:</strong> {{ product.details || 'N/A' }}</p>
-      <p><strong>Phân Loại Động Vật:</strong> {{ product.animal_class_id }}</p>
-      <p><strong>Danh Mục:</strong> {{ product.category_id }}</p>
-      <div *ngIf="variants.length > 0">
-        <h3 style="font-size: 18px; margin-top: 15px;">Biến Thể:</h3>
-        <div *ngFor="let variant of variants" style="border-top: 1px solid #ddd; padding-top: 10px;">
-          <p><strong>ID Biến Thể:</strong> {{ variant.variant_id }}</p>
-          <p><strong>Tên Biến Thể:</strong> {{ variant.variant_name }}</p>
-          <p><strong>Giá:</strong> {{ variant.price | currency:'VND' }}</p>
-          <p><strong>Số Lượng:</strong> {{ variant.quantity }}</p>
-          <p><strong>Giảm Giá:</strong> {{ variant.discount || 0 }}%</p>
-          <p><strong>Hình Ảnh:</strong> <img [src]="variant.variant_image || 'https://via.placeholder.com/60'" alt="Hình ảnh" style="width: 60px; height: 60px;"></p>
-        </div>
-      </div>
-      <div *ngIf="variants.length === 0">
-        <p><strong>Giá:</strong> {{ product.price | currency:'VND' }}</p>
-        <p><strong>Số Lượng:</strong> {{ product.quantity }}</p>
-        <p><strong>Giảm Giá:</strong> {{ product.discount || 0 }}%</p>
-      </div>
-    </div>
-    <div style="display: flex; justify-content: flex-end; margin-top: 15px;">
-      <button class="close-btn" (click)="close.emit()">Đóng</button>
-    </div>
-  </div>
-</div> -->
-
 <div class="modal">
   <div class="modal-content">
-    <h2 class="text-2xl font-bold mb-4">Chi Tiết Sản Phẩm</h2>
-    <div class="space-y-2">
-      <p><strong>ID:</strong> {{ product.product_id }}</p>
-      <p><strong>Tên Sản Phẩm:</strong> {{ product.product_name }}</p>
-      <p><strong>Mô Tả:</strong> {{ product.description || 'N/A' }}</p>
-      <p><strong>Chi Tiết:</strong> {{ product.details || 'N/A' }}</p>
-      <p><strong>Phân Loại Động Vật:</strong> {{ getAnimalClassLabel(product.animal_class_id) }}</p>
-      <p><strong>Danh Mục:</strong> {{ getCategoryName(product.category_id) }}</p>
-      <p><strong>Danh Mục Con:</strong> {{ product.child_category_id || 'N/A' }}</p>
-      <p>
-        <strong>Ngày Tạo:</strong>
-        <ng-container *ngIf="product.date_listed; else noDate">
-          {{ product.date_listed | date:'dd/MM/yyyy HH:mm' }}
-        </ng-container>
-        <ng-template #noDate>N/A</ng-template>
-      </p>
-      <div *ngIf="variants.length > 0">
-        <h3 class="text-lg font-semibold mt-4 mb-2">Biến Thể:</h3>
-        <div class="variant-table">
-          <table>
-            <thead>
-              <tr>
-                <th>ID Biến Thể</th>
-                <th>Tên Biến Thể</th>
-                <th>Giá</th>
-                <th>Số Lượng</th>
-                <th>Giảm Giá (%)</th>
-                <th>Hình Ảnh</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let variant of variants">
-                <td>{{ variant.variant_id }}</td>
-                <td>{{ variant.variant_name }}</td>
-                <td>{{ variant.variant_price | currency:'VND' }}</td>
-                <td>{{ variant.variant_quantity }}</td>
-                <td>{{ variant.variant_discount || 0 }}</td>
-                <td><img [src]="variant.variant_image || 'https://via.placeholder.com/60'" alt="Hình ảnh biến thể" class="variant-image"></td>
-              </tr>
-            </tbody>
-          </table>
+    <h2 class="title" [style.color]="'#9c162c'">Product Details <span class="paw-icon">🐾</span></h2>
+    <div class="form-container">
+      <div class="section">
+        <h3 class="section-title" [style.color]="'#9c162c'">Product Information</h3>
+        <div class="details-row">
+          <p><strong>ID:</strong> {{ product.product_id }}</p>
+          <p><strong>Product Name:</strong> {{ product.product_name }}</p>
+          <p><strong>Description:</strong> {{ product.description || 'N/A' }}</p>
+          <p><strong>Details:</strong> {{ product.details || 'N/A' }}</p>
+          <p><strong>Animal Category:</strong> {{ getAnimalClassLabel(product.animal_class_id) }}</p>
+          <p><strong>Category:</strong> {{ getCategoryName(product.category_id) }}</p>
+          <p><strong>Subcategory:</strong> {{ product.child_category_id || 'N/A' }}</p>
+          <p>
+            <strong>Date Created:</strong>
+            <ng-container *ngIf="product.date_listed; else noDate">
+              {{ product.date_listed | date:'dd/MM/yyyy HH:mm' }}
+            </ng-container>
+            <ng-template #noDate>N/A</ng-template>
+          </p>
         </div>
       </div>
-      <div *ngIf="variants.length === 0">
-        <p><strong>Giá:</strong> {{ product.price | currency:'VND' }}</p>
-        <p><strong>Số Lượng:</strong> {{ product.quantity }}</p>
-        <p><strong>Giảm Giá:</strong> {{ product.discount || 0 }}%</p>
-        <p><strong>Hình Ảnh:</strong> <img [src]="product.product_image || 'https://via.placeholder.com/60'" alt="Hình ảnh sản phẩm" class="variant-image"></p>
+      <div class="section">
+        <h3 class="section-title" [style.color]="'#9c162c'">Pricing & Inventory <span *ngIf="variants.length === 0" class="paw-icon">🐾</span></h3>
+        <div class="details-row" *ngIf="variants.length === 0">
+          <p><strong>Price:</strong> {{ product.price | currency:'VND' }}</p>
+          <p><strong>Quantity:</strong> {{ product.quantity }}</p>
+          <p><strong>Discount:</strong> {{ product.discount || 0 }}%</p>
+          <p><strong>Image:</strong> <img [src]="product.product_image || 'https://via.placeholder.com/60'" alt="Product Image" class="variant-image"></p>
+        </div>
+        <div *ngIf="variants.length > 0">
+          <h3 class="section-title" [style.color]="'#9c162c'">Variants <span class="paw-icon">🐾</span></h3>
+          <div class="variant-table">
+            <table>
+              <thead>
+                <tr>
+                  <th>Variant ID</th>
+                  <th>Variant Name</th>
+                  <th>Price</th>
+                  <th>Quantity</th>
+                  <th>Discount (%)</th>
+                  <th>Image</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let variant of variants">
+                  <td>{{ variant.variant_id }}</td>
+                  <td>{{ variant.variant_name }}</td>
+                  <td>{{ variant.variant_price | currency:'VND' }}</td>
+                  <td>{{ variant.variant_quantity }}</td>
+                  <td>{{ variant.variant_discount || 0 }}</td>
+                  <td><img [src]="variant.variant_image || 'https://via.placeholder.com/60'" alt="Variant Image" class="variant-image"></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
-    </div>
-    <div class="flex justify-end mt-4">
-      <button class="close-btn" (click)="closeModal()">Đóng</button>
+      <div class="button-group">
+        <button class="close-btn" (click)="closeModal()">Close</button>
+      </div>
     </div>
   </div>
 </div>
