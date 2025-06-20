@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "pawdicteddatabase"
-  }
+    "default": "pawdicteddatabase",
+    "development": "pawdicteddatabase"
+  },
+  "targets": {},
+  "etags": {}
 }

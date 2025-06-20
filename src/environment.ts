@@ -8,6 +8,8 @@ export const environment = {
     storageBucket: "pawdicteddatabase.firebasestorage.app",
     messagingSenderId: "482980274516",
     appId: "1:482980274516:web:65a5b9efcc4ff5ca7ea8c1",
-    measurementId: "G-J0XX5W2S4B"
+    measurementId: "G-J0XX5W2S4B",
+    useEmulator: true,
+    storageEmulatorHost: 'localhost:9199'
   }
 };
