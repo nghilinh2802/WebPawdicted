@@ -14,17 +14,17 @@ import { QuillModule } from 'ngx-quill';
 })
 export class BlogsComponent implements OnInit {
   blogs: Blog[] = [];
-  showPopup = false; // Thêm thuộc tính này
-  isEditMode = false; // Thêm thuộc tính này
+  showPopup = false;
+  isEditMode = false;
   editedBlog: Blog = {
-    id: 0,
+    id: '', // Đổi từ number sang string
     title: '',
     author: '',
     content: '',
     description: ''
   };
   newBlog: Blog = {
-    id: 0,
+    id: '', // Đổi từ number sang string
     title: '',
     author: '',
     content: '',
@@ -32,7 +32,7 @@ export class BlogsComponent implements OnInit {
   };
   selectedFile: File | null = null;
   
-  editorConfig = { // Thêm thuộc tính này
+  editorConfig = {
     toolbar: [
       ['bold', 'italic', 'underline', 'strike'],
       ['blockquote', 'code-block'],
@@ -61,26 +61,33 @@ export class BlogsComponent implements OnInit {
     this.blogsService.getBlogs().subscribe(blogs => this.blogs = blogs);
   }
 
-deleteBlog(id: number): void {
-  this.blogsService.deleteBlog(id).subscribe(() => this.loadBlogs());
-}
+  async deleteBlog(id: string): Promise<void> { // Đổi kiểu id sang string
+    try {
+      await this.blogsService.deleteBlog(id);
+      this.loadBlogs(); // Tải lại danh sách sau khi xóa
+    } catch (error) {
+      console.error('Error deleting blog:', error);
+    }
+  }
 
-
-  // Thêm phương thức openAddPopup
   openAddPopup(): void {
     this.isEditMode = false;
-    this.newBlog = { id: 0, title: '', author: '', content: '', description: '' };
+    this.newBlog = { 
+      id: '', 
+      title: '', 
+      author: '', 
+      content: '', 
+      description: '' 
+    };
     this.showPopup = true;
   }
 
-  // Thêm phương thức openEditPopup
   openEditPopup(blog: Blog): void {
     this.isEditMode = true;
     this.editedBlog = { ...blog };
     this.showPopup = true;
   }
 
-  // Thêm phương thức onFileChange
   onFileChange(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
@@ -88,24 +95,22 @@ deleteBlog(id: number): void {
     }
   }
 
-  // Thêm phương thức onSubmit
-  onSubmit(form: NgForm): void {
+  async onSubmit(form: NgForm): Promise<void> { // Chuyển sang async/await
     if (form.valid) {
-      if (this.isEditMode) {
-        this.blogsService.updateBlog(this.editedBlog.id, this.editedBlog).subscribe(() => {
-          this.loadBlogs();
-          this.showPopup = false;
-        });
-      } else {
-        this.blogsService.addBlog(this.newBlog).subscribe(() => {
-          this.loadBlogs();
-          this.showPopup = false;
-        });
+      try {
+        if (this.isEditMode) {
+          await this.blogsService.updateBlog(this.editedBlog.id, this.editedBlog);
+        } else {
+          await this.blogsService.addBlog(this.newBlog);
+        }
+        this.loadBlogs(); // Tải lại danh sách sau khi thêm/cập nhật
+        this.showPopup = false;
+      } catch (error) {
+        console.error('Error saving blog:', error);
       }
     }
   }
 
-  // Thêm phương thức cancelPost
   cancelPost(): void {
     this.showPopup = false;
   }

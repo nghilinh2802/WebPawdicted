@@ -4,6 +4,7 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import { provideFirestore, getFirestore } from '@angular/fire/firestore';
+import { FIREBASE_OPTIONS } from '@angular/fire/compat';
 import { provideAuth, getAuth } from '@angular/fire/auth';
 import { environment } from '../environment';
 import { LoginComponent } from './components/login/login.component';
@@ -17,6 +18,7 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { BlogsComponent } from './components/blogs/blogs.component';
 import { provideHttpClient } from '@angular/common/http';
 import { QuillModule } from 'ngx-quill';
+import { provideDatabase, getDatabase } from '@angular/fire/database';
 
 @NgModule({
   declarations: [
@@ -45,7 +47,9 @@ import { QuillModule } from 'ngx-quill';
     provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
     provideFirestore(() => getFirestore()),
     provideHttpClient(),
-    provideAuth(() => getAuth())
+    { provide: FIREBASE_OPTIONS, useValue: environment.firebaseConfig },
+    provideAuth(() => getAuth()),
+    provideDatabase(() => getDatabase()),
   ],
   bootstrap: [AppComponent]
 })

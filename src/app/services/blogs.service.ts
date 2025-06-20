@@ -1,33 +1,50 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
+import { DatabaseService } from './database.service';
+import { Blog } from '../model/blogs.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BlogsService {
-  // Thay URL này bằng API endpoint thực tế của bạn
-  private apiUrl = 'http://localhost:3000/api/blogs'; // Ví dụ
+  private blogsPath = 'blogs';
 
-  constructor(private http: HttpClient) { }
+  constructor(private databaseService: DatabaseService) {}
 
   // Lấy danh sách blog
-  getBlogs(): Observable<any[]> {
-    return this.http.get<any[]>(this.apiUrl);
+  getBlogs(): Observable<Blog[]> {
+    return this.databaseService.listenData(this.blogsPath).pipe(
+      map(blogsData => {
+        if (blogsData) {
+          return Object.keys(blogsData).map(key => ({
+            id: key,
+            ...blogsData[key]
+          }));
+        }
+        return [];
+      })
+    );
   }
 
-  // Thêm blog mới (nếu cần)
-  addBlog(blog: any): Observable<any> {
-    return this.http.post<any>(this.apiUrl, blog);
+  // Thêm blog mới
+  async addBlog(blog: Blog): Promise<void> {
+    const blogId = this.generateId();
+    const blogWithId = { ...blog, id: blogId };
+    await this.databaseService.writeData(`${this.blogsPath}/${blogId}`, blogWithId);
   }
 
-  // Sửa blog (nếu cần)
-  updateBlog(id: number, blog: any): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/${id}`, blog);
+  // Sửa blog
+  async updateBlog(id: string, blog: Blog): Promise<void> {
+    await this.databaseService.writeData(`${this.blogsPath}/${id}`, blog);
   }
 
-  // Xóa blog (nếu cần)
-  deleteBlog(id: number): Observable<any> {
-    return this.http.delete<any>(`${this.apiUrl}/${id}`);
+  // Xóa blog
+  async deleteBlog(id: string): Promise<void> {
+    await this.databaseService.writeData(`${this.blogsPath}/${id}`, null);
+  }
+
+  // Tạo ID unique
+  private generateId(): string {
+    return Date.now().toString() + Math.random().toString(36).substr(2, 9);
   }
 }
