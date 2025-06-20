@@ -95,12 +95,7 @@ export class BlogsComponent implements OnInit {
     this.showPopup = true;
   }
 
-  onFileChange(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files.length > 0) {
-      this.selectedFile = input.files[0];
-    }
-  }
+  
 
   async onSubmit(form: NgForm): Promise<void> { // Chuyển sang async/await
     if (form.valid) {
