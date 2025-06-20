@@ -48,9 +48,14 @@
           </quill-editor>
         </div>
 
-        <div class="form-group file-upload">
-          <label for="images">Chọn tệp</label>
-          <input type="file" id="file" name="images" (change)="onFileChange($event)">
+        <div class="form-group">
+          <label for="imageURL">URL ảnh</label>
+          <input
+            type="text"
+            id="imageURL"
+            class="form-control"
+            name="imageURL"
+            [(ngModel)]="newBlog.imageURL" placeholder="Nhập URL" required>
         </div>
 
         <div class="button-group">
@@ -91,9 +96,14 @@
           </quill-editor>
         </div>
 
-        <div class="form-group file-upload">
-          <label for="images">Chọn tệp</label>
-          <input type="file" id="file" name="images" (change)="onFileChange($event)">
+        <div class="form-group">
+          <label for="imageURL">URL ảnh</label>
+          <input
+            type="text"
+            id="imageURL"
+            class="form-control"
+            name="imageURL"
+            [(ngModel)]="newBlog.imageURL" placeholder="Nhập URL" required>
         </div>
 
         <div class="button-group">

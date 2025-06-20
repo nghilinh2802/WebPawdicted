@@ -21,7 +21,8 @@ export class BlogsComponent implements OnInit {
     title: '',
     author: '',
     content: '',
-    description: ''
+    description: '',
+    imageURL: '',
   };
   newBlog: Blog = {
     id: '', // Đổi từ number sang string
@@ -29,6 +30,7 @@ export class BlogsComponent implements OnInit {
     author: '',
     content: '',
     description: '',
+    imageURL: '',
     createdAt: undefined,
     updatedAt: undefined 
   };
@@ -80,6 +82,7 @@ export class BlogsComponent implements OnInit {
       author: '', 
       content: '', 
       description: '' ,
+      imageURL: '',
       createdAt: undefined,
       updatedAt: undefined
     };
