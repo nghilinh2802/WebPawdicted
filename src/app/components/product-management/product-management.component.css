@@ -1,44 +1,95 @@
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  background-color: #fff;
   padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  font-family: Arial, sans-serif;
 }
 
 h1 {
-  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
   color: #333;
 }
 
-.actions, .search-filter {
+.actions {
   display: flex;
   gap: 10px;
   margin-bottom: 20px;
-  flex-wrap: wrap;
 }
 
-button {
-  padding: 8px 16px;
+.add-btn, .delete-btn, .flashsale-btn, .view-details, .edit-product, .delete-product, .view-variant-details, .edit-variant, .delete-variant {
+  padding: 4px 8px;
   border: none;
   border-radius: 4px;
-  cursor: pointer;
   font-size: 14px;
+  cursor: pointer;
+  color: white;
 }
 
-button.add-btn { background-color: #28a745; color: white; }
-button.delete-btn { background-color: #dc3545; color: white; }
-button.flashsale-btn { background-color: #007bff; color: white; }
-button:hover { opacity: 0.9; }
+.add-btn {
+  background-color: #28a745;
+}
 
-input[type="text"], select {
+.add-btn:hover {
+  background-color: #218838;
+}
+
+.delete-btn {
+  background-color: #dc3545;
+}
+
+.delete-btn:hover {
+  background-color: #c82333;
+}
+
+.flashsale-btn {
+  background-color: #ffc107;
+}
+
+.flashsale-btn:hover {
+  background-color: #e0a800;
+}
+
+.view-details, .view-variant-details {
+  background-color: #007bff;
+  margin-right: 5px;
+}
+
+.view-details:hover, .view-variant-details:hover {
+  background-color: #0056b3;
+}
+
+.edit-product, .edit-variant {
+  background-color: #17a2b8;
+  margin-right: 5px;
+}
+
+.edit-product:hover, .edit-variant:hover {
+  background-color: #138496;
+}
+
+.delete-product, .delete-variant {
+  background-color: #dc3545;
+}
+
+.delete-product:hover, .delete-variant:hover {
+  background-color: #c82333;
+}
+
+.search-filter {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.search-filter input, .search-filter select {
   padding: 8px;
-  border: 1px solid #ddd;
+  border: 1px solid #ced4da;
   border-radius: 4px;
   font-size: 14px;
   width: 100%;
-  box-sizing: border-box;
+  max-width: 33.333%;
 }
 
 .table-container {
@@ -48,56 +99,84 @@ input[type="text"], select {
 table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 1000px;
+  background-color: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 th, td {
   padding: 12px;
+  border: 1px solid #dee2e6;
   text-align: left;
-  border-bottom: 1px solid #ddd;
+  font-size: 14px;
 }
 
 th {
-  background-color: #f8f9fa;
-  font-weight: bold;
-  color: #6b7280;
-  text-transform: uppercase;
-  font-size: 12px;
-  letter-spacing: 0.05em;
+  background-color: #e9ecef;
+  font-weight: 600;
+  color: #495057;
 }
 
-td {
-  vertical-align: middle;
+tbody tr {
+  background-color: #fff; /* Product row background */
+}
+
+tbody tr.selected {
+  background-color: #f1f1f1; /* Slightly gray background for selected product */
 }
 
 img {
-  width: 60px;
-  height: 60px;
+  width: 40px;
+  height: 40px;
   object-fit: cover;
   border-radius: 4px;
 }
 
-.action-links button {
-  margin-right: 10px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-.action-links button.text-green-600 { color: #28a745; }
-.action-links button.text-red-600 { color: #dc3545; }
-.action-links button:hover { text-decoration: underline; }
-
 .variant-link {
   color: #007bff;
+  text-decoration: underline;
   cursor: pointer;
-  text-decoration: none;
 }
 
-.variant-link:hover { text-decoration: underline; }
+.variant-link:hover {
+  color: #0056b3;
+}
+
+.action-links button {
+  margin-right: 5px;
+}
+
+/* Variant rows styling */
+.variant-row {
+  display: none;
+  background-color: #f8f9fa; /* Light gray for variants */
+}
+
+.variant-row.show {
+  display: table-row;
+  background-color: #e2f0d9; /* Light green for expanded variants */
+}
+
+.variant-row .action-links button {
+  background-color: #007bff;
+  color: white;
+}
+
+.variant-row .action-links button:hover {
+  background-color: #0056b3;
+}
 
 @media (max-width: 768px) {
-  .actions, .search-filter { flex-direction: column; }
-  th, td { font-size: 12px; padding: 8px; }
+  .search-filter {
+    flex-direction: column;
+  }
+
+  th, td {
+    font-size: 12px;
+    padding: 8px;
+  }
+
+  img {
+    width: 30px;
+    height: 30px;
+  }
 }
