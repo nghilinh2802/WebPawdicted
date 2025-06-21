@@ -183,3 +183,30 @@
 .suggestions li:hover {
   background-color: #f1e1e1;
 }
+/* Bảng con: danh sách sản phẩm */
+.inner-product-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff4f4; /* nền nhẹ tông đỏ hồng */
+  margin-top: 10px;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.inner-product-table th,
+.inner-product-table td {
+  padding: 8px 12px;
+  text-align: left;
+  border: 1px solid #f0dada;
+}
+
+.inner-product-table th {
+  background-color: #f2dede;
+  color: #9c162c;
+  font-weight: bold;
+}
+
+.inner-product-table tr:hover {
+  background-color: #fce8e8;
+}
+
