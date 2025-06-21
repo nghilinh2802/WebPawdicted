@@ -7,7 +7,8 @@ import { FormsModule } from '@angular/forms';
 import { AddProductModalComponent } from '../add-product-modal/add-product-modal.component';
 import { EditProductModalComponent } from '../edit-product-modal/edit-product-modal.component';
 import { ProductDetailsModalComponent } from '../product-details-modal/product-details-modal.component';
-
+import { FlashsaleService } from '../../services/flashsale.service';
+import { v4 as uuidv4 } from 'uuid';
 @Component({
   selector: 'app-product-management',
   templateUrl: './product-management.component.html',
@@ -40,7 +41,8 @@ export class ProductManagementComponent implements OnInit {
     { id: 'Carriers & Kennels', name: 'Carriers & Kennels', children: ['Carriers', 'Kennels'] }
   ];
   
-  constructor(private productService: ProductService) {
+  constructor(private productService: ProductService,
+    private flashsaleService: FlashsaleService) {
     this.products$ = this.productService.getProducts();
   }
 
@@ -201,9 +203,52 @@ export class ProductManagementComponent implements OnInit {
       this.filteredProducts = filtered;
     }, error => console.error('Error applying filters:', error));
   }
+  showFlashsalePopup = false;
+  flashsaleForm = {
+  flashSale_id: '',
+  flashSale_name: '',
+  startTime: 0,
+  endTime: 0,
+  discountRate: 0,
+  soldQuantity: 0,
+  product_id: [] as string[]
+};
+  openFlashsalePopup() {
+    this.flashsaleForm = {
+      flashSale_id: uuidv4(),
+      flashSale_name: '',
+      startTime: Date.now(),
+      endTime: Date.now() + 3600000,
+      discountRate: 10,
+      soldQuantity: 0,
+      product_id: Array.from(this.selectedProductIds)
+    };
+    this.showFlashsalePopup = true;
+  }
 
-  createFlashsale(): void {
-    alert('Chức năng tạo flashsale đang được phát triển!');
+  closeFlashsalePopup() {
+    this.showFlashsalePopup = false;
+  }
+
+  async createFlashsale() {
+    try {
+      await this.flashsaleService.createFlashsale(this.flashsaleForm);
+      alert('Flashsale created successfully!');
+      this.closeFlashsalePopup();
+    } catch (error) {
+      console.error('Error creating flashsale:', error);
+      alert('Failed to create flashsale!');
+    }
+  }
+
+  getDateTimeLocal(timestamp: number): string {
+    const date = new Date(timestamp);
+    const pad = (n: number) => n.toString().padStart(2, '0');
+    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+  }
+
+  getTimestampFromLocal(dateTimeString: string): number {
+    return new Date(dateTimeString).getTime();
   }
 
   openAddModal() {

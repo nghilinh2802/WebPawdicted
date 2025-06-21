@@ -1,3 +1,6 @@
+/* =========================
+   Layout & Typography
+========================= */
 .container {
   padding: 20px;
   background-color: #f8f1f1;
@@ -21,6 +24,9 @@
   justify-content: flex-end;
 }
 
+/* =========================
+   Buttons
+========================= */
 .add-btn, .delete-btn, .flashsale-btn, .details-btn, .edit-btn {
   padding: 10px 20px;
   border: none;
@@ -31,39 +37,31 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.add-btn {
+.add-btn, .delete-btn, .flashsale-btn {
   background-color: #ffffff;
   color: #9c162c;
   border: 2px solid #9c162c;
 }
 
-.add-btn:hover {
+.add-btn:hover, .delete-btn:hover, .flashsale-btn:hover {
   background-color: #9c162c;
   color: #ffffff;
 }
 
-.delete-btn {
+.details-btn, .edit-btn {
   background-color: #ffffff;
   color: #9c162c;
-  border: 2px solid #9c162c;
+  border: 1px solid #9c162c;
 }
 
-.delete-btn:hover {
+.details-btn:hover, .edit-btn:hover {
   background-color: #9c162c;
   color: #ffffff;
 }
 
-.flashsale-btn {
-  background-color: #ffffff;
-  color: #9c162c;
-  border: 2px solid #9c162c;
-}
-
-.flashsale-btn:hover {
-  background-color: #9c162c;
-  color: #ffffff;
-}
-
+/* =========================
+   Filters
+========================= */
 .search-filter {
   display: flex;
   gap: 10px;
@@ -90,6 +88,9 @@
   max-width: 300px;
 }
 
+/* =========================
+   Table
+========================= */
 .table-container {
   background-color: #ffffff;
   border-radius: 5px;
@@ -116,10 +117,6 @@
   font-weight: bold;
 }
 
-.product-table tr:last-child td {
-  border-bottom: none;
-}
-
 .product-row {
   background-color: #ffffff;
   transition: background-color 0.3s ease;
@@ -130,7 +127,7 @@
 }
 
 .variant-row {
-  background-color: #f8f8f8; /* Màu nhạt hơn để tạo điểm nhấn */
+  background-color: #f8f8f8;
   display: none;
   transition: background-color 0.3s ease;
 }
@@ -165,39 +162,53 @@
   transition: all 0.3s ease;
 }
 
-.details-btn {
+/* =========================
+   Modal Flashsale Popup
+========================= */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
   background-color: #ffffff;
+  padding: 30px;
+  border-radius: 10px;
+  width: 400px;
+  max-width: 95%;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.modal-content input {
+  padding: 8px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 100%;
+}
+
+.modal-content label {
+  font-weight: bold;
   color: #9c162c;
-  border: 1px solid #9c162c;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
 
-.details-btn:hover {
-  background-color: #9c162c;
-  color: #ffffff;
-}
-
-.edit-btn {
-  background-color: #ffffff;
-  color: #9c162c;
-  border: 1px solid #9c162c;
-}
-
-.edit-btn:hover {
-  background-color: #9c162c;
-  color: #ffffff;
-}
-
-.delete-btn {
-  background-color: #ffffff;
-  color: #9c162c;
-  border: 1px solid #9c162c;
-}
-
-.delete-btn:hover {
-  background-color: #9c162c;
-  color: #ffffff;
-}
-
+/* =========================
+   Responsive
+========================= */
 @media (max-width: 768px) {
   .title {
     font-size: 2rem;
@@ -211,7 +222,6 @@
   .add-btn, .delete-btn, .flashsale-btn {
     width: 100%;
     margin-bottom: 10px;
-    
   }
 
   .search-filter {

@@ -30,6 +30,7 @@ import { OrderUpdateComponent } from './components/order-update/order-update.com
 import { BlogsComponent } from './components/blogs/blogs.component';
 import { VoucherComponent } from './components/voucher/voucher.component';
 import { PromotionsComponent } from './components/promotions/promotions.component';
+import { FlashsaleComponent } from './components/flashsale/flashsale.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import { PromotionsComponent } from './components/promotions/promotions.componen
     OrderUpdateComponent,
     BlogsComponent,
     VoucherComponent,
-    PromotionsComponent
+    PromotionsComponent,
+    FlashsaleComponent
   ],
   imports: [
     BrowserModule,

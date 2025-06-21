@@ -4,7 +4,7 @@
   <div class="actions">
     <button class="add-btn" (click)="openAddModal()">Add Product</button>
     <button class="delete-btn" (click)="deleteSelected()">Delete Selected</button>
-    <button class="flashsale-btn" (click)="createFlashsale()">Create Flashsale</button>
+    <button class="flashsale-btn" (click)="openFlashsalePopup()" [disabled]="selectedProductIds.size === 0">Create Flashsale</button>
   </div>
 
   <div class="search-filter">
@@ -74,6 +74,55 @@
       </tbody>
     </table>
   </div>
+
+  <!-- Flashsale Popup -->
+  <div class="modal" *ngIf="showFlashsalePopup">
+    <div class="modal-content">
+      <h3 style="color: #9c162c">Create Flashsale</h3>
+
+      <label>
+        Flashsale Name:
+        <input [(ngModel)]="flashsaleForm.flashSale_name" name="name" />
+      </label>
+
+      <label>
+        Start Time:
+        <input
+          type="datetime-local"
+          [ngModel]="getDateTimeLocal(flashsaleForm.startTime)"
+          (ngModelChange)="flashsaleForm.startTime = getTimestampFromLocal($event)"
+          name="startTime"
+        />
+      </label>
+
+      <label>
+        End Time:
+        <input
+          type="datetime-local"
+          [ngModel]="getDateTimeLocal(flashsaleForm.endTime)"
+          (ngModelChange)="flashsaleForm.endTime = getTimestampFromLocal($event)"
+          name="endTime"
+        />
+      </label>
+
+      <label>
+        Discount Rate (%):
+        <input type="number" [(ngModel)]="flashsaleForm.discountRate" name="discountRate" />
+      </label>
+      <div style="margin-top: 10px;">
+        <p><strong>Selected Products:</strong></p>
+        <ul>
+          <li *ngFor="let pid of flashsaleForm.product_id">{{ pid }}</li>
+        </ul>
+      </div>
+
+      <div style="display: flex; gap: 10px; margin-top: 15px;">
+        <button class="flashsale-btn" (click)="createFlashsale()">Confirm</button>
+        <button class="delete-btn" (click)="closeFlashsalePopup()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
 </div>
 
 <app-add-product-modal *ngIf="showAddModal" (close)="showAddModal = false"></app-add-product-modal>
