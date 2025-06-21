@@ -17,6 +17,8 @@ import { AddProductModalComponent } from './components/add-product-modal/add-pro
 import { EditProductModalComponent } from './components/edit-product-modal/edit-product-modal.component';
 import { ProductDetailsModalComponent } from './components/product-details-modal/product-details-modal.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { ReportComponent } from './components/report/report.component';
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 
@@ -34,13 +36,14 @@ const routes: Routes = [
   { path: 'blogs', component: BlogsComponent },
   { path: 'voucher-management', component: VoucherComponent },
   { path: 'promotion-management', component: PromotionsComponent },
-  { path: 'product-management', component: ProductManagementComponent },
+  { path: 'product-management', component: ProductManagementComponent, canActivate: [AdminGuard] },
   { path: 'add-product', component: AddProductModalComponent },
   { path: 'edit-product/:id', component: EditProductModalComponent },
   { path: 'product-details/:id', component: ProductDetailsModalComponent },
   { path: 'flashsale', component: FlashsaleManagementComponent},
   { path: 'navbar', component: NavbarComponent },
-
+  { path: 'dashboard', component: DashboardComponent },
+  { path: 'report', component: ReportComponent, canActivate: [AdminGuard] },
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: '**', redirectTo: '/login' }
 ];
