@@ -20,6 +20,7 @@ import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 
 import { AdminGuard } from './guards/admin.guard';
+import { FlashsaleManagementComponent } from './components/flashsale/flashsale.component';
 
 const routes: Routes = [
   { path: 'data', component: DataComponent },
@@ -36,6 +37,7 @@ const routes: Routes = [
   { path: 'add-product', component: AddProductModalComponent },
   { path: 'edit-product/:id', component: EditProductModalComponent },
   { path: 'product-details/:id', component: ProductDetailsModalComponent },
+  { path: 'flashsale', component: FlashsaleManagementComponent},
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: '**', redirectTo: '/login' }
 ];

@@ -626,4 +626,16 @@ export class ProductService {
       map(variants => variants.filter(v => v.variant_id === variantId))
     );
   }
+  loadProducts(): Observable<{ product_id: string, product_name: string }[]> {
+  const productRef = collection(this.firestore, 'products');
+  return collectionData(productRef, { idField: 'docId' }).pipe(
+    map((products: any[]) =>
+      products.map(product => ({
+        product_id: product.product_id || product.docId,
+        product_name: product.product_name || 'Unnamed'
+      }))
+    )
+  );
+}
+
 }

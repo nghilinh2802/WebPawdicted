@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FlashsaleComponent } from './flashsale.component';
+import { FlashsaleManagementComponent } from './flashsale.component';
 
-describe('FlashsaleComponent', () => {
-  let component: FlashsaleComponent;
-  let fixture: ComponentFixture<FlashsaleComponent>;
+describe('FlashsaleManagementComponent', () => {
+  let component: FlashsaleManagementComponent;
+  let fixture: ComponentFixture<FlashsaleManagementComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [FlashsaleComponent]
+      declarations: [FlashsaleManagementComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(FlashsaleComponent);
+    fixture = TestBed.createComponent(FlashsaleManagementComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

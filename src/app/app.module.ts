@@ -30,7 +30,7 @@ import { OrderUpdateComponent } from './components/order-update/order-update.com
 import { BlogsComponent } from './components/blogs/blogs.component';
 import { VoucherComponent } from './components/voucher/voucher.component';
 import { PromotionsComponent } from './components/promotions/promotions.component';
-import { FlashsaleComponent } from './components/flashsale/flashsale.component';
+import { FlashsaleManagementComponent } from './components/flashsale/flashsale.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +45,7 @@ import { FlashsaleComponent } from './components/flashsale/flashsale.component';
     BlogsComponent,
     VoucherComponent,
     PromotionsComponent,
-    FlashsaleComponent
+    FlashsaleManagementComponent
   ],
   imports: [
     BrowserModule,
