@@ -97,6 +97,11 @@ cancelEdit() {
 
 async saveFlashsale() {
   if (!this.editingFlashsale) return;
+  const confirmEdit = confirm('Bạn có chắc chắn muốn lưu thay đổi cho flashsale này không?');
+  if (!confirmEdit) {
+    console.log('🚫 Người dùng huỷ lưu flashsale.');
+    return;
+  }
 
   try {
     // ✅ Cập nhật global discountRate là mức cao nhất
