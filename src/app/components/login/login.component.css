@@ -1,102 +1,131 @@
-/* Định dạng tổng thể */
+/* =========================
+   Global Reset
+========================= */
 * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: 'Times New Roman', Times, serif;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Arial', sans-serif; /* Changed to Arial for consistency */
 }
 
-/* Căn giữa form đăng nhập */
+/* =========================
+   Login Container
+========================= */
 .login-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f8f1f1; /* Changed from default to theme background */
 }
 
-/* Hộp đăng nhập */
+/* =========================
+   Login Box
+========================= */
 .login-box {
-    width: 380px;
-    background: white;
-    padding: 40px;
-    border-radius: 12px;
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
-    text-align: center;
-    transition: transform 0.3s ease-in-out;
+  width: 380px;
+  background: #ffffff; /* Changed to theme container background */
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  transition: transform 0.3s ease-in-out;
 }
 
-/* Hiệu ứng khi hover */
+/* =========================
+   Login Box Hover
+========================= */
 .login-box:hover {
-    transform: scale(1.02);
+  transform: scale(1.02);
 }
 
-/* Tiêu đề */
+/* =========================
+   Title
+========================= */
 .login-box h2 {
-    margin-bottom: 20px;
-    color: #5f3e22;
-    font-size: 24px;
-    font-weight: 600;
+  margin-bottom: 20px;
+  color: #9c162c; /* Changed from #5f3e22 to theme primary */
+  font-size: 24px;
+  font-weight: 600;
 }
 
-/* Nhóm input */
+/* =========================
+   Input Group
+========================= */
 .input-group {
-    margin-bottom: 20px;
-    text-align: left;
+  margin-bottom: 20px;
+  text-align: left;
 }
 
-/* Label */
+/* =========================
+   Label
+========================= */
 .input-group label {
-    display: block;
-    font-weight: 600;
-    color: #5f3e22;
-    margin-bottom: 6px;
+  display: block;
+  font-weight: 600;
+  color: #9c162c; /* Changed from #5f3e22 to theme primary */
+  margin-bottom: 6px;
 }
 
-/* Ô input */
+/* =========================
+   Input
+========================= */
 .input-group input {
-    width: 100%;
-    padding: 12px;
-    border: 2px solid #5f3e22;
-    border-radius: 6px;
-    font-size: 16px;
-    transition: all 0.3s ease-in-out;
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #9c162c; /* Changed from #5f3e22 to theme primary */
+  border-radius: 6px;
+  font-size: 16px;
+  transition: all 0.3s ease-in-out;
 }
 
-/* Ô input khi focus */
+/* =========================
+   Input Focus
+========================= */
 .input-group input:focus {
-    border-color: #675654;
-    outline: none;
-    box-shadow: 0 0 8px rgba(95, 62, 34, 0.4);
+  border-color: #7a1122; /* Changed from #675654 to darker shade of theme primary */
+  outline: none;
+  box-shadow: 0 0 8px rgba(156, 22, 44, 0.4); /* Updated to use theme primary */
 }
 
-/* Nút đăng nhập */
+/* =========================
+   Login Button
+========================= */
 .login-btn {
-    width: 100%;
-    padding: 12px;
-    background: #5f3e22;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.3s ease-in-out, transform 0.2s;
+  width: 100%;
+  padding: 12px;
+  background: #ffffff; /* Changed to match button style */
+  color: #9c162c; /* Changed from white to theme primary */
+  border: 2px solid #9c162c; /* Added border to match theme */
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease-in-out, transform 0.2s, box-shadow 0.3s ease;
 }
 
-/* Nút đăng nhập hover */
+/* =========================
+   Login Button Hover
+========================= */
 .login-btn:hover {
-    background: #675654;
-    transform: translateY(-2px);
+  background: #9c162c; /* Changed from #675654 to theme primary */
+  color: #ffffff; /* Changed to white for contrast */
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(156, 22, 44, 0.3); /* Added shadow to match theme */
 }
 
-/* Nút đăng nhập khi nhấn */
+/* =========================
+   Login Button Active
+========================= */
 .login-btn:active {
-    transform: translateY(0);
+  transform: translateY(0);
 }
 
-/* Thông báo lỗi */
+/* =========================
+   Error Message
+========================= */
 .error-message {
-    color: red;
-    font-size: 14px;
-    margin-top: 10px;
+  color: #9c162c; /* Changed from red to theme primary */
+  font-size: 14px;
+  margin-top: 10px;
 }

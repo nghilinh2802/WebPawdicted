@@ -1,11 +1,25 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
-  standalone: false,
   templateUrl: './navbar.component.html',
-  styleUrl: './navbar.component.css'
+  standalone: false,
+  styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent {
+  userName: string = 'Admin User'; // Placeholder for dynamic user data
 
+  @Output() sidebarToggle = new EventEmitter<void>();
+
+  constructor(private router: Router) {}
+
+  toggleSidebar(): void {
+    this.sidebarToggle.emit();
+  }
+
+  logout(): void {
+    localStorage.removeItem('authToken'); // Example: Remove token
+    this.router.navigate(['/login']);
+  }
 }

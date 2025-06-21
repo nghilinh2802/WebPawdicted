@@ -1,43 +1,73 @@
-/* Sidebar */
+
+
+/* Existing sidebar.component.css content */
 .sidebar {
+  position: fixed;
+  top: 60px; /* Offset for navbar height */
+  left: 0;
+  width: 250px;
+  height: calc(100% - 60px); /* Adjust for navbar */
+  background-color: #ffffff;
+  padding: 20px;
+  box-shadow: 2px 0 6px rgba(0, 0, 0, 0.1);
+  font-family: 'Arial', sans-serif;
+  border-right: 1px solid #f8f1f1;
+}
+
+.menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menu li {
+  margin-bottom: 10px;
+  border-bottom: 1px solid #f8f1f1;
+}
+
+.menu a {
+  display: block;
+  padding: 12px 15px;
+  color: #9c162c;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
+}
+
+.menu a:hover {
+  background-color: #f8f1f1;
+  border: 1px solid #9c162c;
+  color: #9c162c;
+  box-shadow: 0 2px 4px rgba(156, 22, 44, 0.2);
+}
+
+.menu a.active {
+  background-color: #9c162c;
+  color: #ffffff;
+  border: 1px solid #9c162c;
+  box-shadow: 0 2px 4px rgba(156, 22, 44, 0.3);
+}
+
+/* Mobile sidebar toggle */
+@media (max-width: 768px) {
+  .sidebar {
     position: fixed;
-    top: 25px;
-    left: 0;
-    width: 200px;
-    height: 100%;
-    background: #F4F1EC;
-    border-right: 1px solid #ddd;
-    padding-top: 20px;
-}
+    top: 60px;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    width: 250px;
+    height: calc(100% - 60px);
+  }
 
-/* Định dạng thẻ <a> */
-.sidebar a {
-    text-decoration: none;
-    color: #5f3e22;
-    display: block; /* Đảm bảo toàn bộ ô có thể bấm */
-    padding: 15px;
-}
+  .sidebar.active {
+    transform: translateX(0);
+  }
 
-/* Danh sách menu */
-.sidebar ul {
-    list-style-type: none;
-    padding: 0;
-    font-weight: bold;
-}
-
-/* Mục menu */
-.sidebar ul li {
-    cursor: pointer;
-    transition: background 0.3s, color 0.3s; /* Thêm hiệu ứng màu chữ */
-    border-bottom: 1px solid #ddd;
-}
-
-/* Hover - Đổi màu nền & chữ */
-.sidebar ul li:hover {
-    background: #5f3e22;
-}
-
-/* Đổi màu chữ khi hover vào <li> và <a> */
-.sidebar ul li:hover a {
-    color: white !important;
+  .menu a {
+    padding: 10px 12px;
+    font-size: 0.9rem;
+  }
 }
