@@ -46,21 +46,33 @@ export class FlashsaleManagementComponent implements OnInit {
   }
 
   openEditPopup(flash: Flashsale) {
-    this.editingFlashsale = { ...flash }; // clone to avoid two-way binding problems
-    this.showEditPopup = true;
-  }
+  this.editingFlashsale = {
+    ...flash,
+    products: flash.products || [] // ✅ đảm bảo mảng luôn tồn tại
+  };
+  this.showEditPopup = true;
+}
 
   closeEditPopup() {
     this.showEditPopup = false;
     this.editingFlashsale = null;
   }
 
-  async deleteFlashsale(flash: any) {
-    const confirmDelete = confirm(`Delete flashsale: ${flash.flashSale_name}?`);
-    if (!confirmDelete) return;
+  async deleteFlashsale(flash: Flashsale) {
+  const confirmDelete = confirm(`Delete flashsale: ${flash.flashSale_name}?`);
+  if (!confirmDelete) return;
+
+  try {
     const docRef = doc(this.firestore, 'flashsales/' + flash.docId);
     await deleteDoc(docRef);
+    this.loadFlashsales(); // reload list sau khi xóa
+    alert('Flashsale deleted!');
+  } catch (err) {
+    console.error('Delete failed:', err);
+    alert('Failed to delete flashsale!');
   }
+}
+
   getDateTimeLocal(timestamp: number): string {
     const date = new Date(timestamp);
     const pad = (n: number) => n.toString().padStart(2, '0');
@@ -75,7 +87,7 @@ export class FlashsaleManagementComponent implements OnInit {
 
   editFlashsale(flashsale: Flashsale) {
   this.editingFlashsale = { ...flashsale };
-  this.editingProductIds = flashsale.product_id.join(', ');
+  this.editingProductIds = flashsale.products.join(', ');
 }
 
 cancelEdit() {
@@ -85,21 +97,32 @@ cancelEdit() {
 
 async saveFlashsale() {
   if (!this.editingFlashsale) return;
+  const confirmEdit = confirm('Bạn có chắc chắn muốn lưu thay đổi cho flashsale này không?');
+  if (!confirmEdit) {
+    console.log('🚫 Người dùng huỷ lưu flashsale.');
+    return;
+  }
 
   try {
-    const { flashSale_id, docId, ...updateData } = this.editingFlashsale as any;
+    // ✅ Cập nhật global discountRate là mức cao nhất
+    this.editingFlashsale.discountRate = Math.max(
+      ...this.editingFlashsale.products.map(p => p.discountRate)
+    );
 
+    const { flashSale_id, docId, ...updateData } = this.editingFlashsale!;
     const docRef = doc(this.firestore, `flashsales/${docId}`);
     await updateDoc(docRef, updateData);
 
     alert('Flashsale updated!');
     this.editingFlashsale = null;
-    this.loadFlashsales();
+    this.loadFlashsales(); // refresh danh sách
   } catch (e) {
     console.error('Error updating flashsale:', e);
     alert('Failed to update flashsale');
   }
 }
+
+
 
 productSearch: string = '';
 filteredProductSuggestions: any[] = [];
@@ -111,31 +134,52 @@ loadAllProducts() {
   });
 }
 
-removeProduct(pid: string) {
-  this.editingFlashsale!.product_id = this.editingFlashsale!.product_id.filter(id => id !== pid);
+removeProduct(productId: string) {
+  if (!this.editingFlashsale) return;
+
+  this.editingFlashsale.products = this.editingFlashsale.products.filter(
+    p => p.product_id !== productId
+  );
 }
+
 filterProductSuggestions() {
   const keyword = this.productSearch.toLowerCase().trim();
-  if (!keyword) {
+  if (!keyword || !this.allProducts) {
     this.filteredProductSuggestions = [];
     return;
   }
 
   this.filteredProductSuggestions = this.allProducts
-    .filter(p => 
+    .filter(p =>
       (p.product_name?.toLowerCase().includes(keyword) || p.product_id?.toLowerCase().includes(keyword)) &&
-      !this.editingFlashsale!.product_id.includes(p.product_id)
+      !this.editingFlashsale!.products.some(existing => existing.product_id === p.product_id)
     )
-    .slice(0, 5); // giới hạn gợi ý
+    .slice(0, 5);
 }
 
-addProductToFlashsale(pid: string) {
-  if (!this.editingFlashsale!.product_id.includes(pid)) {
-    this.editingFlashsale!.product_id.push(pid);
+
+addProductToFlashsale(productId: string) {
+  if (!this.editingFlashsale) return;
+
+  const exists = this.editingFlashsale.products.some(p => p.product_id === productId);
+  if (!exists) {
+    const defaultRate = this.editingFlashsale.discountRate || 10; // fallback nếu chưa có
+    this.editingFlashsale.products.push({
+      product_id: productId,
+      discountRate: defaultRate
+    });
   }
+
   this.productSearch = '';
   this.filteredProductSuggestions = [];
 }
+expandedFlashsaleIds: Set<string> = new Set();
 
-
+toggleFlashsaleExpand(flashSaleId: string) {
+  if (this.expandedFlashsaleIds.has(flashSaleId)) {
+    this.expandedFlashsaleIds.delete(flashSaleId);
+  } else {
+    this.expandedFlashsaleIds.add(flashSaleId);
+  }
+}
 }

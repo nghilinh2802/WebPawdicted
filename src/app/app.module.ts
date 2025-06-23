@@ -30,6 +30,8 @@ import { BlogsComponent } from './components/blogs/blogs.component';
 import { VoucherComponent } from './components/voucher/voucher.component';
 import { PromotionsComponent } from './components/promotions/promotions.component';
 import { FlashsaleManagementComponent } from './components/flashsale/flashsale.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { ReportComponent } from './components/report/report.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +46,9 @@ import { FlashsaleManagementComponent } from './components/flashsale/flashsale.c
     BlogsComponent,
     VoucherComponent,
     PromotionsComponent,
-    FlashsaleManagementComponent
+    FlashsaleManagementComponent,
+    DashboardComponent,
+    ReportComponent
   ],
   imports: [
     BrowserModule,

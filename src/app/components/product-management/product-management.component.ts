@@ -9,6 +9,12 @@ import { EditProductModalComponent } from '../edit-product-modal/edit-product-mo
 import { ProductDetailsModalComponent } from '../product-details-modal/product-details-modal.component';
 import { FlashsaleService } from '../../services/flashsale.service';
 import { v4 as uuidv4 } from 'uuid';
+import { collection, addDoc } from '@angular/fire/firestore';
+import { Firestore } from '@angular/fire/firestore';
+import { Flashsale } from '../../model/flashsale';
+
+
+
 @Component({
   selector: 'app-product-management',
   templateUrl: './product-management.component.html',
@@ -42,7 +48,9 @@ export class ProductManagementComponent implements OnInit {
   ];
   
   constructor(private productService: ProductService,
-    private flashsaleService: FlashsaleService) {
+    private flashsaleService: FlashsaleService,
+    private firestore: Firestore,
+) {
     this.products$ = this.productService.getProducts();
   }
 
@@ -231,15 +239,55 @@ export class ProductManagementComponent implements OnInit {
   }
 
   async createFlashsale() {
-    try {
-      await this.flashsaleService.createFlashsale(this.flashsaleForm);
-      alert('Flashsale created successfully!');
-      this.closeFlashsalePopup();
-    } catch (error) {
-      console.error('Error creating flashsale:', error);
-      alert('Failed to create flashsale!');
-    }
+  console.log('✅ createFlashsale() được gọi');
+  const confirmed = confirm('Bạn có chắc chắn muốn tạo flashsale này không?');
+  if (!confirmed) {
+    console.log('🚫 User huỷ tạo flashsale.');
+    return;
   }
+
+  const flashRef = collection(this.firestore, 'flashsales');
+
+  const newFlash = {
+    flashSale_id: this.flashsaleForm.flashSale_id || 'fs_' + Date.now(),
+    flashSale_name: this.flashsaleForm.flashSale_name,
+    startTime: this.flashsaleForm.startTime,
+    endTime: this.flashsaleForm.endTime,
+    discountRate: this.flashsaleForm.discountRate,
+    soldQuantity: 0,
+    products: Array.from(this.selectedProductIds).map(pid => ({
+      product_id: pid,
+      discountRate: this.flashsaleForm.discountRate
+    }))
+  };
+
+  try {
+    await addDoc(flashRef, newFlash);
+    alert('✅ Flashsale created!');
+
+    // ✅ Reset lại form an toàn
+    this.flashsaleForm = {
+      flashSale_id: '',
+      flashSale_name: '',
+      startTime: 0,
+      endTime: 0,
+      discountRate: 0,
+      soldQuantity: 0,
+      product_id: []
+    };
+
+    this.selectedProductIds.clear();
+    this.showFlashsalePopup = false;
+
+    // Nếu có loadFlashsales() thì gọi, nếu không thì bỏ
+
+  } catch (error) {
+    console.error('❌ Firestore error:', error);
+    alert('Failed to create flashsale');
+  }
+}
+
+
 
   getDateTimeLocal(timestamp: number): string {
     const date = new Date(timestamp);

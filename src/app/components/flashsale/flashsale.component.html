@@ -2,43 +2,67 @@
   <h1 class="title">Flashsale Management</h1>
 
   <div class="search-filter">
-    <input type="text" [(ngModel)]="searchTerm" (input)="applyFilters()" placeholder="Search by name or ID" class="search-input">
+    <input
+      type="text"
+      [(ngModel)]="searchTerm"
+      (input)="applyFilters()"
+      placeholder="Search by name or ID"
+      class="search-input"
+    />
   </div>
 
   <div class="table-container">
     <table class="product-table">
+  <thead>
+    <tr>
+      <th>Flashsale Name</th>
+      <th>Start Time</th>
+      <th>End Time</th>
+      <th>Global Discount (%)</th>
+      <th>Product Count</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <ng-container *ngFor="let flash of filteredFlashsales">
+      <!-- Hàng chính -->
+      <tr (click)="toggleFlashsaleExpand(flash.flashSale_id)" style="cursor: pointer;">
+        <td>{{ flash.flashSale_name }}</td>
+        <td>{{ flash.startTime | date: 'dd/MM/yyyy HH:mm' }}</td>
+        <td>{{ flash.endTime | date: 'dd/MM/yyyy HH:mm' }}</td>
+        <td>{{ flash.discountRate }}%</td>
+        <td>{{ flash.products.length || 0 }} products</td>
+        <td>
+          <button class="edit-btn" (click)="openEditPopup(flash); $event.stopPropagation()">Edit</button>
+          <button class="delete-btn" (click)="deleteFlashsale(flash); $event.stopPropagation()">Delete</button>
+        </td>
+      </tr>
+
+      <!-- Hàng phụ để hiển thị sản phẩm -->
+      <tr *ngIf="expandedFlashsaleIds.has(flash.flashSale_id)">
+  <td colspan="7">
+    <table class="inner-product-table" style="width: 100%;">
       <thead>
         <tr>
-          <th>Flashsale Name</th>
-          <th>Start Time</th>
-          <th>End Time</th>
+          <th>Product ID</th>
           <th>Discount (%)</th>
-          <th>Sold</th>
-          <th>Products</th>
-          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let flash of filteredFlashsales">
-          <td>{{ flash.flashSale_name }}</td>
-          <td>{{ flash.startTime | date: 'dd/MM/yyyy HH:mm' }}</td>
-          <td>{{ flash.endTime | date: 'dd/MM/yyyy HH:mm' }}</td>
-          <td>{{ flash.discountRate }}%</td>
-          <td>{{ flash.soldQuantity }}</td>
-          <td>
-            <ul>
-              <li *ngFor="let pid of flash.product_id">{{ pid }}</li>
-            </ul>
-          </td>
-          <td>
-            <button class="edit-btn" title="Edit flashsale" (click)="openEditPopup(flash)">Edit</button>
-            <button class="delete-btn" title="Delete flashsale" (click)="deleteFlashsale(flash)">Delete</button>
-          </td>
+        <tr *ngFor="let p of flash.products">
+          <td>{{ p.product_id }}</td>
+          <td>{{ p.discountRate }}%</td>
         </tr>
       </tbody>
     </table>
+  </td>
+</tr>
+    </ng-container>
+  </tbody>
+</table>
   </div>
 </div>
+
 <!-- Edit Flashsale Popup -->
 <div class="modal" *ngIf="editingFlashsale">
   <div class="modal-content">
@@ -67,40 +91,45 @@
       />
     </label>
 
+    <p style="color: gray;">
+      Global Discount (when created): {{ editingFlashsale.discountRate }}%
+    </p>
+
     <label>
-      Discount Rate (%):
-      <input type="number" [(ngModel)]="editingFlashsale.discountRate" />
+      Selected Products:
+      <ul>
+        <li *ngFor="let item of editingFlashsale.products">
+          {{ item.product_id }}
+          <input
+            type="number"
+            [(ngModel)]="item.discountRate"
+            min="0"
+            max="100"
+            placeholder="Discount (%)"
+            style="width: 80px; margin-left: 10px;"
+          />
+          <button class="delete-btn" (click)="removeProduct(item.product_id)">×</button>
+        </li>
+      </ul>
     </label>
 
     <label>
-  Selected Products:
-  <ul>
-    <li *ngFor="let pid of editingFlashsale?.product_id">
-      {{ pid }}
-      <button class="delete-btn" (click)="removeProduct(pid)">×</button>
-    </li>
-  </ul>
-</label>
-
-<label>
-  Add Product:
-  <div style="position: relative;">
-    <input
-      type="text"
-      [(ngModel)]="productSearch"
-      (input)="filterProductSuggestions()"
-      placeholder="Search product by name or ID"
-      autocomplete="off"
-    />
-    <ul class="suggestions" *ngIf="filteredProductSuggestions.length > 0">
-      <li *ngFor="let p of filteredProductSuggestions" (click)="addProductToFlashsale(p.product_id)">
-        {{ p.product_name }} ({{ p.product_id }})
-      </li>
-    </ul>
-  </div>
-</label>
-
-
+      Add Product:
+      <div style="position: relative;">
+        <input
+          type="text"
+          [(ngModel)]="productSearch"
+          (input)="filterProductSuggestions()"
+          placeholder="Search product by name or ID"
+          autocomplete="off"
+        />
+        <ul class="suggestions" *ngIf="filteredProductSuggestions.length > 0">
+          <li *ngFor="let p of filteredProductSuggestions" (click)="addProductToFlashsale(p.product_id)">
+            {{ p.product_name }} ({{ p.product_id }})
+          </li>
+        </ul>
+      </div>
+    </label>
 
     <div style="display: flex; gap: 10px; margin-top: 15px;">
       <button class="edit-btn" (click)="saveFlashsale()">Save</button>
@@ -108,5 +137,3 @@
     </div>
   </div>
 </div>
-
-

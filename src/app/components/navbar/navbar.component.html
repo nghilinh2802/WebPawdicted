@@ -1,1 +1,50 @@
-<p>navbar works!</p>
+<!-- <nav class="navbar">
+  <div class="navbar-brand">
+    <a href="/" class="brand-logo">Admin Dashboard</a>
+    <button class="menu-toggle" (click)="toggleSidebar()" aria-label="Toggle Sidebar">
+      <span class="menu-icon"></span>
+      <span class="menu-icon"></span>
+      <span class="menu-icon"></span>
+    </button>
+  </div>
+  <div class="navbar-menu">
+    <ul class="nav-links">
+      
+    </ul>
+    <div class="user-profile">
+      <span class="user-name">Admin User</span>
+      <button class="logout-btn" (click)="logout()">Logout</button>
+    </div>
+  </div>
+</nav> -->
+
+<nav class="navbar">
+  <div class="navbar-brand">
+    <a href="/dashboard" class="brand-logo" (click)="navigateToDashboard()">Admin Dashboard</a>
+    <button class="menu-toggle" (click)="toggleSidebar()" aria-label="Toggle Sidebar">
+      <span class="menu-icon"></span>
+      <span class="menu-icon"></span>
+      <span class="menu-icon"></span>
+    </button>
+  </div>
+  <div class="navbar-menu">
+    <ul class="nav-links">
+      <!-- Placeholder for future nav links -->
+    </ul>
+    <div class="user-profile">
+      <!-- Unauthenticated: Login button/icon -->
+      <div *ngIf="!isLoggedIn" class="login-action" (click)="goToLogin()">
+        <i class="fa-solid fa-user"></i>
+        <span>Login</span>
+      </div>
+      <!-- Authenticated: User name and logout button -->
+      <div *ngIf="isLoggedIn" class="user-info">
+        <span class="user-name">Hi, {{ userName }}</span>
+        <button class="logout-btn" (click)="logout()" aria-label="Logout">
+          <i class="fa-solid fa-right-from-bracket"></i>
+          Logout
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>

@@ -1,62 +1,70 @@
-<div class="role-management-container">
-  <h2>QUẢN LÝ PHÂN QUYỀN</h2>
-  <div>
-    <button (click)="openAddUserPopup()">+ Thêm tài khoản</button>
-    <button (click)="updateSelectedUsersRole()">- Xóa quyền Admin/Staff</button>
-  </div>
-  <table>
-    <thead>
-      <tr>
-        <th><input type="checkbox" [(ngModel)]="selectAll" (change)="toggleSelectAll()"></th>
-        <th>#</th>
-        <th>Email</th>
-        <th>Vai trò</th>
-        <th>Thao tác</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let user of users; let i = index">
-        <td><input type="checkbox" [(ngModel)]="selectedUsers[user.id]"></td>
-        <td>{{ i + 1 }}</td>
-        <td>{{ user.email }}</td>
-        <td>{{ user.role }}</td>
-        <td>
-          <div class="modal-actions">
-            <button class="delete-btn" (click)="deleteUser(user.id)">
-              <i class="fa fa-trash"></i>
-            </button>
-          </div>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+<div class="container">
+  <h1 class="title">Role Management</h1>
 
+  <div class="actions">
+    <button class="add-btn" (click)="openAddUserPopup()">Add Role</button>
+    <button class="delete-btn" (click)="updateSelectedUsersRole()">Remove Admin/Staff Role</button>
+  </div>
+
+  <div class="table-container">
+    <table class="product-table">
+      <thead>
+        <tr>
+          <th><input type="checkbox" [(ngModel)]="selectAll" (change)="toggleSelectAll()"></th>
+          <th>#</th>
+          <th>Email</th>
+          <th>Role</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of users; let i = index" class="product-row">
+          <td><input type="checkbox" [(ngModel)]="selectedUsers[user.id]"></td>
+          <td>{{ i + 1 }}</td>
+          <td>{{ user.email }}</td>
+          <td>{{ user.role }}</td>
+          <td class="action-links">
+            <button class="delete-btn" (click)="deleteUser(user.id)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Add User Modal -->
   <div class="modal" *ngIf="isAddUserPopupOpen">
     <div class="modal-content">
-      <h3>Thêm tài khoản</h3>
-      <label>Email</label>
-      <input type="email" [(ngModel)]="newUser.email" required>
-      <label>Vai trò</label>
-      <select [(ngModel)]="newUser.role">
-        <option value="Admin">Admin</option>
-        <option value="Staff">Staff</option>
-      </select>
-      <div>
-        <button (click)="checkUserExists()">Xác nhận</button>
-        <button class="close-btn" (click)="closeAddUserPopup()">Hủy</button>
+      <h3 style="color: #9c162c">Add Account</h3>
+      <label>
+        Email:
+        <input type="email" [(ngModel)]="newUser.email" required>
+      </label>
+      <label>
+        Role:
+        <select [(ngModel)]="newUser.role">
+          <option value="Admin">Admin</option>
+          <option value="Staff">Staff</option>
+        </select>
+      </label>
+      <div style="display: flex; gap: 10px; margin-top: 15px;">
+        <button class="flashsale-btn" (click)="checkUserExists()">Confirm</button>
+        <button class="delete-btn" (click)="closeAddUserPopup()">Cancel</button>
       </div>
     </div>
   </div>
 
+  <!-- Confirm Add User Modal -->
   <div class="modal" *ngIf="isConfirmPopupOpen">
     <div class="modal-content">
-      <h3>Xác nhận Thêm Người Dùng</h3>
-      <p>Vui lòng nhập mật khẩu để xác nhận:</p>
-      <label>Mật khẩu</label>
-      <input type="password" [(ngModel)]="adminPassword" required>
-      <div>
-        <button (click)="confirmAddUser()">Xác nhận</button>
-        <button class="close-btn" (click)="closeConfirmPopup()">Hủy</button>
+      <h3 style="color: #9c162c">Confirm Add User</h3>
+      <p>Please enter the password to confirm:</p>
+      <label>
+        Password:
+        <input type="password" [(ngModel)]="adminPassword" required>
+      </label>
+      <div style="display: flex; gap: 10px; margin-top: 15px;">
+        <button class="flashsale-btn" (click)="confirmAddUser()">Confirm</button>
+        <button class="delete-btn" (click)="closeConfirmPopup()">Cancel</button>
       </div>
     </div>
   </div>
