@@ -1,4 +1,17 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit} from '@angular/core';
+import { Firestore, collection, doc, getDoc, getDocs} from '@angular/fire/firestore';
+import { Timestamp } from 'firebase/firestore';
+import { deleteDoc } from '@angular/fire/firestore';
+
+interface Order {
+  id: string;
+  code: string;
+  status: string;
+  value: number;
+  date: string;
+  payment_method: string;
+  customer_name: string;
+}
 
 @Component({
   selector: 'app-order',
@@ -6,35 +19,64 @@ import { Component } from '@angular/core';
   templateUrl: './order.component.html',
   styleUrls: ['./order.component.css']
 })
-export class OrderComponent {
-  // Danh sách đơn hàng mẫu
-  orders = [
-    { id: 'ORD001', customer: 'Nguyễn Văn A', status: 'Pending', total: 1500000, date: '2025-06-18' },
-    { id: 'ORD002', customer: 'Trần Thị B', status: 'Shipped', total: 2300000, date: '2025-06-17' },
-    { id: 'ORD003', customer: 'Lê Văn C', status: 'Delivered', total: 800000, date: '2025-06-16' },
-    { id: 'ORD004', customer: 'Phạm Văn D', status: 'Pending', total: 1600000, date: '2025-06-15' },
-    { id: 'ORD005', customer: 'Ngô Thị E', status: 'Shipped', total: 1900000, date: '2025-06-14' },
-    { id: 'ORD006', customer: 'Hoàng Văn F', status: 'Delivered', total: 1200000, date: '2025-06-13' },
-    { id: 'ORD007', customer: 'Đặng Thị G', status: 'Pending', total: 1000000, date: '2025-06-12' },
-  ];
+export class OrderComponent implements OnInit {
+  orders: Order[] = [];
 
-  // Tìm kiếm & lọc
-  searchText: string = '';
-  selectedStatus: string = '';
-
-  // Phân trang
-  currentPage: number = 1;
-  pageSize: number = 5;
-
-  // Danh sách đơn hàng được chọn để xoá
+  searchText = '';
+  selectedStatus = '';
+  currentPage = 1;
+  pageSize = 10;
   selectedOrderIds: string[] = [];
 
-  // Lọc dữ liệu theo từ khoá & trạng thái
+  firestore = inject(Firestore);
+
+  async ngOnInit(): Promise<void> {
+    const ordersSnapshot = await getDocs(collection(this.firestore, 'orders'));
+  
+    const orderPromises = ordersSnapshot.docs.map(async docSnap => {
+      const data: any = docSnap.data();
+  
+      let customerName = '[Không rõ]';
+  
+      // Lấy tên khách từ bảng customers nếu có customer_id
+      if (data.customer_id) {
+        try {
+          const customerRef = doc(this.firestore, 'customers', data.customer_id);
+          const customerSnap = await getDoc(customerRef);
+          if (customerSnap.exists()) {
+            const customerData = customerSnap.data();
+            customerName = customerData['customer_name'] || '[Không tên]';
+          }
+        } catch (error) {
+          console.warn('Không thể lấy customer_name:', error);
+        }
+      }
+
+      const orderDate = data['order_time'] instanceof Timestamp
+        ? data['order_time'].toDate().toLocaleDateString()
+        : '';
+
+      return {
+        id: docSnap.id,
+        code: data['order_code'] || '',
+        status: data['order_status'] || '',
+        value: data['order_value'] || 0,
+        date: orderDate,
+        payment_method: data['payment_method'] || '',
+        customer_name: customerName
+      } as Order;
+    });
+
+    this.orders = await Promise.all(orderPromises);
+    // this.isLoading = false;
+  }
+
   get filteredOrders() {
     return this.orders.filter(order =>
       (this.selectedStatus === '' || order.status === this.selectedStatus) &&
-      (this.searchText === '' || order.id.toLowerCase().includes(this.searchText.toLowerCase()) ||
-        order.customer.toLowerCase().includes(this.searchText.toLowerCase()))
+      (this.searchText === '' ||
+        order.code.toLowerCase().includes(this.searchText.toLowerCase()) ||
+        order.customer_name.toLowerCase().includes(this.searchText.toLowerCase()))
     );
   }
 
@@ -46,8 +88,7 @@ export class OrderComponent {
   // Danh sách đơn trong trang hiện tại
   get paginatedOrders() {
     const start = (this.currentPage - 1) * this.pageSize;
-    const end = start + this.pageSize;
-    return this.filteredOrders.slice(start, end);
+    return this.filteredOrders.slice(start, start + this.pageSize);
   }
 
   // Chỉ số dòng cuối đang hiển thị
@@ -57,16 +98,12 @@ export class OrderComponent {
 
   // Chuyển sang trang tiếp theo
   nextPage() {
-    if (this.currentPage < this.totalPages) {
-      this.currentPage++;
-    }
+    if (this.currentPage < this.totalPages) this.currentPage++;
   }
 
   // Quay lại trang trước
   prevPage() {
-    if (this.currentPage > 1) {
-      this.currentPage--;
-    }
+    if (this.currentPage > 1) this.currentPage--;
   }
 
   // Xử lý chọn/xoá nhiều đơn hàng
@@ -79,11 +116,8 @@ export class OrderComponent {
   // Tick/Bỏ tick từng đơn hàng
   toggleOrderSelection(id: string) {
     const index = this.selectedOrderIds.indexOf(id);
-    if (index > -1) {
-      this.selectedOrderIds.splice(index, 1);
-    } else {
-      this.selectedOrderIds.push(id);
-    }
+    if (index > -1) this.selectedOrderIds.splice(index, 1);
+    else this.selectedOrderIds.push(id);
   }
 
   // Kiểm tra đã chọn hết đơn trong trang chưa
@@ -96,27 +130,41 @@ export class OrderComponent {
     const checked = (event.target as HTMLInputElement).checked;
     if (checked) {
       this.paginatedOrders.forEach(order => {
-        if (!this.isSelected(order.id)) {
-          this.selectedOrderIds.push(order.id);
-        }
+        if (!this.isSelected(order.id)) this.selectedOrderIds.push(order.id);
       });
     } else {
       this.paginatedOrders.forEach(order => {
         const index = this.selectedOrderIds.indexOf(order.id);
-        if (index > -1) {
-          this.selectedOrderIds.splice(index, 1);
-        }
+        if (index > -1) this.selectedOrderIds.splice(index, 1);
       });
     }
   }
 
   // Xoá các đơn hàng đã chọn
-  deleteSelectedOrders() {
+  async deleteSelectedOrders() {
     const confirmed = confirm('Bạn có chắc chắn muốn xóa các đơn hàng đã chọn?');
-    if (confirmed) {
-      this.orders = this.orders.filter(order => !this.selectedOrderIds.includes(order.id));
-      this.selectedOrderIds = [];
-      this.currentPage = 1;
+    if (!confirmed) return;
+  
+    for (const id of this.selectedOrderIds) {
+      try {
+        // Xoá đơn hàng chính
+        await deleteDoc(doc(this.firestore, 'orders', id));
+  
+        // Lấy order_item_id để xoá dữ liệu trong order_items
+        const orderDoc = await getDoc(doc(this.firestore, 'orders', id));
+        const itemId = orderDoc.exists() ? orderDoc.data()['order_item_id'] : null;
+        if (itemId) {
+          await deleteDoc(doc(this.firestore, 'order_items', itemId));
+        }
+  
+      } catch (err) {
+        console.error('Lỗi khi xóa đơn hàng hoặc order_items:', id, err);
+      }
     }
+  
+    // Xoá trên giao diện
+    this.orders = this.orders.filter(order => !this.selectedOrderIds.includes(order.id));
+    this.selectedOrderIds = [];
+    this.currentPage = 1;
   }
 }

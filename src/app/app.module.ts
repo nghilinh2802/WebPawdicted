@@ -4,7 +4,6 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import { provideFirestore, getFirestore } from '@angular/fire/firestore';
-import { FIREBASE_OPTIONS } from '@angular/fire/compat';
 import { provideAuth, getAuth } from '@angular/fire/auth';
 import { provideStorage, getStorage } from '@angular/fire/storage';
 import { provideDatabase, getDatabase } from '@angular/fire/database';
@@ -65,7 +64,6 @@ import { FlashsaleManagementComponent } from './components/flashsale/flashsale.c
     provideStorage(() => getStorage()),
     provideDatabase(() => getDatabase()),
     provideHttpClient(),
-    { provide: FIREBASE_OPTIONS, useValue: environment.firebaseConfig }
   ],
   bootstrap: [AppComponent]
 })

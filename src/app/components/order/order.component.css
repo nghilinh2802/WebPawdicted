@@ -110,6 +110,16 @@
     color: #f8f1f1;
   }
 
+  .status-Completed {
+    background-color: #4caf50; 
+    color: #ffffff;
+  }
+  
+  .status-Cancelled {
+    background-color: #9e9e9e;
+    color: #ffffff;
+  }
+
   /* Nút trong bảng */
   .order-table .btn {
     font-size: 13px;
@@ -227,4 +237,3 @@
     color: #782421;
     font-weight: bold;
   }
-  

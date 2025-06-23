@@ -43,7 +43,7 @@
     border-radius: 6px;
     font-size: 15px;
   }
-  
+
   /* Product grid */
   .product-item {
     display: flex;
@@ -71,8 +71,22 @@
     width: 80px;
   }
 
+  .product-img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 4px;
+  }  
+  
   .name-col {
     flex: 2;
+  }
+
+  .quantity-input {
+    width: 60px;
+    padding: 4px 6px;
+    font-size: 14px;
+    height: auto;
   }
 
   .center {
@@ -85,24 +99,53 @@
     width: 120px;
   }
   
-  /* Tổng cộng */
-  .order-total {
-    margin-top: 30px; 
-    text-align: right;
-    margin-bottom: 20px;
-  }
+/* Summary Card */
+.order-summary {
+  background-color: #ffffff;
+  /* border-left: 6px solid #782421;  */
+  border-radius: 8px;
+  padding: 20px;
+  margin-top: 5px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
 
-  .total-amount {
-    font-size: 24px;
-    color: #9c162c;
-    font-weight: bold;
-  }
-  
-  .text-center {
-    text-align: center;
-  }
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 3px;
+}
+
+.summary-label {
+  font-weight: 600;
+  color: #782421;
+}
+
+.summary-value {
+  font-weight: 500;
+  color: #333;
+}
+
+.summary-row.total {
+  border-top: 1px dashed #faca77;
+  padding-top: 12px;
+  margin-top: 12px;
+}
+
+.summary-value.total-amount {
+  font-size: 20px;
+  color: #9c162c;
+  font-weight: bold;
+}
   
   /* Buttons */
+  .button-group {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 30px;
+  }
+
   .btn-save {
     background-color: #782421;
     color: #f8f1f1;

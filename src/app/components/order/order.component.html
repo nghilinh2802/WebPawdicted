@@ -1,86 +1,89 @@
 <div class="order-page bg-light">
-    <h2 class="text-primary text-2xl font-bold mb-4">QUẢN LÝ ĐƠN HÀNG</h2>
-  
-    <!-- Tìm kiếm + Lọc trạng thái -->
-    <div class="filter-bar mb-4 flex flex-wrap gap-4">
-      <input
-        type="text"
-        [(ngModel)]="searchText"
-        placeholder="Tìm theo mã đơn hoặc tên khách hàng"
-        class="search-box border border-accent rounded px-3 py-2 w-full max-w-xl"
-      />
-  
-      <select [(ngModel)]="selectedStatus" class="filter-dropdown border border-accent rounded px-3 py-2">
-        <option value="">Tất cả trạng thái</option>
-        <option value="Pending">Đang xử lý</option>
-        <option value="Shipped">Đã gửi</option>
-        <option value="Delivered">Đã giao</option>
-      </select>
-    </div>
+  <h2 class="text-primary text-2xl font-bold mb-4">QUẢN LÝ ĐƠN HÀNG</h2>
 
-    <!-- Nút xóa -->
-    <div class="mb-4">
-        <button
-        class="btn btn-delete"
-        (click)="deleteSelectedOrders()"
-        [disabled]="selectedOrderIds.length === 0"
-        >
-        Xóa đã chọn ({{ selectedOrderIds.length }})
-        </button>
-    </div>
-  
-    <!-- Bảng đơn hàng -->
-    <div class="table-container">
-        <table class="order-table">
-        <thead>
-            <tr class="bg-accent text-primary">
-            <th>
-                <input type="checkbox" [checked]="allSelected" (change)="toggleSelectAll($event)" />
-            </th>
-            <th>Order ID</th>
-            <th>Customer</th>
-            <th>Status</th>
-            <th>Total</th>
-            <th>Date</th>
-            <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let order of paginatedOrders">
-            <td>
-                <input
-                type="checkbox"
-                [checked]="isSelected(order.id)"
-                (change)="toggleOrderSelection(order.id)"
-                />
-            </td>
-            <td>{{ order.id }}</td>
-            <td>{{ order.customer }}</td>
-            <td class="text-center">
-              <span class="status-pill" [ngClass]="'status-' + order.status">{{ order.status }}</span>
-            </td>
-            <td class="text-right">{{ order.total | number: '1.0-0' }} VNĐ</td>            
-            <td>{{ order.date }}</td>
-            <td>
-                <button class="btn btn-view" [routerLink]="['/order', order.id]">Xem</button>
-                <button class="btn btn-update" [routerLink]="['/order-update', order.id]">Cập nhật</button>
-            </td>
-            </tr>
-        </tbody>
-        </table>
-    </div>
-  
-    <!-- Phân trang -->
-    <div class="pagination mt-4 flex justify-between items-center">
-        <p class="text-primary">
-            Hiển thị {{ (currentPage - 1) * pageSize + 1 }} - {{ endItemIndex }} /
-            {{ filteredOrders.length }} đơn hàng
-          </p>
-          
-      <div class="flex gap-2">
-        <button class="btn btn-prev" (click)="prevPage()" [disabled]="currentPage === 1">Trước</button>
-        <button class="btn btn-next" (click)="nextPage()" [disabled]="currentPage === totalPages">Sau</button>        
-      </div>
+  <!-- Tìm kiếm + Lọc trạng thái -->
+  <div class="filter-bar mb-4 flex flex-wrap gap-4">
+    <input
+      type="text"
+      [(ngModel)]="searchText"
+      placeholder="Tìm theo mã đơn hoặc tên khách hàng"
+      class="search-box border border-accent rounded px-3 py-2 w-full max-w-xl"
+    />
+
+    <select [(ngModel)]="selectedStatus" class="filter-dropdown border border-accent rounded px-3 py-2">
+      <option value="">Tất cả trạng thái</option>
+      <option value="Pending Payment">Đang xử lý</option>
+      <option value="Shipped">Đã gửi</option>
+      <option value="Delivered">Đã giao</option>
+      <option value="Completed">Hoàn thành</option>
+      <option value="Cancelled">Đã hủy</option>
+    </select>
+  </div>
+
+  <!-- Nút xóa -->
+  <div class="mb-4">
+    <button
+      class="btn btn-delete"
+      (click)="deleteSelectedOrders()"
+      [disabled]="selectedOrderIds.length === 0"
+    >
+      Xóa đã chọn ({{ selectedOrderIds.length }})
+    </button>
+  </div>
+
+  <!-- Bảng đơn hàng -->
+  <div class="table-container" >
+    <table class="order-table">
+      <thead>
+        <tr class="bg-accent text-primary">
+          <th>
+            <input type="checkbox" [checked]="allSelected" (change)="toggleSelectAll($event)" />
+          </th>
+          <th>Mã đơn</th>
+          <th>Khách hàng</th>
+          <th>Trạng thái</th>
+          <th>Thanh toán</th>
+          <th>Tổng tiền</th>
+          <th>Ngày đặt</th>
+          <th>Hành động</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let order of paginatedOrders">
+          <td>
+            <input
+              type="checkbox"
+              [checked]="isSelected(order.id)"
+              (change)="toggleOrderSelection(order.id)"
+            />
+          </td>
+          <td>{{ order.code }}</td>
+          <td>
+            <strong>{{ order.customer_name }}</strong>
+          </td>
+          <td>
+            <span class="status-pill" [ngClass]="'status-' + order.status">{{ order.status }}</span>
+          </td>
+          <td>{{ order.payment_method }}</td>
+          <td class="text-right">{{ order.value | number: '1.0-0' }} VNĐ</td>
+          <td>{{ order.date }}</td>
+          <td>
+            <button class="btn btn-view" [routerLink]="['/order', order.id]">Xem</button>
+            <button class="btn btn-update" [routerLink]="['/order-update', order.id]">Cập nhật</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Phân trang -->
+  <div class="pagination mt-4 flex justify-between items-center">
+    <p class="text-primary">
+      Hiển thị {{ (currentPage - 1) * pageSize + 1 }} - {{ endItemIndex }} / {{ filteredOrders.length }} đơn hàng
+    </p>
+    <div class="flex gap-2">
+      <button class="btn btn-prev" (click)="prevPage()" [disabled]="currentPage === 1">Trước</button>
+      <button class="btn btn-next" (click)="nextPage()" [disabled]="currentPage === totalPages">Sau</button>
     </div>
   </div>
-  
+</div>
