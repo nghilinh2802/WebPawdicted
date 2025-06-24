@@ -1,0 +1,83 @@
+<!-- src/app/components/chat/chat.component.html -->
+<div class="pawdicted-chat-container">
+  <div class="customers-sidebar">
+    <div class="shop-header">
+      <h3>🐾 Pawdicted Chat</h3>
+      <p>Hỗ trợ khách hàng</p>
+    </div>
+    
+    <div class="customers-list">
+      <div 
+        *ngFor="let chat of chatRooms$ | async" 
+        class="customer-item"
+        [class.active]="selectedChat?.chat_id === chat.chat_id"
+        [class.unread]="hasUnreadMessages(chat)"
+        (click)="selectChat(chat)">
+        
+        <div class="customer-info">
+          <div class="customer-name">
+            <strong>{{ chat.customer_id }}</strong>
+            <span class="unread-badge" *ngIf="hasUnreadMessages(chat)">●</span>
+          </div>
+          <div class="last-message">
+            {{ getLastMessage(chat) }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="chat-main">
+    <!-- Không hiển thị gì nếu chưa có chat nào -->
+    <div *ngIf="(chatRooms$ | async)?.length === 0" class="no-chats-available">
+      <div class="welcome-message">
+        <h4>🐾 Pawdicted Chat</h4>
+        <p>Chưa có khách hàng nào nhắn tin</p>
+      </div>
+    </div>
+
+    <!-- Hiển thị message chọn chat khi có chat nhưng chưa chọn -->
+    <div *ngIf="(chatRooms$ | async)?.length! > 0 && !selectedChat" class="no-customer-selected">
+      <div class="welcome-message">
+        <h4>🐾 Chào mừng đến Pawdicted!</h4>
+        <p>Chọn một khách hàng để bắt đầu trò chuyện</p>
+      </div>
+    </div>
+
+    <div *ngIf="selectedChat" class="chat-window">
+      <div class="chat-header">
+        <h4>💬 Chat với {{ selectedChat?.customer_id }}</h4>
+        <span class="customer-status">Khách hàng Pawdicted</span>
+      </div>
+
+      <div class="messages-container">
+        <div 
+          *ngFor="let message of allMessages" 
+          class="message"
+          [class.customer-message]="message.sender === 'customer'"
+          [class.pawdicted-message]="message.sender === 'pawdicted'">
+          
+          <div class="message-bubble">
+            <p>{{ message.content }}</p>
+            <small>{{ message.time | date:'HH:mm' }}</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="message-input">
+        <input 
+          type="text" 
+          [(ngModel)]="newMessage" 
+          placeholder="Nhập tin nhắn hỗ trợ khách hàng..."
+          (keyup.enter)="sendMessage()"
+          class="message-input-field">
+        <button 
+          (click)="sendMessage()" 
+          [disabled]="!newMessage.trim()"
+          class="send-button">
+          📤 Gửi
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

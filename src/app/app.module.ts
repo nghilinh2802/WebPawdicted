@@ -9,7 +9,7 @@ import { provideStorage, getStorage } from '@angular/fire/storage';
 import { provideDatabase, getDatabase } from '@angular/fire/database';
 import { provideHttpClient } from '@angular/common/http';
 import { QuillModule } from 'ngx-quill';
-
+import { DatePipe } from '@angular/common';
 import { environment } from '../environment';
 
 import { FormsModule } from '@angular/forms';
@@ -33,6 +33,10 @@ import { FlashsaleManagementComponent } from './components/flashsale/flashsale.c
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ReportComponent } from './components/report/report.component';
 
+// Import chat component mới
+import { ChatComponent } from './components/chat/chat.component';
+import { RouterModule } from '@angular/router';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -48,17 +52,20 @@ import { ReportComponent } from './components/report/report.component';
     PromotionsComponent,
     FlashsaleManagementComponent,
     DashboardComponent,
-    ReportComponent
+    ReportComponent,
+    
   ],
   imports: [
     BrowserModule,
     CommonModule,
     FormsModule,
     AppRoutingModule,
+    RouterModule,
     ProductManagementComponent,
     AddProductModalComponent,
     EditProductModalComponent,
     ProductDetailsModalComponent,
+    ChatComponent, // Thêm component chat mới
     QuillModule.forRoot()
   ],
   providers: [
@@ -68,6 +75,7 @@ import { ReportComponent } from './components/report/report.component';
     provideStorage(() => getStorage()),
     provideDatabase(() => getDatabase()),
     provideHttpClient(),
+    DatePipe
   ],
   bootstrap: [AppComponent]
 })

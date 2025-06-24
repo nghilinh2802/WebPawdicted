@@ -24,6 +24,7 @@ import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 
 import { AdminGuard } from './guards/admin.guard';
 import { FlashsaleManagementComponent } from './components/flashsale/flashsale.component';
+import { ChatComponent } from './components/chat/chat.component';
 
 const routes: Routes = [
   { path: 'data', component: DataComponent },
@@ -41,11 +42,12 @@ const routes: Routes = [
   { path: 'edit-product/:id', component: EditProductModalComponent },
   { path: 'product-details/:id', component: ProductDetailsModalComponent },
   { path: 'flashsale', component: FlashsaleManagementComponent},
+  { path: 'chat', component: ChatComponent},
   { path: 'navbar', component: NavbarComponent },
   { path: 'dashboard', component: DashboardComponent },
   { path: 'report', component: ReportComponent, canActivate: [AdminGuard] },
   { path: '', redirectTo: '/login', pathMatch: 'full' },
-  { path: '**', redirectTo: '/login' }
+  { path: '**', redirectTo: '/login' },
 ];
 
 @NgModule({

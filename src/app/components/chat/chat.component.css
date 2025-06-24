@@ -1,0 +1,15 @@
+/* src/app/components/chat/chat.component.css */
+.no-chats-available {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  text-align: center;
+  color: #666;
+}
+
+.no-chats-available .welcome-message h4 {
+  color: #667eea;
+  margin-bottom: 10px;
+}
+
