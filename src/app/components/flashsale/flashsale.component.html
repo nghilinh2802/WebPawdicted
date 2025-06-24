@@ -13,59 +13,61 @@
 
   <div class="table-container">
     <table class="product-table">
-  <thead>
-    <tr>
-      <th>Flashsale Name</th>
-      <th>Start Time</th>
-      <th>End Time</th>
-      <th>Global Discount (%)</th>
-      <th>Product Count</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    <ng-container *ngFor="let flash of filteredFlashsales">
-      <!-- Hàng chính -->
-      <tr (click)="toggleFlashsaleExpand(flash.flashSale_id)" style="cursor: pointer;">
-        <td>{{ flash.flashSale_name }}</td>
-        <td>{{ flash.startTime | date: 'dd/MM/yyyy HH:mm' }}</td>
-        <td>{{ flash.endTime | date: 'dd/MM/yyyy HH:mm' }}</td>
-        <td>{{ flash.discountRate }}%</td>
-        <td>{{ flash.products.length }} products</td>
-        <td>
-          <button class="edit-btn" (click)="openEditPopup(flash); $event.stopPropagation()">Edit</button>
-          <button class="delete-btn" (click)="deleteFlashsale(flash); $event.stopPropagation()">Delete</button>
-        </td>
-      </tr>
-
-      <!-- Hàng phụ để hiển thị sản phẩm -->
-      <tr *ngIf="expandedFlashsaleIds.has(flash.flashSale_id)">
-  <td colspan="7">
-    <table class="inner-product-table" style="width: 100%;">
       <thead>
         <tr>
-          <th>Product ID</th>
-          <th>Discount (%)</th>
+          <th>Flashsale Name</th>
+          <th>Start Time</th>
+          <th>End Time</th>
+          <th>Global Discount (%)</th>
+          <th>Product Count</th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let p of flash.products">
-          <td>{{ p.product_id }}</td>
-          <td>{{ p.discountRate }}%</td>
-        </tr>
+        <ng-container *ngFor="let flash of filteredFlashsales">
+          <!-- Hàng chính -->
+          <tr (click)="toggleFlashsaleExpand(flash.flashSale_id)" style="cursor: pointer;">
+            <td>{{ flash.flashSale_name }}</td>
+            <td>{{ flash.startTime | date: 'dd/MM/yyyy HH:mm' }}</td>
+            <td>{{ flash.endTime | date: 'dd/MM/yyyy HH:mm' }}</td>
+            <td>{{ flash.discountRate }}%</td>
+            <td>{{ flash.products.length }} products</td>
+            <td>
+              <button class="edit-btn" (click)="openEditPopup(flash); $event.stopPropagation()">Edit</button>
+              <button class="delete-btn" (click)="deleteFlashsale(flash); $event.stopPropagation()">Delete</button>
+            </td>
+          </tr>
+
+          <!-- Hàng phụ để hiển thị sản phẩm -->
+          <tr *ngIf="expandedFlashsaleIds.has(flash.flashSale_id)">
+            <td colspan="7">
+              <table class="inner-product-table" style="width: 100%;">
+                <thead>
+                  <tr>
+                    <th>Product ID</th>
+                    <th>Discount (%)</th>
+                    <th>Max Quantity</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let p of flash.products">
+                    <td>{{ p.product_id }}</td>
+                    <td>{{ p.discountRate }}%</td>
+                    <td>{{ p.maxQuantity }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </td>
+          </tr>
+        </ng-container>
       </tbody>
     </table>
-  </td>
-</tr>
-    </ng-container>
-  </tbody>
-</table>
   </div>
 </div>
 
 <!-- Edit Flashsale Popup -->
 <div class="modal" *ngIf="editingFlashsale">
-  <div class="modal-content">
+  <div class="modal-content" style="max-height: 90vh; overflow-y: auto;">
     <h3 style="color: #9c162c">Edit Flashsale</h3>
 
     <label>
@@ -96,32 +98,61 @@
     </p>
 
     <label>
-  Selected Products:
-  <ul style="list-style: none; padding-left: 0; margin-top: 10px;">
-    <li
-      *ngFor="let item of editingFlashsale.products"
-      style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;"
-    >
-      <span style="flex: 1;">{{ item.product_id }}</span>
-      <input
-        type="number"
-        [(ngModel)]="item.discountRate"
-        min="0"
-        max="100"
-        placeholder="Discount (%)"
-        style="width: 100px; padding: 5px;"
-      />
-      <button
-        class="delete-btn"
-        (click)="removeProduct(item.product_id)"
-        style="padding: 5px 10px;"
-      >
-        ×
-      </button>
-    </li>
-  </ul>
-</label>
-
+      Selected Products:
+      <div style="max-height: 300px; overflow-y: auto; border: 1px solid #ddd; border-radius: 4px; padding: 10px; margin-top: 10px;">
+        <div
+          *ngFor="let item of editingFlashsale.products"
+          style="border-bottom: 1px solid #eee; padding: 10px 0; margin-bottom: 10px;"
+        >
+          <!-- Tên sản phẩm -->
+          <div style="margin-bottom: 8px;">
+            <strong>{{ getProductName(item.product_id) }}</strong>
+            <br>
+            <small style="color: #666;">ID: {{ item.product_id }}</small>
+          </div>
+          
+          <!-- Input fields -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr auto; gap: 10px; align-items: center;">
+            
+            <!-- Discount Rate -->
+            <div>
+              <label style="font-size: 12px; color: #666;">Discount Rate (%):</label>
+              <input
+                type="number"
+                [(ngModel)]="item.discountRate"
+                min="1"
+                max="100"
+                style="width: 100%; padding: 4px; border: 1px solid #ccc; border-radius: 3px;"
+              />
+            </div>
+            
+            <!-- Max Quantity -->
+            <div>
+              <label style="font-size: 12px; color: #666;">Max Quantity:</label>
+              <input
+                type="number"
+                [(ngModel)]="item.maxQuantity"
+                min="1"
+                max="9999"
+                style="width: 100%; padding: 4px; border: 1px solid #ccc; border-radius: 3px;"
+              />
+            </div>
+            
+            <!-- Delete Button -->
+            <div style="text-align: center;">
+              <button
+                (click)="removeProduct(item.product_id)"
+                style="background: #dc3545; color: white; border: none; padding: 6px 10px; border-radius: 3px; cursor: pointer; font-size: 14px;"
+                title="Xóa sản phẩm"
+              >
+                ×
+              </button>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+    </label>
 
     <label>
       Add Product:
@@ -141,10 +172,9 @@
       </div>
     </label>
 
-    <div style="display: flex; gap: 10px; margin-top: 15px;">
+    <div style="display: flex; gap: 10px; margin-top: 15px; position: sticky; bottom: 0; background: white; padding-top: 10px; border-top: 1px solid #eee;">
       <button class="edit-btn" (click)="saveFlashsale()">Save</button>
       <button class="delete-btn" (click)="cancelEdit()">Cancel</button>
     </div>
   </div>
 </div>
-

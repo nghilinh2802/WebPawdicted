@@ -211,17 +211,28 @@ export class ProductManagementComponent implements OnInit {
       this.filteredProducts = filtered;
     }, error => console.error('Error applying filters:', error));
   }
+  // ===== FLASHSALE SECTION - UPDATED =====
   showFlashsalePopup = false;
+  productMaxQuantities: Map<string, number> = new Map();
+  
   flashsaleForm = {
-  flashSale_id: '',
-  flashSale_name: '',
-  startTime: 0,
-  endTime: 0,
-  discountRate: 0,
-  soldQuantity: 0,
-  product_id: [] as string[]
-};
+    flashSale_id: '',
+    flashSale_name: '',
+    startTime: 0,
+    endTime: 0,
+    discountRate: 0,
+    soldQuantity: 0,
+    product_id: [] as string[]
+  };
+
   openFlashsalePopup() {
+    // Khởi tạo maxQuantity mặc định cho các sản phẩm được chọn
+    this.selectedProductIds.forEach(productId => {
+      if (!this.productMaxQuantities.has(productId)) {
+        this.productMaxQuantities.set(productId, 100); // Giá trị mặc định
+      }
+    });
+
     this.flashsaleForm = {
       flashSale_id: uuidv4(),
       flashSale_name: '',
@@ -236,56 +247,65 @@ export class ProductManagementComponent implements OnInit {
 
   closeFlashsalePopup() {
     this.showFlashsalePopup = false;
+    this.productMaxQuantities.clear(); // Clear maxQuantities khi đóng popup
   }
 
   async createFlashsale() {
-  console.log('✅ createFlashsale() được gọi');
-  const confirmed = confirm('Bạn có chắc chắn muốn tạo flashsale này không?');
-  if (!confirmed) {
-    console.log('🚫 User huỷ tạo flashsale.');
-    return;
-  }
+    console.log('✅ createFlashsale() được gọi');
+    const confirmed = confirm('Bạn có chắc chắn muốn tạo flashsale này không?');
+    if (!confirmed) {
+      console.log('🚫 User huỷ tạo flashsale.');
+      return;
+    }
 
-  const flashRef = collection(this.firestore, 'flashsales');
+    const flashRef = collection(this.firestore, 'flashsales');
 
-  const newFlash = {
-    flashSale_id: this.flashsaleForm.flashSale_id || 'fs_' + Date.now(),
-    flashSale_name: this.flashsaleForm.flashSale_name,
-    startTime: this.flashsaleForm.startTime,
-    endTime: this.flashsaleForm.endTime,
-    discountRate: this.flashsaleForm.discountRate,
-    products: Array.from(this.selectedProductIds).map(pid => ({
-      product_id: pid,
-      discountRate: this.flashsaleForm.discountRate, 
-      unitSold: 0
-    }))
-  };
-
-  try {
-    await addDoc(flashRef, newFlash);
-    alert('✅ Flashsale created!');
-
-    // ✅ Reset lại form an toàn
-    this.flashsaleForm = {
-      flashSale_id: '',
-      flashSale_name: '',
-      startTime: 0,
-      endTime: 0,
-      discountRate: 0,
-      soldQuantity: 0,
-      product_id: []
+    const newFlash = {
+      flashSale_id: this.flashsaleForm.flashSale_id || 'fs_' + Date.now(),
+      flashSale_name: this.flashsaleForm.flashSale_name,
+      startTime: this.flashsaleForm.startTime,
+      endTime: this.flashsaleForm.endTime,
+      discountRate: this.flashsaleForm.discountRate,
+      products: Array.from(this.selectedProductIds).map(pid => ({
+        product_id: pid,
+        discountRate: this.flashsaleForm.discountRate,
+        unitSold: 0,
+        maxQuantity: this.productMaxQuantities.get(pid) || 100 // Lấy maxQuantity riêng cho từng sản phẩm
+      }))
     };
 
-    this.selectedProductIds.clear();
-    this.showFlashsalePopup = false;
+    try {
+      await addDoc(flashRef, newFlash);
+      alert('✅ Flashsale created!');
 
-    // Nếu có loadFlashsales() thì gọi, nếu không thì bỏ
+      // ✅ Reset lại form an toàn
+      this.flashsaleForm = {
+        flashSale_id: '',
+        flashSale_name: '',
+        startTime: 0,
+        endTime: 0,
+        discountRate: 0,
+        soldQuantity: 0,
+        product_id: []
+      };
 
-  } catch (error) {
-    console.error('❌ Firestore error:', error);
-    alert('Failed to create flashsale');
+      this.selectedProductIds.clear();
+      this.productMaxQuantities.clear(); // Clear maxQuantities
+      this.showFlashsalePopup = false;
+
+    } catch (error) {
+      console.error('❌ Firestore error:', error);
+      alert('Failed to create flashsale');
+    }
   }
-}
+
+  // Thêm method để lấy tên sản phẩm
+  getProductName(productId: string): string {
+    const product = this.filteredProducts.find(p => p.product_id === productId);
+    return product ? product.product_name : productId;
+  }
+  // ===== END FLASHSALE SECTION =====
+
 
 
 

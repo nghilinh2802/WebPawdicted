@@ -76,52 +76,73 @@
   </div>
 
   <!-- Flashsale Popup -->
-  <div class="modal" *ngIf="showFlashsalePopup">
-    <div class="modal-content">
-      <h3 style="color: #9c162c">Create Flashsale</h3>
+<div class="modal" *ngIf="showFlashsalePopup">
+  <div class="modal-content" style="max-height: 90vh; overflow-y: auto;">
+    <h3 style="color: #9c162c">Create Flashsale</h3>
 
-      <label>
-        Flashsale Name:
-        <input [(ngModel)]="flashsaleForm.flashSale_name" name="name" />
-      </label>
+    <label>
+      Flashsale Name:
+      <input [(ngModel)]="flashsaleForm.flashSale_name" name="name" />
+    </label>
 
-      <label>
-        Start Time:
-        <input
-          type="datetime-local"
-          [ngModel]="getDateTimeLocal(flashsaleForm.startTime)"
-          (ngModelChange)="flashsaleForm.startTime = getTimestampFromLocal($event)"
-          name="startTime"
-        />
-      </label>
+    <label>
+      Start Time:
+      <input
+        type="datetime-local"
+        [ngModel]="getDateTimeLocal(flashsaleForm.startTime)"
+        (ngModelChange)="flashsaleForm.startTime = getTimestampFromLocal($event)"
+        name="startTime"
+      />
+    </label>
 
-      <label>
-        End Time:
-        <input
-          type="datetime-local"
-          [ngModel]="getDateTimeLocal(flashsaleForm.endTime)"
-          (ngModelChange)="flashsaleForm.endTime = getTimestampFromLocal($event)"
-          name="endTime"
-        />
-      </label>
+    <label>
+      End Time:
+      <input
+        type="datetime-local"
+        [ngModel]="getDateTimeLocal(flashsaleForm.endTime)"
+        (ngModelChange)="flashsaleForm.endTime = getTimestampFromLocal($event)"
+        name="endTime"
+      />
+    </label>
 
-      <label>
-        Discount Rate (%):
-        <input type="number" [(ngModel)]="flashsaleForm.discountRate" name="discountRate" />
-      </label>
-      <div style="margin-top: 10px;">
-        <p><strong>Selected Products:</strong></p>
-        <ul>
-          <li *ngFor="let pid of flashsaleForm.product_id">{{ pid }}</li>
-        </ul>
-      </div>
+    <label>
+      Discount Rate (%):
+      <input type="number" [(ngModel)]="flashsaleForm.discountRate" name="discountRate" />
+    </label>
 
-      <div style="display: flex; gap: 10px; margin-top: 15px;">
-        <button class="flashsale-btn" (click)="createFlashsale()">Confirm</button>
-        <button class="delete-btn" (click)="closeFlashsalePopup()">Cancel</button>
+    <!-- Phần nhập maxQuantity cho từng sản phẩm -->
+    <div style="margin-top: 15px;" *ngIf="selectedProductIds.size > 0">
+      <p><strong>Số lượng tối đa cho từng sản phẩm:</strong></p>
+      <div style="max-height: 200px; overflow-y: auto; border: 1px solid #ddd; border-radius: 4px; padding: 10px;">
+        <div *ngFor="let productId of selectedProductIds" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding: 8px; border-bottom: 1px solid #eee;">
+          <div style="flex: 1;">
+            <strong>{{ getProductName(productId) }}</strong>
+            <br>
+            <small style="color: #666;">ID: {{ productId }}</small>
+          </div>
+          <div style="width: 120px;">
+            <input 
+              type="number" 
+              [value]="productMaxQuantities.get(productId) || 100"
+              (input)="productMaxQuantities.set(productId, +$any($event.target).value)"
+              min="1"
+              max="9999"
+              placeholder="100"
+              style="width: 100%; text-align: center; padding: 5px; border: 1px solid #ccc; border-radius: 3px;"
+            >
+          </div>
+        </div>
       </div>
     </div>
+
+    <div style="display: flex; gap: 10px; margin-top: 15px; position: sticky; bottom: 0; background: white; padding-top: 10px; border-top: 1px solid #eee;">
+      <button class="flashsale-btn" (click)="createFlashsale()">Confirm</button>
+      <button class="delete-btn" (click)="closeFlashsalePopup()">Cancel</button>
+    </div>
   </div>
+</div>
+
+
 
 </div>
 
