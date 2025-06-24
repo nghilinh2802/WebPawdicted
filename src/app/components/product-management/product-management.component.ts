@@ -254,10 +254,10 @@ export class ProductManagementComponent implements OnInit {
     startTime: this.flashsaleForm.startTime,
     endTime: this.flashsaleForm.endTime,
     discountRate: this.flashsaleForm.discountRate,
-    soldQuantity: 0,
     products: Array.from(this.selectedProductIds).map(pid => ({
       product_id: pid,
-      discountRate: this.flashsaleForm.discountRate
+      discountRate: this.flashsaleForm.discountRate, 
+      unitSold: 0
     }))
   };
 

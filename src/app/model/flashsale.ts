@@ -4,7 +4,6 @@ export interface Flashsale {
   startTime: number;           // Thời gian bắt đầu (timestamp - milliseconds)
   endTime: number;             // Thời gian kết thúc (timestamp - milliseconds)
   discountRate: number;        // Phần trăm giảm giá (int, ví dụ: 20)
-  soldQuantity: number;        // Số lượng đã bán (có thể ban đầu là 0)
-  products: { product_id: string, discountRate: number }[];
+  products: { product_id: string, discountRate: number, unitSold: number }[];
   docId?: string;
 }

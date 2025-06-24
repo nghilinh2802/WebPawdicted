@@ -38,12 +38,14 @@ export class FlashsaleManagementComponent implements OnInit {
   }
 
   applyFilters() {
-    const term = this.searchTerm.toLowerCase();
-    this.filteredFlashsales = this.flashsales.filter(f =>
-      f.flashSale_id.toLowerCase().includes(term) ||
-      f.flashSale_name.toLowerCase().includes(term)
-    );
-  }
+  const term = this.searchTerm?.toLowerCase() || '';
+  this.filteredFlashsales = this.flashsales.filter(f => {
+    const id = f.flashSale_id ? f.flashSale_id.toLowerCase() : '';
+    const name = f.flashSale_name ? f.flashSale_name.toLowerCase() : '';
+    return id.includes(term) || name.includes(term);
+  });
+}
+
 
   openEditPopup(flash: Flashsale) {
   this.editingFlashsale = {
@@ -166,7 +168,8 @@ addProductToFlashsale(productId: string) {
     const defaultRate = this.editingFlashsale.discountRate || 10; // fallback nếu chưa có
     this.editingFlashsale.products.push({
       product_id: productId,
-      discountRate: defaultRate
+      discountRate: defaultRate,
+      unitSold: 0
     });
   }
 
