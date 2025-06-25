@@ -1,20 +1,24 @@
 <div class="container">
-  <h1>Quản lý Blog</h1>
-  <button (click)="openAddPopup()" class="btn-add">Thêm mới</button>
+  <h1>Blog Management</h1>
+  <button (click)="openAddPopup()" class="btn-add">Creat New Post</button>
 
-  <!-- Danh sách blog -->
+  <!-- Blog list -->
   <div class="blog-list">
     <div *ngFor="let blog of blogs" class="blog-item">
       <h3>{{ blog.title }}</h3>
-      <p class="author">Tác giả: {{ blog.author }}</p>
+      <p class="author">Author: {{ blog.author }}</p>
       <p class="description">{{ blog.description }}</p>
       <div class="blog-actions">
-        <button (click)="openEditPopup(blog)" class="btn-edit">Sửa</button>
-        <button (click)="deleteBlog(blog.id)" class="btn-delete">Xóa</button>
+        <button (click)="openEditPopup(blog)" class="btn-icon">
+          <i class="fa-solid fa-pen"></i>
+        </button>
+        <button (click)="deleteBlog(blog.id)" class="btn-icon">
+          <i class="fa-solid fa-trash-can"></i>
+        </button>
       </div>
     </div>
     <div *ngIf="!blogs.length" class="no-blog">
-      Chưa có blog nào.
+      No blogs available.
     </div>
   </div>
 
@@ -22,45 +26,45 @@
   <div *ngIf="showPopup && !isEditMode" class="popup-overlay">
     <div class="popup">
       <form (ngSubmit)="onSubmit(blogForm)" #blogForm="ngForm" class="create-post-form">
-        <h2>Tạo bài đăng mới</h2>
+        <h2>Create New Post</h2>
 
         <div class="form-group">
-          <label for="title">Nhập tiêu đề</label>
+          <label for="title">Title</label>
           <input type="text" id="title" class="form-control" name="title"
-            [(ngModel)]="newBlog.title" placeholder="Nhập tiêu đề bài viết" required>
+            [(ngModel)]="newBlog.title" placeholder="Enter post title" required>
         </div>
 
         <div class="form-group">
-          <label for="author">Nhập tác giả</label>
+          <label for="author">Author</label>
           <input type="text" id="author" class="form-control" name="author"
-            [(ngModel)]="newBlog.author" placeholder="Nhập tên tác giả" required>
+            [(ngModel)]="newBlog.author" placeholder="Enter author name" required>
         </div>
 
         <div class="form-group">
-          <label for="description">Nhập mô tả</label>
+          <label for="description">Description</label>
           <input type="text" id="description" class="form-control" name="description"
-            [(ngModel)]="newBlog.description" placeholder="Nhập mô tả" required>
+            [(ngModel)]="newBlog.description" placeholder="Enter description" required>
         </div>
 
         <div class="form-group">
-          <label for="content">Nhập nội dung bài viết</label>
+          <label for="content">Post Content</label>
           <quill-editor [(ngModel)]="newBlog.content" name="content" [modules]="editorConfig" [required]="true">
           </quill-editor>
         </div>
 
         <div class="form-group">
-          <label for="imageURL">URL ảnh</label>
+          <label for="imageURL">Image URL</label>
           <input
             type="text"
             id="imageURL"
             class="form-control"
             name="imageURL"
-            [(ngModel)]="newBlog.imageURL" placeholder="Nhập URL" required>
+            [(ngModel)]="newBlog.imageURL" placeholder="Enter URL" required>
         </div>
 
         <div class="button-group">
-          <button type="submit" class="submit-button" [disabled]="!blogForm.form.valid">Đăng bài</button>
-          <button type="button" class="cancel-button" (click)="cancelPost()">Hủy</button>
+          <button type="submit" class="submit-button" [disabled]="!blogForm.form.valid">Publish</button>
+          <button type="button" class="cancel-button" (click)="cancelPost()">Cancel</button>
         </div>
       </form>
     </div>
@@ -70,43 +74,43 @@
   <div *ngIf="showPopup && isEditMode" class="popup-overlay">
     <div class="popup">
       <form (ngSubmit)="onSubmit(editForm)" #editForm="ngForm" class="edit-post-form">
-        <h2>Chỉnh sửa bài viết</h2>
+        <h2>Edit Post</h2>
 
         <div class="form-group">
-          <label for="title">Tiêu đề</label>
+          <label for="title">Title</label>
           <input type="text" id="title" class="form-control" name="title"
-            [(ngModel)]="editedBlog.title" placeholder="Nhập tiêu đề" required>
+            [(ngModel)]="editedBlog.title" placeholder="Enter title" required>
         </div>
 
         <div class="form-group">
-          <label for="author">Tác giả</label>
+          <label for="author">Author</label>
           <input type="text" id="author" class="form-control" name="author"
-            [(ngModel)]="editedBlog.author" placeholder="Nhập tên tác giả" required>
+            [(ngModel)]="editedBlog.author" placeholder="Enter author name" required>
         </div>
 
         <div class="form-group">
-          <label for="description">Mô tả</label>
+          <label for="description">Description</label>
           <input type="text" id="description" class="form-control" name="description"
-            [(ngModel)]="editedBlog.description" placeholder="Nhập mô tả" required>
+            [(ngModel)]="editedBlog.description" placeholder="Enter description" required>
         </div>
 
         <div class="form-group">
-          <label for="content">Nội dung bài viết</label>
+          <label for="content">Post Content</label>
           <quill-editor [(ngModel)]="editedBlog.content" name="content" [modules]="editorConfig" [required]="true">
           </quill-editor>
         </div>
 
         <div class="form-group">
-          <label for="imageURL">URL ảnh</label>
+          <label for="imageURL">Image URL</label>
           <input type="text" id="imageURL"
             class="form-control"
             name="imageURL"
-            [(ngModel)]="editedBlog.imageURL" placeholder="Nhập URL" required>
+            [(ngModel)]="editedBlog.imageURL" placeholder="Enter URL" required>
         </div>
 
         <div class="button-group">
-          <button type="submit" class="submit-button" [disabled]="!editForm.form.valid">Cập nhật</button>
-          <button type="button" class="cancel-button" (click)="cancelPost()">Hủy</button>
+          <button type="submit" class="submit-button" [disabled]="!editForm.form.valid">Update</button>
+          <button type="button" class="cancel-button" (click)="cancelPost()">Cancel</button>
         </div>
       </form>
     </div>

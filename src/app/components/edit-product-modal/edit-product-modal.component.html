@@ -128,11 +128,34 @@
                     </div>
                     <input *ngIf="editingVariantId === variant.variant_id" type="text" [(ngModel)]="variant.variant_image" name="variant_image_{{variant.variant_id}}" class="input-field inline wide-input">
                   </td>
-                  <td>
+
+
+                  <!-- <td>
                     <button *ngIf="editingVariantId !== variant.variant_id" type="button" (click)="editVariant(variant.variant_id)" class="edit-btn">Edit</button>
                     <button *ngIf="editingVariantId === variant.variant_id" type="button" (click)="cancelEdit()" class="cancel-btn">Cancel</button>
                     <button *ngIf="editingVariantId !== variant.variant_id" type="button" (click)="deleteVariant(variant.variant_id)" class="delete-btn">Delete</button>
-                  </td>
+                  </td> -->
+
+
+                  <td>
+  <!-- Nút "Edit" sử dụng icon Font Awesome -->
+  <button *ngIf="editingVariantId !== variant.variant_id" type="button" (click)="editVariant(variant.variant_id)" class="btn-icon">
+    <i class="fa-solid fa-pen"></i> <!-- Icon bút cho chỉnh sửa -->
+  </button>
+
+  <!-- Nút "Cancel" khi đang chỉnh sửa, sử dụng icon Font Awesome -->
+  <button *ngIf="editingVariantId === variant.variant_id" type="button" (click)="cancelEdit()" class="btn-icon">
+    <i class="fa-solid fa-times"></i> <!-- Icon cancel -->
+  </button>
+
+  <!-- Nút "Delete" sử dụng icon Font Awesome -->
+  <button *ngIf="editingVariantId !== variant.variant_id" type="button" (click)="deleteVariant(variant.variant_id)" class="btn-icon">
+    <i class="fa-solid fa-trash-can"></i> <!-- Icon thùng rác cho xóa -->
+  </button>
+</td>
+
+
+                  
                 </tr>
               </tbody>
             </table>

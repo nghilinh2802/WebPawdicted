@@ -1,127 +1,135 @@
 <div class="order-update">
-    <!-- Tiêu đề -->
-    <div class="order-header">
-      <h2>Cập nhật đơn hàng: {{ order.id }}</h2>
+  <!-- Header -->
+  <div class="order-header">
+    <h2>Update Order: {{ order.id }}</h2>
+  </div>
+
+  <!-- Order Information -->
+  <div class="order-info">
+    <div class="info-row">
+      <span class="info-label">Recipient:</span>
+      <input [value]="order.delivery?.receiver" class="info-input" disabled />
     </div>
-  
-    <!-- Thông tin đơn hàng -->
-    <div class="order-info">
-      <div class="info-row">
-        <span class="info-label">Người nhận:</span>
-        <input [value]="order.delivery?.receiver" class="info-input" disabled />
-      </div>
-      <div class="info-row">
-        <span class="info-label">Số điện thoại:</span>
-        <input [value]="order.delivery?.phone" class="info-input" disabled />
-      </div>
-      <div class="info-row">
-        <span class="info-label">Địa chỉ giao hàng:</span>
-        <input [value]="order.delivery?.address" class="info-input" disabled />
-      </div>
-      <div class="info-row">
-        <span class="info-label">Ghi chú KH:</span>
-        <textarea [value]="order.customer_note" class="info-input" disabled></textarea>
-      </div>
-      <div class="info-row">
-        <span class="info-label">Trạng thái:</span>
-        <select [(ngModel)]="order.status" class="info-input">
-          <option value="Pending Payment">Đang xử lý</option>
-          <option value="Shipped">Đã gửi</option>
-          <option value="Delivered">Đã giao</option>
-          <option value="Completed">Hoàn thành</option>
-          <option value="Cancelled">Hủy</option>
-        </select>
-      </div>
-      
-      <!-- Dòng 2: Lý do huỷ đơn (chỉ khi chọn Đã hủy) -->
-      <div *ngIf="order.status === 'Cancelled'" class="info-row info-row-full">
-        <label for="cancelReason" class="info-label">Lý do huỷ đơn:</label>
-        <textarea
-          id="cancelReason"
-          [(ngModel)]="cancelReason"
-          rows="2"
-          class="info-input textarea-input"
-          placeholder="Nhập lý do huỷ đơn..."
-          required
-        ></textarea>
-      </div>
-      <div class="info-row">
-        <span class="info-label">Phương thức thanh toán:</span>
-        <input [value]="order.payment_method" class="info-input" disabled />
-      </div>    
-      <div class="info-row">
-        <span class="info-label">Thời gian đặt hàng:</span>
-        <input [value]="order.date" class="info-input" disabled />
-      </div>  
-      <div class="info-row" *ngIf="order.ship_time">
-        <span class="info-label">Thời gian gửi hàng:</span>
-        <input [value]="order.ship_time" class="info-input" disabled />
-      </div>
-      <div class="info-row" *ngIf="order.payment_time">
-        <span class="info-label">Thời gian thanh toán:</span>
-        <input [value]="order.payment_time" class="info-input" disabled />
-      </div>
-      <div class="info-row" *ngIf="order.complete_time">
-        <span class="info-label">Thời gian hoàn tất:</span>
-        <input [value]="order.complete_time" class="info-input" disabled />
-      </div>
-      <div class="info-row" *ngIf="order.cancel_requested_at">
-        <span class="info-label">Thời gian huỷ đơn:</span>
-        <input [value]="order.cancel_requested_at" class="info-input" disabled />
-      </div>
-      <div class="info-row" *ngIf="order?.cancel_reason">
-        <span class="info-label">Lý do huỷ:</span>
-        <span class="info-value">{{ order.cancel_reason }}</span>
-      </div>
-      <div class="info-row" *ngIf="order?.cancel_requested_by">
-        <span class="info-label">Người yêu cầu huỷ:</span>
-        <input [value]="order.cancel_requested_by" class="info-input" disabled />
-      </div>      
+    <div class="info-row">
+      <span class="info-label">Phone Number:</span>
+      <input [value]="order.delivery?.phone" class="info-input" disabled />
     </div>
-  
-    <!-- Danh sách sản phẩm -->
-    <div class="product-list">
-      <div class="product-item header">
-        <div class="product-col image-col">Ảnh</div>
-        <div class="product-col name-col">Tên sản phẩm</div>
-        <div class="product-col center">Số lượng</div>
-        <div class="product-col right">Đơn giá</div>
-        <div class="product-col right">Thành tiền</div>
-      </div>
-  
-      <div *ngFor="let item of order.items" class="product-item">
-        <div class="product-col image-col">
-          <img [src]="item.image" alt="Ảnh" class="product-img" />
-        </div>
-        <div class="product-col name-col">{{ item.name }}</div>
-        <div class="product-col center">
-          <input type="number" [(ngModel)]="item.quantity" min="1" (change)="recalculateTotal()" class="info-input quantity-input" />
-        </div>
-        <div class="product-col right">{{ item.price | number:'1.0-0' }} VNĐ</div>
-        <div class="product-col right">{{ item.price * item.quantity | number:'1.0-0' }} VNĐ</div>
-      </div>
+    <div class="info-row">
+      <span class="info-label">Delivery Address:</span>
+      <input [value]="order.delivery?.address" class="info-input" disabled />
     </div>
-  
-  <!-- Tổng kết -->
+    <div class="info-row">
+      <span class="info-label">Customer Note:</span>
+      <textarea [value]="order.customer_note" class="info-input textarea-input" disabled></textarea>
+    </div>
+    <div class="info-row">
+      <span class="info-label">Status:</span>
+      <select [(ngModel)]="order.status" class="info-input">
+        <option value="Pending Payment">Processing</option>
+        <option value="Shipped">Shipped</option>
+        <option value="Delivered">Delivered</option>
+        <option value="Completed">Completed</option>
+        <option value="Cancelled">Cancelled</option>
+      </select>
+    </div>
+    <div *ngIf="order.status === 'Cancelled'" class="info-row">
+      <span class="info-label" for="cancelReason">Cancellation Reason:</span>
+      <textarea
+        id="cancelReason"
+        [(ngModel)]="cancelReason"
+        rows="2"
+        class="info-input textarea-input"
+        placeholder="Enter cancellation reason..."
+        required
+      ></textarea>
+    </div>
+    <div class="info-row">
+      <span class="info-label">Payment Method:</span>
+      <input [value]="order.payment_method" class="info-input" disabled />
+    </div>
+    <div class="info-row">
+      <span class="info-label">Order Date:</span>
+      <input [value]="order.date" class="info-input" disabled />
+    </div>
+    <div class="info-row" *ngIf="order.ship_time">
+      <span class="info-label">Shipping Date:</span>
+      <input [value]="order.ship_time" class="info-input" disabled />
+    </div>
+    <div class="info-row" *ngIf="order.payment_time">
+      <span class="info-label">Payment Date:</span>
+      <input [value]="order.payment_time" class="info-input" disabled />
+    </div>
+    <div class="info-row" *ngIf="order.complete_time">
+      <span class="info-label">Completion Date:</span>
+      <input [value]="order.complete_time" class="info-input" disabled />
+    </div>
+    <div class="info-row" *ngIf="order.cancel_requested_at">
+      <span class="info-label">Cancellation Date:</span>
+      <input [value]="order.cancel_requested_at" class="info-input" disabled />
+    </div>
+    <div class="info-row" *ngIf="order?.cancel_reason">
+      <span class="info-label">Cancellation Reason:</span>
+      <span class="info-value">{{ order.cancel_reason }}</span>
+    </div>
+    <div class="info-row" *ngIf="order?.cancel_requested_by">
+      <span class="info-label">Requested By:</span>
+      <input [value]="order.cancel_requested_by" class="info-input" disabled />
+    </div>
+  </div>
+
+  <!-- Product List (Table) -->
+  <div class="product-table-container">
+    <table class="product-table">
+      <thead>
+        <tr>
+          <th class="image-col">Image</th>
+          <th class="name-col">Product Name</th>
+          <th class="center">Quantity</th>
+          <th class="right">Unit Price</th>
+          <th class="right">Subtotal</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of order.items">
+          <td class="image-col">
+            <img [src]="item.image" width="60" alt="{{ item.name }}" />
+          </td>
+          <td class="name-col">{{ item.name }}</td>
+          <td class="center">
+            <input
+              type="number"
+              [(ngModel)]="item.quantity"
+              min="1"
+              (change)="recalculateTotal()"
+              class="info-input quantity-input"
+            />
+          </td>
+          <td class="right">{{ item.price | number: '1.0-0' }} VNĐ</td>
+          <td class="right">{{ item.price * item.quantity | number: '1.0-0' }} VNĐ</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Summary -->
   <div class="order-summary">
     <div class="summary-row">
-      <span class="summary-label">Tổng giá trị sản phẩm:</span>
+      <span class="summary-label">Total Product Value:</span>
       <span class="summary-value">{{ productTotal | number: '1.0-0' }} VNĐ</span>
     </div>
     <div class="summary-row">
-      <span class="summary-label">Chi phí giao hàng:</span>
-      <span class="summary-value">{{ shippingFee | number: '1.0-0' }} VNĐ</span>
+      <span class="info-label">Shipping Fee:</span>
+      <input type="number" [(ngModel)]="shippingFee" min="0" (change)="recalculateTotal()" class="info-input" style="width: 150px; text-align: right;" />
     </div>
     <div class="summary-row total">
-      <span class="summary-label">Tổng cộng:</span>
+      <span class="summary-label">Grand Total:</span>
       <span class="summary-value total-amount">{{ getTotal() | number: '1.0-0' }} VNĐ</span>
     </div>
   </div>
-  
-    <!-- Nút thao tác -->
-    <div class="button-group">
-      <button class="btn-save" (click)="saveOrder()">Lưu thay đổi</button>
-      <button class="btn-cancel" routerLink="/order">Hủy</button>
-    </div>
+
+  <!-- Action Buttons -->
+  <div class="button-group">
+    <button class="btn-save" (click)="saveOrder()">Save Changes</button>
+    <button class="btn-cancel" routerLink="/order">Cancel</button>
   </div>
-  
+</div>

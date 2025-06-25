@@ -131,7 +131,37 @@
   transform: scale(1.05);
 }
 
-.edit-image-btn {
+.btn-icon {
+  background-color: transparent;
+  border: none;
+  color: #9c162c;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 10px 12px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn-icon:hover {
+  color: #ffffff;
+  background-color: #9c162c;
+  box-shadow: 0 4px 8px rgba(156, 22, 44, 0.3);
+  transform: scale(1.1);
+}
+
+/* =========================================
+   Tùy chỉnh icon xóa (trash-can), chỉnh sửa (pen), chi tiết (eye)
+   ========================================= */
+.fa-trash-can,
+.fa-pen,
+.fa-eye {
+  font-size: 1.5rem;
+}
+
+/* .edit-image-btn {
   padding: 5px 10px;
   background-color: #ffffff;
   color: #9c162c;
@@ -144,7 +174,7 @@
 .edit-image-btn:hover {
   background-color: #9c162c;
   color: #ffffff;
-}
+} */
 
 .variant-list {
   margin-top: 10px;

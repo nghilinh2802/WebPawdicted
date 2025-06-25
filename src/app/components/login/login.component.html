@@ -1,6 +1,6 @@
 <div class="login-container">
   <div class="login-box">
-    <h2>Đăng nhập Admin</h2>
+    <h2>Admin Login</h2>
     <form (ngSubmit)="login()">
       <div class="input-group">
         <label for="email">Email</label>
@@ -13,7 +13,7 @@
         />
       </div>
       <div class="input-group">
-        <label for="password">Mật khẩu</label>
+        <label for="password">Password</label>
         <input
           type="password"
           id="password"
@@ -22,7 +22,7 @@
           required
         />
       </div>
-      <button type="submit" class="login-btn">Đăng nhập</button>
+      <button type="submit" class="login-btn">Login</button>
       <p class="error-message" *ngIf="errorMessage">{{ errorMessage }}</p>
     </form>
   </div>

@@ -1,8 +1,8 @@
 <!-- src/app/components/chat/chat.component.html -->
 <div class="chat-page-container">
   <div class="chat-header">
-    <h2>🐾 Pawdicted Chat - Danh sách khách hàng</h2>
-    <p class="subtitle">Tin nhắn chưa trả lời sẽ hiển thị ở đầu danh sách</p>
+    <h2>🐾 Pawdicted Chat - Customer List</h2>
+    <p class="subtitle">Unread messages will appear at the top of the list</p>
   </div>
 
   <div class="chat-rooms-grid">
@@ -27,27 +27,27 @@
             {{ getUnreadCount(chat) }}
           </div>
           <div class="unreplied-badge" *ngIf="isUnrepliedMessage(chat)">
-            Chưa trả lời
+            Unreplied
           </div>
         </div>
       </div>
       
       <div class="last-message">
         <p>{{ getLastMessage(chat) }}</p>
-        <small>{{ getLastMessageTime(chat) | date:'dd/MM HH:mm' }}</small>
+        <small>{{ getLastMessageTime(chat) | date:'MM/dd HH:mm' }}</small>
       </div>
     </div>
   </div>
 
   <!-- Loading state -->
   <div *ngIf="isLoading" class="loading-state">
-    <p>Đang tải danh sách chat...</p>
+    <p>Loading chat list...</p>
   </div>
 
   <!-- Empty state -->
   <div *ngIf="(chatRooms$ | async)?.length === 0 && !isLoading" class="empty-state">
-    <h3>🐾 Chưa có khách hàng nào nhắn tin</h3>
-    <p>Khi có khách hàng nhắn tin, họ sẽ xuất hiện ở đây</p>
+    <h3>🐾 No customers have messaged yet</h3>
+    <p>When customers send messages, they will appear here</p>
   </div>
 </div>
 
@@ -64,7 +64,7 @@
           <h3>{{ getCustomerDisplayName(selectedChatRoom) }}</h3>
           <span class="status">
             <span class="status-dot" [class.online]="isCustomerOnline(selectedChatRoom)"></span>
-            {{ isCustomerOnline(selectedChatRoom) ? 'Đang online' : 'Offline' }}
+            {{ isCustomerOnline(selectedChatRoom) ? 'Online' : 'Offline' }}
           </span>
         </div>
       </div>
@@ -91,7 +91,7 @@
       <input 
         type="text" 
         [(ngModel)]="newMessage" 
-        placeholder="Nhập tin nhắn..."
+        placeholder="Type your message..."
         (keydown)="onKeyPress($event)"
         [disabled]="isSending"
         class="message-input-field">

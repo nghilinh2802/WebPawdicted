@@ -1,26 +1,26 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
 <div class="promotions-container">
-  <h2>KHUYẾN MÃI</h2>
-  <button (click)="openAddModal()" type="button">+ Thêm khuyến mãi</button>
+  <h2>Promotion Management</h2>
+  <button (click)="openAddModal()" type="button">+ Add Promotion</button>
 
   <div class="filter">
-    <label for="status-filter">Lọc theo:</label>
+    <label for="status-filter">Filter by:</label>
     <select id="status-filter" (change)="filterPromotions($event)">
-      <option value="all">Tất cả</option>
-      <option value="scheduled">Đã lên lịch</option>
-      <option value="sent">Đã gửi</option>
+      <option value="all">All</option>
+      <option value="scheduled">Scheduled</option>
+      <option value="sent">Sent</option>
     </select>
   </div>
 
   <table>
     <thead>
       <tr>
-        <th>Tiêu đề</th>
-        <th>Thời gian</th>
-        <th>Trạng thái</th>
-        <th>Ảnh</th>
-        <th>Thao tác</th>
+        <th>Title</th>
+        <th>Time</th>
+        <th>Status</th>
+        <th>Image</th>
+        <th>Actions</th>
       </tr>
     </thead>
     <tbody>
@@ -45,87 +45,87 @@
     </tbody>
   </table>
 
-  <!-- Modal thêm khuyến mãi -->
+  <!-- Add Promotion Modal -->
   <div *ngIf="isAddModalOpen" class="modal">
     <div class="modal-content">
-      <h2>Thêm Khuyến Mãi</h2>
+      <h2>Add Promotion</h2>
       <form #promotionForm="ngForm">
-        <label>Mã khuyến mãi</label>
+        <label>Promotion Title</label>
         <input
           [(ngModel)]="newPromotion.title"
           name="title"
-          placeholder="Tiêu đề"
+          placeholder="Title"
           required
         />
-        <label>Mô tả</label>
+        <label>Description</label>
         <input
           [(ngModel)]="newPromotion.description"
           name="description"
-          placeholder="Mô tả"
+          placeholder="Description"
           required
         />
-        <label>Thời gian</label>
+        <label>Time</label>
         <input
           [(ngModel)]="newPromotion.time"
           name="time"
           type="datetime-local"
           required
         />
-        <label>Link ảnh (URL)</label>
+        <label>Image URL</label>
         <input
           [(ngModel)]="newPromotion.imageUrl"
           name="imageUrl"
-          placeholder="Nhập URL ảnh"
+          placeholder="Enter image URL"
           required
         />
         <div>
           <button (click)="addPromotion()" type="button" [disabled]="!promotionForm.valid">
-            Lưu
+            Save
           </button>
-          <button class="close-btn" type="button" (click)="closeAddModal()">Hủy</button>
+          <button class="close-btn" type="button" (click)="closeAddModal()">Cancel</button>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- Modal chỉnh sửa khuyến mãi (tạm thời để trống, sẽ triển khai sau) -->
+  <!-- Edit Promotion Modal -->
   <div *ngIf="isEditModalOpen" class="modal">
     <div class="modal-content">
-      <h2>Chỉnh Sửa Khuyến Mãi</h2>
+      <h2>Edit Promotion</h2>
       <form #editForm="ngForm">
-        <label>Tiêu đề</label>
+        <label>Title</label>
         <input
           [(ngModel)]="editedPromotion.title"
           name="editTitle"
-          placeholder="Tiêu đề"
+          placeholder="Title"
           required
         />
-        <label>Mô tả</label>
+        <label>Description</label>
         <input
           [(ngModel)]="editedPromotion.description"
           name="editDescription"
-          placeholder="Mô tả"
+          placeholder="Description"
           required
         />
-        <label>Thời gian</label>
+        <label>Time</label>
         <input
           [(ngModel)]="editedPromotion.time"
           name="editTime"
           type="datetime-local"
           required
         />
-        <label>Link ảnh (URL)</label>
+        <label>Image URL</label>
         <input
           [(ngModel)]="editedPromotion.imageUrl"
           name="editImageUrl"
-          placeholder="Nhập URL ảnh"
+          placeholder="Enter image URL"
           required
         />
         <div>
           <button (click)="updatePromotion()" type="button" [disabled]="!editForm.valid">
-            Cập nhật
+            Update
           </button>
-          <button class="close-btn" type="button" (click)="closeEditModal()">Hủy</button>
+          <button class="close-btn" type="button" (click)="closeEditModal()">Cancel</button>
         </div>
       </form>
     </div>
