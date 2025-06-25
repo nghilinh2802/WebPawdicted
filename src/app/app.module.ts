@@ -12,6 +12,8 @@ import { QuillModule } from 'ngx-quill';
 import { DatePipe } from '@angular/common';
 import { environment } from '../environment';
 
+import { NgChartsModule } from 'ng2-charts';
+
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
@@ -52,10 +54,12 @@ import { RouterModule } from '@angular/router';
     PromotionsComponent,
     FlashsaleManagementComponent,
     DashboardComponent,
-    ReportComponent,
+    
+
     
   ],
   imports: [
+    NgChartsModule,
     BrowserModule,
     CommonModule,
     FormsModule,
@@ -65,6 +69,9 @@ import { RouterModule } from '@angular/router';
     AddProductModalComponent,
     EditProductModalComponent,
     ProductDetailsModalComponent,
+
+    ReportComponent,
+
     ChatComponent, // Thêm component chat mới
     QuillModule.forRoot()
   ],
