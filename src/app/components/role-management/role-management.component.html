@@ -24,8 +24,12 @@
           <td>{{ user.email }}</td>
           <td>{{ user.role }}</td>
           <td class="action-links">
-            <button class="delete-btn" (click)="deleteUser(user.id)">Delete</button>
-          </td>
+          <!-- Thay nút "Delete" bằng icon Font Awesome -->
+          <button class="btn-icon" (click)="deleteUser(user.id)">
+            <i class="fa-solid fa-trash-can"></i> <!-- Icon xóa -->
+          </button>
+        </td>
+
         </tr>
       </tbody>
     </table>

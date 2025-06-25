@@ -47,6 +47,35 @@
   box-shadow: 0 4px 8px rgba(156, 22, 44, 0.3);
 }
 
+
+
+/* =========================================
+   Nút icon Font Awesome
+   ========================================= */
+.btn-icon {
+  background-color: transparent;
+  border: none;
+  color: #9c162c; /* Màu chủ đạo */
+  font-size: 1.5rem; /* Điều chỉnh kích thước icon */
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 8px 12px; /* Thêm padding để tăng khu vực nhấp chuột */
+  border-radius: 5px; /* Bo góc để các icon trông mềm mại */
+}
+
+.btn-icon:hover {
+  color: #ffffff; /* Màu khi hover */
+  background-color: #9c162c; /* Màu nền khi hover */
+  box-shadow: 0 4px 8px rgba(156, 22, 44, 0.3); /* Đổ bóng nhẹ */
+  transform: scale(1.1); /* Hiệu ứng phóng to khi hover */
+}
+
+/* Tùy chỉnh icon xóa */
+.fa-trash-can {
+  font-size: 1.5rem; /* Điều chỉnh kích thước icon xóa */
+}
+
+
 /* =========================
    Table
 ========================= */
@@ -66,7 +95,7 @@
 .product-table th,
 .product-table td {
   padding: 12px 15px;
-  text-align: left;
+  text-align: center;
   border-bottom: 1px solid #f8f1f1;
 }
 

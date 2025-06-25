@@ -53,11 +53,23 @@
             <td>{{ product.price | currency:'VND' }}</td>
             <td>{{ product.category_id }}</td>
             <td><img [src]="product.product_image || 'https://via.placeholder.com/60'" alt="Product Image" class="product-image"></td>
-            <td class="action-links">
-              <button class="details-btn" (click)="openDetailsModal(product.product_id)">Details</button>
-              <button class="edit-btn" (click)="openEditModal(product.product_id)">Edit</button>
-              <button class="delete-btn" (click)="deleteProduct(product.product_id)">Delete</button>
+           <td class="action-links">
+              <!-- Nút "Details" thay bằng icon Font Awesome -->
+              <button class="btn-icon" (click)="openDetailsModal(product.product_id)">
+                <i class="fa-solid fa-eye"></i> <!-- Icon mắt cho chi tiết -->
+              </button>
+              
+              <!-- Nút "Edit" thay bằng icon Font Awesome -->
+              <button class="btn-icon" (click)="openEditModal(product.product_id)">
+                <i class="fa-solid fa-pen"></i> <!-- Icon bút cho chỉnh sửa -->
+              </button>
+              
+              <!-- Nút "Delete" thay bằng icon Font Awesome -->
+              <button class="btn-icon" (click)="deleteProduct(product.product_id)">
+                <i class="fa-solid fa-trash-can"></i> <!-- Icon thùng rác cho xóa -->
+              </button>
             </td>
+
           </tr>
           <tr *ngFor="let variant of product.variants" [attr.data-parent-id]="product.product_id" [attr.data-variant-id]="variant.variant_id" class="variant-row" [class.show]="expandedProductIds.has(product.product_id)">
             <td><input type="checkbox" [checked]="selectedVariantIds.has(variant.variant_id)" (change)="toggleVariantSelection(variant.variant_id)"></td>

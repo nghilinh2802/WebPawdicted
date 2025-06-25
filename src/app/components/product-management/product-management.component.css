@@ -48,15 +48,53 @@
   color: #ffffff;
 }
 
-.details-btn, .edit-btn {
-  background-color: #ffffff;
+/* =========================================
+   Nút icon Font Awesome
+   ========================================= */
+.btn-icon {
+  background-color: transparent;
+  border: none;
   color: #9c162c;
-  border: 1px solid #9c162c;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 10px 12px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.details-btn:hover, .edit-btn:hover {
-  background-color: #9c162c;
+.btn-icon:hover {
   color: #ffffff;
+  background-color: #9c162c;
+  box-shadow: 0 4px 8px rgba(156, 22, 44, 0.3);
+  transform: scale(1.1);
+}
+
+/* =========================================
+   Tùy chỉnh icon xóa (trash-can), chỉnh sửa (pen), chi tiết (eye)
+   ========================================= */
+.fa-trash-can,
+.fa-pen,
+.fa-eye {
+  font-size: 1.5rem;
+}
+
+/* =========================
+   Action Links (Icon Buttons)
+========================= */
+.action-links {
+  display: flex;
+  gap: 5px; /* Khoảng cách giữa các icon */
+  justify-content: center; /* Căn giữa icon trong cột */
+  align-items: center; /* Đảm bảo icon thẳng hàng */
+}
+
+.action-links .btn-icon {
+  display: inline-flex; /* Sử dụng inline-flex để icon nằm ngang */
+  margin: 0 2px; /* Điều chỉnh khoảng cách giữa các icon */
+  vertical-align: middle; /* Căn giữa theo chiều dọc */
 }
 
 /* =========================
@@ -107,8 +145,9 @@
 .product-table th,
 .product-table td {
   padding: 12px 15px;
-  text-align: left;
+  text-align: left; /* Giữ nguyên căn trái, có thể thay bằng center nếu muốn */
   border-bottom: 1px solid #f8f1f1;
+  vertical-align: middle; /* Căn giữa theo chiều dọc trong cột */
 }
 
 .product-table th {
@@ -150,16 +189,6 @@
 .variant-link {
   cursor: pointer;
   text-decoration: underline;
-}
-
-.action-links button {
-  margin: 0 5px;
-  padding: 5px 10px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 0.9rem;
-  transition: all 0.3s ease;
 }
 
 /* =========================
@@ -241,5 +270,10 @@
   .product-image, .variant-image {
     width: 40px;
     height: 40px;
+  }
+
+  /* Đảm bảo icon nằm ngang trên mobile */
+  .action-links .btn-icon {
+    margin: 0 2px;
   }
 }

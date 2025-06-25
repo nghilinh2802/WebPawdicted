@@ -1,0 +1,141 @@
+/* =========================
+   Layout & Typography
+========================= */
+body {
+    margin: 0;
+    font-family: 'Roboto', 'Arial', sans-serif;
+}
+
+.container {
+    padding: 32px;
+    background: linear-gradient(135deg, #f8f1f1 0%, #ffffff 100%);
+    min-height: 100vh;
+}
+
+.title {
+    color: #9c162c;
+    font-size: 2.25rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 40px;
+    text-shadow: 1px 1px 3px rgba(156, 22, 44, 0.1);
+}
+
+/* =========================
+   Card Container
+========================= */
+.card-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+    margin-top: 24px;
+}
+
+.card {
+    background-color: #FFFFFF;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(156, 22, 44, 0.15);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px;
+}
+
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 16px rgba(156, 22, 44, 0.2);
+}
+
+.card-header {
+    font-size: 2.5rem;
+    color: #9c162c;
+    margin-bottom: 16px;
+}
+
+.card-body {
+    text-align: center;
+}
+
+.card-body h2 {
+    color: #9c162c;
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin-bottom: 12px;
+}
+
+.card-body p {
+    color: #757575;
+    font-size: 1rem;
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+.card-btn {
+    padding: 12px 24px;
+    font-size: 1rem;
+    font-weight: 500;
+    border-radius: 8px;
+    background-color: #FFFFFF;
+    border: 2px solid #9c162c;
+    color: #9c162c;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.card-btn:hover {
+    background-color: #9c162c;
+    color: #FFFFFF;
+    box-shadow: 0 4px 8px rgba(156, 22, 44, 0.3);
+}
+
+/* =========================
+   Responsive
+========================= */
+@media (max-width: 768px) {
+    .container {
+        padding: 16px;
+    }
+
+    .title {
+        font-size: 1.75rem;
+    }
+
+    .card-container {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .card {
+        padding: 16px;
+    }
+
+    .card-header {
+        font-size: 2rem;
+    }
+
+    .card-body h2 {
+        font-size: 1.25rem;
+    }
+
+    .card-body p {
+        font-size: 0.9rem;
+    }
+
+    .card-btn {
+        width: 100%;
+        padding: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .title {
+        font-size: 1.5rem;
+    }
+
+    .card-header {
+        font-size: 1.75rem;
+    }
+}

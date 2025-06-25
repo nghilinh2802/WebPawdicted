@@ -4,12 +4,12 @@
   <!-- Tìm kiếm + Lọc trạng thái -->
   <div class="filter-bar mb-4 flex flex-wrap gap-4">
     <input
-    type="text"
-    [(ngModel)]="searchText"
-    placeholder="Search by Code or Name"
-    title="Search by Order Code or Customer Name"
-    class="search-box border border-accent rounded px-3 py-3 w-full max-w-xl text-base"
-  />
+      type="text"
+      [(ngModel)]="searchText"
+      placeholder="Search by Code or Name"
+      title="Search by Order Code or Customer Name"
+      class="search-box border border-accent rounded px-3 py-3 w-full max-w-xl text-base"
+    />
 
     <select [(ngModel)]="selectedStatus" class="filter-dropdown border border-accent rounded px-3 py-2">
       <option value="">All Status</option>
@@ -60,7 +60,7 @@
           </td>
           <td>{{ order.code }}</td>
           <td>
-            <strong>{{ order.customer_name }}</strong>
+            {{ order.customer_name }}
           </td>
           <td>
             <span class="status-pill" [ngClass]="'status-' + order.status">{{ order.status }}</span>
@@ -69,8 +69,12 @@
           <td class="text-right">{{ order.value | number: '1.0-0' }} VND</td>
           <td>{{ order.date }}</td>
           <td>
-            <button class="btn btn-view" [routerLink]="['/order', order.id]">View</button>
-            <button class="btn btn-update" [routerLink]="['/order-update', order.id]">Update</button>
+            <button class="btn-icon btn-view" [routerLink]="['/order', order.id]">
+              <i class="fa-solid fa-eye"></i> <!-- Thay "View" bằng icon mắt -->
+            </button>
+            <button class="btn-icon btn-update" [routerLink]="['/order-update', order.id]">
+              <i class="fa-solid fa-pen"></i> <!-- Thay "Update" bằng icon bút -->
+            </button>
           </td>
         </tr>
       </tbody>

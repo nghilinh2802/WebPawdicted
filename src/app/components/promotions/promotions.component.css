@@ -1,169 +1,386 @@
+/* =========================
+   Layout & Typography
+========================= */
 .promotions-container {
-  padding: 20px;
-  background: #f4f1ec;
-  border-radius: 10px;
-  margin-top: 30px;
+    padding: 20px;
+    background-color: #f8f1f1;
+    border-radius: 10px;
+    margin-top: 30px;
+    font-family: 'Arial', sans-serif;
+    min-height: 100vh;
 }
 
+.promotions-container h2 {
+    color: #9c162c;
+    font-size: 2.5rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+    text-shadow: 1px 1px 2px rgba(156, 22, 44, 0.2);
+}
+
+/* =========================
+   Buttons
+========================= */
 button {
-  background: #5f3e22;
-  color: white;
-  border: none;
-  padding: 10px 15px;
-  cursor: pointer;
-  border-radius: 5px;
-  margin-bottom: 10px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    color: #9c162c;
+    border: 2px solid #9c162c;
+    margin-bottom: 10px;
 }
 
 button:hover {
-  background-color: #675654;
+    background-color: #9c162c;
+    color: #ffffff;
 }
 
+button:disabled {
+    background-color: #f8f9fa;
+    color: #6c757d;
+    border-color: #dee2e6;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+button:disabled:hover {
+    background-color: #f8f9fa;
+    color: #6c757d;
+    transform: none;
+}
+
+/* =========================
+   Filter Section
+========================= */
 .filter {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  margin-bottom: 10px;
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    justify-content: flex-end;
+    align-items: center;
+    flex-wrap: wrap;
 }
 
 .filter label {
-  margin-right: 10px;
+    font-weight: bold;
+    color: #9c162c;
+    margin-right: 10px;
 }
 
 #status-filter {
-  padding: 5px;
-  border-radius: 10px;
-  border: 1px solid #ccc;
-  outline: none;
-  cursor: pointer;
-  background: white;
+    padding: 10px;
+    border: 1px solid #9c162c;
+    border-radius: 5px;
+    font-size: 1rem;
+    background-color: #ffffff;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    outline: none;
 }
 
+#status-filter:focus {
+    box-shadow: 0 0 5px rgba(156, 22, 44, 0.5);
+}
+
+/* =========================
+   Table
+========================= */
 table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 10px;
-  background: white;
-  border-radius: 10px;
-  overflow: hidden;
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-top: 10px;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
-th,
-td {
-  border: 1px solid #ddd;
-  padding: 10px;
-  text-align: center;
+th, td {
+    padding: 12px 15px;
+    text-align: center;
+    border-bottom: 1px solid #f8f1f1;
+    vertical-align: middle;
 }
 
 th {
-  background: #5f3e22;
-  color: white;
+    background: #9c162c;
+    color: white;
+    font-weight: bold;
 }
 
+tr {
+    background-color: #ffffff;
+    transition: background-color 0.3s ease;
+}
+
+tr:hover {
+    background-color: #f8f1f1;
+}
+
+/* =========================
+   Image in Table
+========================= */
+td img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border: 2px solid #9c162c;
+    border-radius: 5px;
+}
+
+/* =========================
+   Modal Actions (Icon Buttons)
+========================= */
+.modal-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
+
+.modal-actions button,
+.edit-btn,
+.delete-btn {
+    width: 35px;
+    height: 35px;
+    border-radius: 5px;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    color: #9c162c;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 8px;
+    margin: 0;
+    box-shadow: none;
+}
+
+.modal-actions button:hover,
+.edit-btn:hover,
+.delete-btn:hover {
+    color: #ffffff;
+    background-color: #9c162c;
+    box-shadow: 0 4px 8px rgba(156, 22, 44, 0.3);
+    transform: scale(1.1);
+}
+
+.modal-actions button i,
+.edit-btn i,
+.delete-btn i {
+    font-size: 1.2rem;
+}
+
+/* =========================
+   Modal
+========================= */
 .modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
 }
 
 .modal-content {
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
-  width: 320px;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    width: 400px;
+    max-width: 95%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.modal-content h2 {
+    color: #9c162c;
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 1.8rem;
+    text-shadow: none;
+}
+
+/* =========================
+   Form Elements in Modal
+========================= */
+.modal-content form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .modal-content label {
-  width: 95%;
-  text-align: left;
-  font-weight: bold;
-  display: block;
-  margin-top: 10px;
+    width: 95%;
+    text-align: left;
+    font-weight: bold;
+    color: #9c162c;
+    display: block;
+    margin-top: 15px;
+    margin-bottom: 5px;
 }
 
 .modal-content input,
-.modal-content select {
-  width: 90%;
-  padding: 8px;
-  margin: 8px 0;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  text-align: left;
+.modal-content select,
+.modal-content textarea {
+    width: 90%;
+    padding: 10px;
+    margin: 8px 0;
+    border: 1px solid #9c162c;
+    border-radius: 5px;
+    text-align: left;
+    font-size: 1rem;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+    font-family: 'Arial', sans-serif;
 }
 
-.modal-actions {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 5px;
+.modal-content input:focus,
+.modal-content select:focus,
+.modal-content textarea:focus {
+    outline: none;
+    box-shadow: 0 0 5px rgba(156, 22, 44, 0.5);
 }
 
-.modal-actions button {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  border: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #f0f0f0;
-  cursor: pointer;
-  transition: 0.3s ease-in-out;
+.modal-content textarea {
+    min-height: 80px;
+    resize: vertical;
 }
 
-.modal-actions button:hover {
-  background-color: #ddd;
+.modal-content form > div {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+    width: 100%;
 }
 
-.modal-actions button i {
-  font-size: 16px;
-  color: #333;
-}
-
-.edit-btn,
-.delete-btn {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  border: none;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  font-size: 16px;
-}
-
-.edit-btn i,
-.delete-btn i {
-  font-size: 16px;
-}
-
-.edit-btn {
-  background-color: #675654;
-  color: white;
-}
-
-.delete-btn {
-  background-color: #da323e;
-  color: white;
-}
-
-.edit-btn:hover,
-.delete-btn:hover {
-  opacity: 0.8;
+.modal-content form > div button {
+    margin: 0;
+    flex: 1;
+    max-width: 120px;
 }
 
 .close-btn {
-  background: #da323e;
-  margin-left: 10px;
+    background: #dc3545 !important;
+    color: white !important;
+    border: 2px solid #dc3545 !important;
+}
+
+.close-btn:hover {
+    background: #c82333 !important;
+    border-color: #c82333 !important;
+}
+
+/* =========================
+   Status Colors
+========================= */
+.status-scheduled {
+    color: #ffc107;
+    font-weight: bold;
+}
+
+.status-sent {
+    color: #28a745;
+    font-weight: bold;
+}
+
+.status-draft {
+    color: #6c757d;
+    font-weight: bold;
+}
+
+/* =========================
+   Form Validation
+========================= */
+.modal-content input.ng-invalid.ng-touched,
+.modal-content select.ng-invalid.ng-touched,
+.modal-content textarea.ng-invalid.ng-touched {
+    border-color: #dc3545;
+    box-shadow: 0 0 5px rgba(220, 53, 69, 0.3);
+}
+
+.modal-content input.ng-valid.ng-touched,
+.modal-content select.ng-valid.ng-touched,
+.modal-content textarea.ng-valid.ng-touched {
+    border-color: #28a745;
+    box-shadow: 0 0 5px rgba(40, 167, 69, 0.3);
+}
+
+/* =========================
+   Responsive
+========================= */
+@media (max-width: 768px) {
+    .promotions-container h2 {
+        font-size: 2rem;
+    }
+
+    .filter {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    button {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    #status-filter {
+        width: 100%;
+    }
+
+    th, td {
+        padding: 8px 10px;
+        font-size: 0.9rem;
+    }
+
+    td img {
+        width: 40px;
+        height: 40px;
+    }
+
+    .modal-actions button,
+    .edit-btn,
+    .delete-btn {
+        width: 30px;
+        height: 30px;
+        padding: 6px;
+    }
+
+    .modal-actions button i,
+    .edit-btn i,
+    .delete-btn i {
+        font-size: 1rem;
+    }
+
+    .modal-content {
+        width: 95%;
+        padding: 20px;
+    }
+
+    .modal-content form > div {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .modal-content form > div button {
+        max-width: none;
+        width: 100%;
+    }
 }

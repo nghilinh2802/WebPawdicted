@@ -1,245 +1,268 @@
+/* =========================
+   Order Page Container
+========================= */
 .order-page {
-    background-color: transparent !important;
-    padding: 24px;
-    font-family: 'Arial', sans-serif;
-  }
-  
-  /* Tiêu đề */
-  .title {
-    color: #9c162c;
-    font-size: 2.5rem;
-    font-weight: bold;
-    text-align: center;
-    margin-bottom: 20px;
-    text-shadow: 1px 1px 2px rgba(156, 22, 44, 0.2);
-  }
-  
-  /* Khu vực lọc tìm kiếm */
+  padding: 20px;
+  background-color: transparent;
+  font-family: 'Arial', sans-serif;
+}
+
+.title {
+  color: #9c162c;
+  font-size: 2.5rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 20px;
+  text-shadow: 1px 1px 2px rgba(156, 22, 44, 0.2);
+}
+
+/* =========================
+   Filter Bar
+========================= */
+.filter-bar {
+  margin-bottom: 20px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.search-box {
+  border: 1px solid #9c162c;
+  border-radius: 5px;
+  padding: 10px;
+  width: 100%;
+  max-width: 300px;
+  font-size: 1rem;
+  background-color: #ffffff;
+  transition: all 0.3s ease;
+}
+
+.search-box:focus {
+  outline: none;
+  box-shadow: 0 0 5px rgba(156, 22, 44, 0.5);
+}
+
+.filter-dropdown {
+  border: 1px solid #9c162c;
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 1rem;
+  background-color: #ffffff;
+  transition: all 0.3s ease;
+}
+
+.filter-dropdown:focus {
+  outline: none;
+  box-shadow: 0 0 5px rgba(156, 22, 44, 0.5);
+}
+
+/* =========================
+   Delete Button
+========================= */
+.btn-delete {
+  background-color: #dc3545;
+  color: #ffffff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  margin-bottom: 15px;
+  display: inline-block;
+  text-align: center;
+}
+
+/* Container cha để căn trái nút */
+.mb-4 {
+  text-align: right;
+  margin-bottom: 15px;
+}
+
+.btn-delete:hover:not(:disabled) {
+  background-color: #c82333;
+  box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+}
+
+.btn-delete:disabled {
+  background-color: #6c757d;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+/* =========================
+   Table Container
+========================= */
+.table-container {
+  background-color: #ffffff;
+  border-radius: 5px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.order-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.order-table th,
+.order-table td {
+  padding: 12px 15px;
+  text-align: center; /* Căn giữa nội dung cột */
+  border-bottom: 1px solid #f8f1f1;
+}
+
+.order-table th {
+  background-color: #9c162c;
+  color: #ffffff;
+  font-weight: bold;
+}
+
+.order-table tr {
+  background-color: #ffffff;
+  transition: background-color 0.3s ease;
+}
+
+.order-table tr:hover {
+  background-color: #f8f1f1;
+}
+
+.status-pill {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  border: 1px solid #9c162c;
+}
+
+.status-Pending\ Payment {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.status-Shipped {
+  background-color: #cce5ff;
+  color: #004085;
+}
+
+.status-Delivered {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.status-Completed {
+  background-color: #e9ecef;
+  color: #495057;
+}
+
+.status-Cancelled {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+/* =========================
+   Action Buttons (Icon-based)
+========================= */
+.btn-icon {
+  background-color: transparent;
+  border: none;
+  color: #9c162c;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 10px 12px;
+  border-radius: 5px;
+  display: inline-flex; /* Sử dụng inline-flex để nằm ngang */
+  justify-content: center;
+  align-items: center;
+  margin: 0 2px; /* Giảm khoảng cách giữa các icon */
+}
+
+.btn-icon:hover {
+  color: #ffffff;
+  background-color: #9c162c;
+  box-shadow: 0 4px 8px rgba(156, 22, 44, 0.3);
+  transform: scale(1.1);
+}
+
+.btn-view .fa-eye,
+.btn-update .fa-pen {
+  font-size: 1.5rem;
+}
+
+/* =========================
+   Pagination
+========================= */
+.pagination {
+  margin-top: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #9c162c;
+  font-size: 0.95rem;
+}
+
+.btn-prev,
+.btn-next {
+  background-color: #9c162c;
+  color: #ffffff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-right: 10px;
+  transition: all 0.3s ease;
+}
+
+.btn-prev:hover:not(:disabled),
+.btn-next:hover:not(:disabled) {
+  background-color: #7a1122;
+  box-shadow: 0 4px 8px rgba(156, 22, 44, 0.2);
+}
+
+.btn-prev:disabled,
+.btn-next:disabled {
+  background-color: #6c757d;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+/* =========================
+   Responsive
+========================= */
+@media (max-width: 768px) {
   .filter-bar {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 16px;
-    margin-bottom: 16px;
+    flex-direction: column;
+    gap: 12px;
   }
-  
+
   .search-box,
   .filter-dropdown {
-    padding: 8px 12px;
-    border-radius: 6px;
-    border: 1px solid #faca77; /* .border-accent */
-    font-size: 14px;
-  }
-  
-  .search-box:focus,
-  .filter-dropdown:focus {
-    outline: none;
-    border-color: #ec6a44; /* .bg-highlight */
-    box-shadow: 0 0 0 2px rgba(236, 106, 68, 0.2); /* highlight ring */
-  }
-
-  /* Bảng đơn hàng */
-  .order-table {
     width: 100%;
-    border-collapse: separate;
-    border-spacing: 0;
-    border-radius: 12px;
-    overflow: hidden;
-    background-color: #ffffff;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    text-align: center;
-    margin-top: 10px;
-  }
-
-  .order-table thead {
-    background-color: #9c162c;
-    color: #ffffff;
-    font-weight: bold;
+    max-width: none;
   }
 
   .order-table th,
   .order-table td {
-    padding: 14px 18px;
-    border-bottom: 1px solid #eee;
-    border-right: 1px solid #ddd; /* Viền giữa các cột */
-    vertical-align: middle;
-  }
-
-  .order-table th:last-child,
-  .order-table td:last-child {
-    border-right: none; /* Không viền phải cột cuối */
-  }
-
-  .order-table thead th:first-child {
-    border-top-left-radius: 12px;
-  }
-
-  .order-table thead th:last-child {
-    border-top-right-radius: 12px;
-  }
-
-  .order-table tbody tr:last-child td {
-    border-bottom: none;
-  }
-
-  .order-table tbody tr:hover {
-    background-color: #fff6eb;
-    transition: background 0.2s ease-in-out;
-  }
-
-  /* Cột checkbox */
-  .order-table td input[type="checkbox"],
-  .order-table th input[type="checkbox"] {
-    transform: scale(1.1);
-  }
-
-  /* Trạng thái với pill màu */
-  .status-pill {
-    padding: 4px 12px;
-    border-radius: 20px;
+    padding: 8px 10px;
     font-size: 0.9rem;
-    font-weight: bold;
-    display: inline-block;
   }
 
-  .status-Pending {
-    background-color: #faca77;
-    color: #782421;
-  }
-
-  .status-Shipped {
-    background-color: #ec6a44;
-    color: #f8f1f1;
-  }
-
-  .status-Delivered {
-    background-color: #9c162c;
-    color: #f8f1f1;
-  }
-
-  .status-Completed {
-    background-color: #4caf50; 
-    color: #ffffff;
-  }
-  
-  .status-Cancelled {
-    background-color: #9e9e9e;
-    color: #ffffff;
-  }
-
-  /* Nút trong bảng */
-  .order-table .btn {
-    font-size: 13px;
-    padding: 6px 10px;
-    margin: 2px 4px;
-    font-weight: bold;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    color: #f8f1f1;
-    font-family: system-ui, sans-serif;
-  }
-
-  .btn-view {
-    background-color: #782421;
-  }
-
-  .btn-view:hover {
-    background-color: #9c162c;
-  }
-
-  .btn-update {
-    background-color: #ec6a44;
-  }
-
-  .btn-update:hover {
-    background-color: #faca77;
-    color: #782421;
-  }
-
-  .btn-delete {
-    background-color: #9c162c;
-    color: #f8f1f1;
-  }
-
-  .btn-delete:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-  
-  /* Nút */
-  .btn {
-    padding: 6px 12px;
-    margin-right: 8px;
-    border: none;
-    border-radius: 6px;
-    font-weight: bold;
-    cursor: pointer;
-    color: #f8f1f1; /* .text-light */
-    font-family: system-ui, sans-serif; /* tránh Arial nếu không muốn */
-  }
-  
-  .btn-view {
-    background-color: #782421;
-  }
-  
-  .btn-view:hover {
-    background-color: #9c162c;
-  }
-  
-  .btn-update {
-    background-color: #ec6a44;
-  }
-  
-  .btn-update:hover {
-    background-color: #faca77;
-    color: #782421;
-  }
-
-  .btn-delete {
-    background-color: #9c162c; /* .bg-secondary */
-    color: #f8f1f1;
-    margin-bottom: 10px;
-  }
-  
-  .btn-delete:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    margin-bottom: 10px;
-  }
-
-  .btn-prev,
-  .btn-next {
-    background-color: #b0b0b0; /* màu xám */
-    color: #ffffff;
-    font-weight: bold;
-    padding: 6px 12px;
-    border-radius: 6px;
-    border: none;
-    cursor: pointer;
-    transition: background 0.2s ease-in-out;
-  }
-
-  .btn-prev:hover,
-  .btn-next:hover {
-    background-color: #a0a0a0; /* xám đậm hơn chút khi hover */
-  }
-
-  .btn-prev:disabled,
-  .btn-next:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-  
-  /* Phân trang */
   .pagination {
-    margin-top: 24px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
+    flex-direction: column;
+    gap: 12px;
   }
-  
-  .pagination p {
-    color: #782421;
-    font-weight: bold;
+
+  .btn-delete {
+    width: 100%;
   }
+
+  /* Đảm bảo icon nằm ngang trên mobile */
+  .btn-icon {
+    margin: 0 2px;
+  }
+}
