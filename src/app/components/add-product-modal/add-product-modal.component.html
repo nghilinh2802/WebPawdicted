@@ -2,6 +2,8 @@
   <div class="modal-content">
     <h2 class="title" [style.color]="'#9c162c'">Add Product <span class="paw-icon">🐾</span></h2>
     <form (ngSubmit)="submitForm()" class="form-container">
+      
+      <!-- Product Information Section -->
       <div class="section">
         <h3 class="section-title" [style.color]="'#9c162c'">Product Information</h3>
         <div class="form-row">
@@ -14,6 +16,8 @@
             <input type="text" [(ngModel)]="product.product_name" name="product_name" required class="input-field">
           </div>
         </div>
+        
+        <!-- Description and Details -->
         <div class="form-row">
           <div class="form-group full-width">
             <label class="required-label">Description</label>
@@ -27,9 +31,12 @@
           </div>
         </div>
       </div>
+
+      <!-- Category Information Section -->
       <div class="section">
         <h3 class="section-title" [style.color]="'#9c162c'">Category Information</h3>
         <div class="form-row">
+          <!-- Animal Category -->
           <div class="form-group">
             <label class="required-label">Animal Category</label>
             <select [(ngModel)]="product.animal_class_id" name="animal_class_id" required class="input-field">
@@ -37,6 +44,8 @@
               <option *ngFor="let animal of animalClasses" [value]="animal.value">{{ animal.label }}</option>
             </select>
           </div>
+
+          <!-- Product Category -->
           <div class="form-group">
             <label class="required-label">Category</label>
             <select [(ngModel)]="product.category_id" name="category_id" (change)="onCategoryChange()" required class="input-field">
@@ -44,15 +53,19 @@
               <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
             </select>
           </div>
+
+          <!-- Subcategory -->
           <div class="form-group">
             <label class="required-label">Subcategory</label>
             <select [(ngModel)]="product.child_category_id" name="child_category_id" required class="input-field" [disabled]="!product.category_id">
               <option value="" disabled selected>Select Subcategory</option>
-              <option *ngFor="let child of filteredChildCategories" [value]="child">{{ child }}</option>
+              <option *ngFor="let child of filteredChildCategories" [value]="child.id">{{ child.name }}</option>
             </select>
           </div>
         </div>
       </div>
+
+      <!-- Pricing & Inventory Section -->
       <div class="section">
         <h3 class="section-title" [style.color]="'#9c162c'">Pricing & Inventory</h3>
         <div class="form-row">
@@ -76,6 +89,8 @@
           </div>
         </div>
       </div>
+
+      <!-- Variants Section -->
       <div class="section">
         <h3 class="section-title" [style.color]="'#9c162c'">Variants <span class="paw-icon">🐾</span></h3>
         <div class="variant-list">
@@ -117,6 +132,8 @@
         </div>
         <button type="button" class="add-btn" (click)="addVariant()">Add Variant <span class="paw-icon">🐾</span></button>
       </div>
+
+      <!-- Submit Button -->
       <div class="button-group">
         <button type="button" class="close-btn" (click)="close.emit()">Close</button>
         <button type="submit" class="save-btn">Save</button>

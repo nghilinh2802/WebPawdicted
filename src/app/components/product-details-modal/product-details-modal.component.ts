@@ -39,14 +39,63 @@ export class ProductDetailsModalComponent implements OnInit {
 
   variants: any[] = [];
 
-  categories = [
-    { id: 'Food & Treats', name: 'Food & Treats', children: ['Dry Food', 'Wet Food', 'Treats'] },
-    { id: 'Pet Care', name: 'Pet Care', children: ['Dental Care', 'Supplements & Vitamins', 'Flea & Tick Control', 'Shampoos & Conditioners', 'Brushes & Combs', 'Nail Care', 'Deodorant Tools'] },
-    { id: 'Toys', name: 'Toys', children: ['Toys', 'Training'] },
-    { id: 'Accessories', name: 'Accessories', children: ['Collars & Leashes', 'Apparel & Costume', 'Feeders'] },
-    { id: 'Furniture', name: 'Furniture', children: ['Bedding', 'Crates, Houses & Pens'] },
-    { id: 'Carriers & Kennels', name: 'Carriers & Kennels', children: ['Carriers', 'Kennels'] }
-  ];
+categories = [
+  { 
+    id: 'FT', 
+    name: 'Food & Treats', 
+    children: [
+      { id: 'DF', name: 'Dry Food' },
+      { id: 'WF', name: 'Wet Food' },
+      { id: 'TR', name: 'Treats' }
+    ]
+  },
+  { 
+    id: 'PC', 
+    name: 'Pet Care', 
+    children: [
+      { id: 'DC', name: 'Dental Care' },
+      { id: 'SV', name: 'Supplements & Vitamins' },
+      { id: 'FT', name: 'Flea & Tick Control' },
+      { id: 'SC', name: 'Shampoos & Conditioners' },
+      { id: 'BC', name: 'Brushes & Combs' },
+      { id: 'NC', name: 'Nail Care' },
+      { id: 'DT', name: 'Deodorant Tools' }
+    ]
+  },
+  { 
+    id: 'TO', 
+    name: 'Toys', 
+    children: [
+      { id: 'TY', name: 'Toys' },
+      { id: 'TN', name: 'Training' }
+    ]
+  },
+  { 
+    id: 'AC', 
+    name: 'Accessories', 
+    children: [
+      { id: 'CL', name: 'Collars & Leashes' },
+      { id: 'AC', name: 'Apparel & Costume' },
+      { id: 'FE', name: 'Feeders' }
+    ]
+  },
+  { 
+    id: 'FU', 
+    name: 'Furniture', 
+    children: [
+      { id: 'BE', name: 'Bedding' },
+      { id: 'CH', name: 'Crates, Houses & Pens' }
+    ]
+  },
+  { 
+    id: 'CK', 
+    name: 'Carriers & Kennels', 
+    children: [
+      { id: 'CA', name: 'Carriers' },
+      { id: 'KE', name: 'Kennels' }
+    ]
+  }
+];
 
   animalClasses = [
     { value: 0, label: 'Cat' },
@@ -89,6 +138,14 @@ export class ProductDetailsModalComponent implements OnInit {
   getCategoryName(id: string): string {
     const category = this.categories.find(cat => cat.id === id);
     return category ? category.name : 'Không xác định';
+  }
+
+  getSubCategoryName(id: string): string {
+    for (let category of this.categories) {
+      const subcategory = category.children.find(child => child.id === id);
+      if (subcategory) return subcategory.name;
+    }
+    return 'Không xác định';
   }
 
   closeModal(): void {

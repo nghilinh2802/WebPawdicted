@@ -11,7 +11,7 @@
           <p><strong>Details:</strong> {{ product.details || 'N/A' }}</p>
           <p><strong>Animal Category:</strong> {{ getAnimalClassLabel(product.animal_class_id) }}</p>
           <p><strong>Category:</strong> {{ getCategoryName(product.category_id) }}</p>
-          <p><strong>Subcategory:</strong> {{ product.child_category_id || 'N/A' }}</p>
+          <p><strong>Subcategory:</strong> {{ getSubCategoryName(product.child_category_id) || 'N/A' }}</p>
           <p>
             <strong>Date Created:</strong>
             <ng-container *ngIf="product.date_listed; else noDate">

@@ -51,7 +51,7 @@
             </td>
             <td>{{ product.quantity }}</td>
             <td>{{ product.price | currency:'VND' }}</td>
-            <td>{{ product.category_id }}</td>
+            <td>{{ getCategoryName(product.category_id) }}</td>
             <td><img [src]="product.product_image || 'https://via.placeholder.com/60'" alt="Product Image" class="product-image"></td>
            <td class="action-links">
               <!-- Nút "Details" thay bằng icon Font Awesome -->

@@ -18,7 +18,7 @@ export class AddProductModalComponent {
     product_name: '',
     description: '',
     details: '',
-    animal_class_id: null,
+    animal_class_id: 0,
     category_id: '',
     child_category_id: '',
     price: null,
@@ -38,14 +38,63 @@ export class AddProductModalComponent {
   variants: any[] = [];
 
   // Danh sách danh mục và danh mục con
-  categories = [
-  { id: 'Food & Treats', name: 'Food & Treats', children: ['Dry Food', 'Wet Food', 'Treats'] },
-  { id: 'Pet Care', name: 'Pet Care', children: ['Dental Care', 'Supplements & Vitamins',  'Flea & Tick Control', 'Shampoos & Conditioners', 'Brushes & Combs', 'Nail Care', 'Deodorant Tools'] },
-  { id: 'Toys', name: 'Toys', children: ['Toys', 'Training'] },
-  { id: 'Accessories', name: 'Accessories', children: ['Collars & Leashes', 'Apparel & Costume', 'Feeders'] },
-  { id: 'Furniture', name: 'Furniture', children: ['Bedding', 'Crates, Houses & Pens'] },
-  { id: 'Carriers & Kennels', name: 'Carriers & Kennels', children: ['Carriers', 'Kennels'] }
-  ];
+categories = [
+  { 
+    id: 'FT', 
+    name: 'Food & Treats', 
+    children: [
+      { id: 'DF', name: 'Dry Food' },
+      { id: 'WF', name: 'Wet Food' },
+      { id: 'TR', name: 'Treats' }
+    ]
+  },
+  { 
+    id: 'PC', 
+    name: 'Pet Care', 
+    children: [
+      { id: 'DC', name: 'Dental Care' },
+      { id: 'SV', name: 'Supplements & Vitamins' },
+      { id: 'FT', name: 'Flea & Tick Control' },
+      { id: 'SC', name: 'Shampoos & Conditioners' },
+      { id: 'BC', name: 'Brushes & Combs' },
+      { id: 'NC', name: 'Nail Care' },
+      { id: 'DT', name: 'Deodorant Tools' }
+    ]
+  },
+  { 
+    id: 'TO', 
+    name: 'Toys', 
+    children: [
+      { id: 'TY', name: 'Toys' },
+      { id: 'TN', name: 'Training' }
+    ]
+  },
+  { 
+    id: 'AC', 
+    name: 'Accessories', 
+    children: [
+      { id: 'CL', name: 'Collars & Leashes' },
+      { id: 'AC', name: 'Apparel & Costume' },
+      { id: 'FE', name: 'Feeders' }
+    ]
+  },
+  { 
+    id: 'FU', 
+    name: 'Furniture', 
+    children: [
+      { id: 'BE', name: 'Bedding' },
+      { id: 'CH', name: 'Crates, Houses & Pens' }
+    ]
+  },
+  { 
+    id: 'CK', 
+    name: 'Carriers & Kennels', 
+    children: [
+      { id: 'CA', name: 'Carriers' },
+      { id: 'KE', name: 'Kennels' }
+    ]
+  }
+];
 
 
   animalClasses = [
@@ -54,7 +103,7 @@ export class AddProductModalComponent {
     { value: 2, label: 'Both' }
   ];
 
-  filteredChildCategories: string[] = [];
+  filteredChildCategories: { id: string; name: string }[] = [];
 
   constructor(private productService: ProductService) {}
 
@@ -100,6 +149,10 @@ export class AddProductModalComponent {
   }
 
   async submitForm(): Promise<void> {
+
+     // Đảm bảo `animal_class_id` là số nguyên khi gửi
+  this.product.animal_class_id = parseInt(this.product.animal_class_id.toString(), 10);
+
     // Kiểm tra các trường bắt buộc
     const requiredFields = [
       { field: this.product.product_id, name: 'Product ID' },
