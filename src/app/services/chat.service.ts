@@ -2,6 +2,7 @@
 import { Injectable, inject, runInInjectionContext, Injector } from '@angular/core';
 import { Firestore, collection, collectionData, doc, docData, updateDoc, setDoc, getDoc, arrayUnion, query, where, getDocs } from '@angular/fire/firestore';
 import { Observable, BehaviorSubject } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { ChatMessage, ChatRoom } from '../model/chat';
 
 @Injectable({
@@ -12,18 +13,54 @@ export class ChatService {
   private customerNamesSubject = new BehaviorSubject<Map<string, string>>(new Map());
   public customerNames$ = this.customerNamesSubject.asObservable();
   private injector = inject(Injector);
-  private isLoadingNames = new Set<string>(); // Prevent duplicate calls
+  private isLoadingNames = new Set<string>();
 
   constructor(private firestore: Firestore) {}
 
+  // Fix type casting issue
   getAllChatRooms(): Observable<ChatRoom[]> {
     const chatsRef = collection(this.firestore, 'chats');
-    return collectionData(chatsRef, { idField: 'id' }) as Observable<ChatRoom[]>;
+    return collectionData(chatsRef, { idField: 'id' }).pipe(
+      map((chats: any[]) => { // Use any[] first
+        // Cast to ChatRoom[] and filter valid data
+        const validChats = chats
+          .filter(chat => chat && chat.chat_id && chat.customer_id)
+          .map(chat => ({
+            chat_id: chat.chat_id || chat.id,
+            customer_id: chat.customer_id,
+            customerSent: chat.customerSent || [],
+            pawdictedSent: chat.pawdictedSent || []
+          } as ChatRoom));
+
+        // Sort: unreplied first, then by time
+        return validChats.sort((a, b) => {
+          const isUnrepliedA = this.isUnrepliedMessage(a);
+          const isUnrepliedB = this.isUnrepliedMessage(b);
+          
+          if (isUnrepliedA && !isUnrepliedB) return -1;
+          if (!isUnrepliedA && isUnrepliedB) return 1;
+          
+          const lastTimeA = this.getLastMessageTime(a);
+          const lastTimeB = this.getLastMessageTime(b);
+          return lastTimeB - lastTimeA;
+        });
+      })
+    );
   }
 
   getChatRoom(chatId: string): Observable<ChatRoom | undefined> {
     const chatRef = doc(this.firestore, `chats/${chatId}`);
-    return docData(chatRef) as Observable<ChatRoom | undefined>;
+    return docData(chatRef).pipe(
+      map((data: any) => {
+        if (!data) return undefined;
+        return {
+          chat_id: data.chat_id || chatId,
+          customer_id: data.customer_id,
+          customerSent: data.customerSent || [],
+          pawdictedSent: data.pawdictedSent || []
+        } as ChatRoom;
+      })
+    );
   }
 
   async sendPawdictedMessage(chatId: string, content: string): Promise<void> {
@@ -58,18 +95,26 @@ export class ChatService {
     await setDoc(chatRef, newChat);
   }
 
+  // Kiểm tra tin nhắn chưa được trả lời
+  isUnrepliedMessage(chat: ChatRoom): boolean {
+    if (!chat.customerSent || chat.customerSent.length === 0) return false;
+    if (!chat.pawdictedSent || chat.pawdictedSent.length === 0) return true;
+    
+    const lastCustomerMsg = Math.max(...chat.customerSent.map(msg => msg.time));
+    const lastPawdictedMsg = Math.max(...chat.pawdictedSent.map(msg => msg.time));
+    
+    return lastCustomerMsg > lastPawdictedMsg;
+  }
+
   async getCustomerName(customerId: string): Promise<string> {
-    // Prevent duplicate calls
     if (this.isLoadingNames.has(customerId)) {
       return this.getCachedCustomerName(customerId);
     }
 
-    // Check cache first
     if (this.customerNamesCache.has(customerId)) {
       return this.customerNamesCache.get(customerId)!;
     }
 
-    // Guest user
     if (customerId.startsWith('guest_')) {
       const guestName = 'Khách vãng lai';
       this.customerNamesCache.set(customerId, guestName);
@@ -151,24 +196,22 @@ export class ChatService {
   }
 
   getLastMessageTime(chat: ChatRoom): number {
-    const allMsgs = [
-      ...chat.customerSent.map(msg => ({ ...msg, sender: 'customer' })),
-      ...chat.pawdictedSent.map(msg => ({ ...msg, sender: 'pawdicted' }))
-    ].sort((a, b) => a.time - b.time);
+    const customerTimes = (chat.customerSent || []).map(msg => msg.time);
+    const pawdictedTimes = (chat.pawdictedSent || []).map(msg => msg.time);
+    const allTimes = [...customerTimes, ...pawdictedTimes];
 
-    if (allMsgs.length === 0) return 0;
-    return allMsgs[allMsgs.length - 1].time;
+    if (allTimes.length === 0) return 0;
+    return Math.max(...allTimes);
   }
 
   getUnreadCount(chat: ChatRoom): number {
-    return chat.customerSent.length;
+    return (chat.customerSent || []).length;
   }
 
   getLastMessage(chat: ChatRoom): string {
-    const allMsgs = [
-      ...chat.customerSent.map(msg => ({ ...msg, sender: 'customer' })),
-      ...chat.pawdictedSent.map(msg => ({ ...msg, sender: 'pawdicted' }))
-    ].sort((a, b) => a.time - b.time);
+    const customerMsgs = (chat.customerSent || []).map(msg => ({ ...msg, sender: 'customer' }));
+    const pawdictedMsgs = (chat.pawdictedSent || []).map(msg => ({ ...msg, sender: 'pawdicted' }));
+    const allMsgs = [...customerMsgs, ...pawdictedMsgs].sort((a, b) => a.time - b.time);
 
     if (allMsgs.length === 0) return 'Chưa có tin nhắn';
     

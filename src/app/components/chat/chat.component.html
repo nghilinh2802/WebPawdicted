@@ -2,6 +2,7 @@
 <div class="chat-page-container">
   <div class="chat-header">
     <h2>🐾 Pawdicted Chat - Danh sách khách hàng</h2>
+    <p class="subtitle">Tin nhắn chưa trả lời sẽ hiển thị ở đầu danh sách</p>
   </div>
 
   <div class="chat-rooms-grid">
@@ -9,6 +10,7 @@
       *ngFor="let chat of chatRooms$ | async; trackBy: trackByCustomerId" 
       class="chat-room-card"
       [class.unread]="hasUnreadMessages(chat)"
+      [class.unreplied]="isUnrepliedMessage(chat)"
       (click)="openChatModal(chat)">
       
       <div class="card-header">
@@ -23,6 +25,9 @@
           <span class="status-dot" [class.online]="isCustomerOnline(chat)"></span>
           <div class="unread-badge" *ngIf="hasUnreadMessages(chat)">
             {{ getUnreadCount(chat) }}
+          </div>
+          <div class="unreplied-badge" *ngIf="isUnrepliedMessage(chat)">
+            Chưa trả lời
           </div>
         </div>
       </div>

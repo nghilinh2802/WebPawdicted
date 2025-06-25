@@ -14,8 +14,14 @@
 }
 
 .chat-header h2 {
-  margin: 0;
+  margin: 0 0 5px 0;
   font-size: 24px;
+}
+
+.subtitle {
+  margin: 0;
+  font-size: 14px;
+  opacity: 0.9;
 }
 
 /* Layout list dọc full width */
@@ -26,36 +32,47 @@
   padding: 20px;
   overflow-y: auto;
   flex: 1;
-  width: 100%; /* Full width */
-  max-width: none; /* Bỏ giới hạn width */
-  margin: 0; /* Bỏ margin auto */
+  width: 100%;
+  max-width: none;
+  margin: 0;
 }
 
 /* Thẻ hình chữ nhật full width */
 .chat-room-card {
   background: white;
   border-radius: 8px;
-  padding: 25px 30px; /* Tăng padding */
+  padding: 25px 30px;
   cursor: pointer;
   transition: all 0.3s ease;
   border: 2px solid transparent;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  width: 100%; /* Full width */
-  min-height: 100px; /* Tăng chiều cao tối thiểu */
+  width: 100%;
+  min-height: 100px;
   position: relative;
   overflow: hidden;
   box-sizing: border-box;
 }
 
 .chat-room-card:hover {
-  transform: translateX(8px); /* Tăng khoảng cách slide */
+  transform: translateX(8px);
   box-shadow: 0 6px 20px rgba(0,0,0,0.15);
   border-color: #9c162c;
 }
 
 .chat-room-card.unread {
-  border-left: 6px solid #ffd700; /* Tăng độ dày border */
+  border-left: 6px solid #ffd700;
   background: linear-gradient(90deg, #fff9e6, #ffffff);
+}
+
+/* Tin nhắn chưa được trả lời - màu đỏ nổi bật */
+.chat-room-card.unreplied {
+  border-left: 6px solid #9c162c;
+  background: linear-gradient(90deg, #ffe6e6, #ffffff);
+  box-shadow: 0 4px 15px rgba(156, 22, 44, 0.2);
+}
+
+.chat-room-card.unreplied:hover {
+  box-shadow: 0 8px 25px rgba(156, 22, 44, 0.3);
 }
 
 /* Hover effect với thanh màu đỏ */
@@ -72,21 +89,21 @@
 }
 
 .chat-room-card:hover::before {
-  width: 6px; /* Tăng width thanh hover */
+  width: 6px;
 }
 
 /* Header layout ngang với khoảng cách lớn hơn */
 .card-header {
   display: flex;
   align-items: center;
-  gap: 25px; /* Tăng gap */
-  margin-bottom: 15px; /* Tăng margin */
+  gap: 25px;
+  margin-bottom: 15px;
   position: relative;
   z-index: 1;
 }
 
 .customer-avatar {
-  width: 55px; /* Tăng kích thước avatar */
+  width: 55px;
   height: 55px;
   border-radius: 50%;
   background: linear-gradient(135deg, #9c162c, #7a1122);
@@ -95,7 +112,7 @@
   justify-content: center;
   color: white;
   font-weight: bold;
-  font-size: 20px; /* Tăng font size */
+  font-size: 20px;
   flex-shrink: 0;
 }
 
@@ -105,28 +122,29 @@
 }
 
 .customer-info h4 {
-  margin: 0 0 8px 0; /* Tăng margin bottom */
+  margin: 0 0 8px 0;
   color: #333;
-  font-size: 20px; /* Tăng font size */
+  font-size: 20px;
   font-weight: 600;
 }
 
 .customer-id {
   margin: 0;
-  font-size: 13px; /* Tăng font size */
+  font-size: 13px;
   color: #666;
   opacity: 0.8;
 }
 
 .chat-status {
   display: flex;
-  align-items: center;
-  gap: 20px; /* Tăng gap */
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
   flex-shrink: 0;
 }
 
 .status-dot {
-  width: 12px; /* Tăng kích thước */
+  width: 12px;
   height: 12px;
   border-radius: 50%;
   background: #ccc;
@@ -140,15 +158,34 @@
 .unread-badge {
   background: #ff4757;
   color: white;
-  border-radius: 15px; /* Tăng border radius */
-  min-width: 25px; /* Tăng kích thước */
+  border-radius: 15px;
+  min-width: 25px;
   height: 25px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 12px; /* Tăng font size */
+  font-size: 12px;
   font-weight: bold;
-  padding: 0 8px; /* Tăng padding */
+  padding: 0 8px;
+}
+
+/* Badge cho tin nhắn chưa trả lời */
+.unreplied-badge {
+  background: #9c162c;
+  color: white;
+  border-radius: 12px;
+  padding: 4px 8px;
+  font-size: 10px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.7; }
+  100% { opacity: 1; }
 }
 
 /* Last message layout ngang với khoảng cách lớn hơn */
@@ -157,8 +194,8 @@
   justify-content: space-between;
   align-items: center;
   border-top: 1px solid #eee;
-  padding-top: 15px; /* Tăng padding */
-  margin-top: 15px; /* Tăng margin */
+  padding-top: 15px;
+  margin-top: 15px;
   position: relative;
   z-index: 1;
 }
@@ -166,17 +203,17 @@
 .last-message p {
   margin: 0;
   color: #333;
-  font-size: 15px; /* Tăng font size */
+  font-size: 15px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   flex: 1;
-  margin-right: 20px; /* Tăng margin */
+  margin-right: 20px;
 }
 
 .last-message small {
   color: #666;
-  font-size: 12px; /* Tăng font size */
+  font-size: 12px;
   white-space: nowrap;
   flex-shrink: 0;
 }
@@ -200,7 +237,7 @@
   background: white;
   border-radius: 16px;
   width: 90vw;
-  max-width: 800px; /* Tăng max-width cho modal */
+  max-width: 800px;
   height: 80vh;
   max-height: 700px;
   display: flex;

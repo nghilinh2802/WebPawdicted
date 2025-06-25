@@ -160,6 +160,11 @@ export class ChatComponent implements OnInit, OnDestroy {
     return this.getUnreadCount(chat) > 0;
   }
 
+  // Kiểm tra tin nhắn chưa được trả lời
+  isUnrepliedMessage(chat: ChatRoom): boolean {
+    return this.chatService.isUnrepliedMessage(chat);
+  }
+
   onKeyPress(event: KeyboardEvent): void {
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault();
