@@ -188,7 +188,7 @@
 /* Charts Grid */
 .charts-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 0.5fr));
+  grid-template-columns: 70% 30%; /* Tỷ lệ 70/30 cho Line Chart và Pie Chart */
   gap: 24px;
 }
 
@@ -207,6 +207,27 @@
   margin-bottom: 16px;
 }
 
+/* Custom Styles for Charts */
+.chart-card-wide {
+  grid-column: span 1; /* Chiếm 70% */
+}
+
+.chart-card-wide canvas {
+  width: 100% !important; /* Đảm bảo Line Chart mở rộng */
+  height: 300px !important; /* Chiều cao cố định cho Line Chart */
+  max-height: 300px;
+}
+
+.chart-card-narrow {
+  grid-column: span 1; /* Chiếm 30% */
+}
+
+.chart-card-narrow canvas {
+  width: 100% !important; /* Thu nhỏ Pie Chart */
+  height: 200px !important; /* Chiều cao nhỏ hơn cho Pie Chart */
+  max-height: 200px;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .report-container { padding: 16px; }
@@ -216,7 +237,9 @@
   .filter-row select, .filter-row input { width: 100%; }
   .btn-export { width: 100%; }
   .stats-grid { grid-template-columns: 1fr; }
-  .charts-grid { grid-template-columns: 1fr; }
+  .charts-grid { grid-template-columns: 1fr; } /* Trên mobile, hiển thị full width */
+  .chart-card-wide canvas { height: 250px !important; }
+  .chart-card-narrow canvas { height: 150px !important; }
 }
 
 @media (max-width: 480px) {
@@ -224,4 +247,6 @@
   .stat-card h3, .table-card h3, .chart-card h3 { font-size: 1.25rem; }
   .stat-value { font-size: 1.25rem; }
   .report-table th, .report-table td { font-size: 0.9rem; }
+  .chart-card-wide canvas { height: 200px !important; }
+  .chart-card-narrow canvas { height: 120px !important; }
 }
