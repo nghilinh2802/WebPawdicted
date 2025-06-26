@@ -29,10 +29,10 @@ export class AddProductModalComponent {
     also_buy: null,
     also_view: null,
     similar_item: null,
-    average_rating: null,
-    rating_number: null,
-    rank: null,
-    sold_quantity: null
+    average_rating: 4.5,
+    rating_number: 100,
+    rank: 1,
+    sold_quantity: 50
   };
 
   variants: any[] = [];
@@ -124,9 +124,9 @@ categories = [
       variant_discount: null,
       variant_image: null,
       variant_date_listed: null,
-      variant_rating: null,
-      variant_rating_number: null,
-      variant_sold_quantity: null
+      variant_rating: 4.5,
+      variant_rating_number: 100,
+      variant_sold_quantity: 50
     });
     this.toggleProductFields();
   }
@@ -196,10 +196,10 @@ categories = [
       also_buy: null,
       also_view: null,
       similar_item: null,
-      average_rating: null,
-      rating_number: null,
-      rank: null,
-      sold_quantity: null
+      average_rating: 4.5,
+      rating_number: 100,
+      rank: 1,
+      sold_quantity: 50
     };
 
     // Lưu sản phẩm với product_id làm document ID
@@ -209,9 +209,9 @@ categories = [
         ...variant,
         product_id: productData.product_id,
         variant_date_listed: new Date(),
-        variant_rating: null,
-        variant_rating_number: null,
-        variant_sold_quantity: null
+        variant_rating: 4.5,
+        variant_rating_number: 100,
+        variant_sold_quantity: 50
       });
     }
 
