@@ -26,8 +26,8 @@
     <tbody>
       <tr *ngFor="let promotion of filteredPromotions; let i = index">
         <td>{{ promotion.title }}</td>
-        <td>{{ promotion.time | date: 'yyyy-MM-dd HH:mm' }}</td>
-        <td>{{ promotion.status }}</td>
+        <td>{{ promotion.time.toDate() | date: 'yyyy-MM-dd HH:mm' }}</td>
+        <td>{{ calculateStatus(promotion.time) }}</td>
         <td>
           <img [src]="promotion.imageUrl" alt="{{ promotion.title }}" width="50" />
         </td>
@@ -65,12 +65,8 @@
           required
         />
         <label>Time</label>
-        <input
-          [(ngModel)]="newPromotion.time"
-          name="time"
-          type="datetime-local"
-          required
-        />
+        <input [(ngModel)]="newPromotionTimeStr" name="time" type="datetime-local" required />
+
         <label>Image URL</label>
         <input
           [(ngModel)]="newPromotion.imageUrl"
@@ -108,12 +104,8 @@
           required
         />
         <label>Time</label>
-        <input
-          [(ngModel)]="editedPromotion.time"
-          name="editTime"
-          type="datetime-local"
-          required
-        />
+        <input [(ngModel)]="editedPromotionTimeStr" name="editTime" type="datetime-local" required />
+
         <label>Image URL</label>
         <input
           [(ngModel)]="editedPromotion.imageUrl"

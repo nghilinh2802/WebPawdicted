@@ -123,6 +123,13 @@ tr {
 tr:hover {
     background-color: #f8f1f1;
 }
+.scheduled {
+  color: orange;
+}
+.sent {
+  color: green;
+}
+
 
 /* =========================
    Image in Table
@@ -383,4 +390,5 @@ td img {
         max-width: none;
         width: 100%;
     }
+
 }
