@@ -32,33 +32,60 @@ export class OrderComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     const ordersSnapshot = await getDocs(collection(this.firestore, 'orders'));
+
+    // Sắp xếp theo thời gian giảm dần (mới nhất trên cùng)
+    const sortedDocs = ordersSnapshot.docs.sort((a, b) => {
+      const timeA = a.data()['order_time']?.toDate?.() ?? new Date(0);
+      const timeB = b.data()['order_time']?.toDate?.() ?? new Date(0);
+      return timeB.getTime() - timeA.getTime(); 
+    });
   
-    const orderPromises = ordersSnapshot.docs.map(async docSnap => {
+    const orderPromises = sortedDocs.map(async docSnap => {
       const data: any = docSnap.data();
   
       let customerName = '[Không rõ]';
-  
-      // Lấy tên khách từ bảng customers nếu có customer_id
-      if (data.customer_id) {
-        try {
+
+      try {
+        if (data.customer_id && data.address_id) {
+          const addressItemRef = doc(this.firestore, 'addresses', data.customer_id, 'items', data.address_id);
+          const addressItemSnap = await getDoc(addressItemRef);
+          if (addressItemSnap.exists()) {
+            const addressData = addressItemSnap.data();
+            if (addressData['name']) {
+              customerName = addressData['name'];
+              }
+            }
+          }         
+      
+        // Nếu không tìm được tên từ address, fallback sang customer
+        if (customerName === '[Không rõ]' && data.customer_id) {
           const customerRef = doc(this.firestore, 'customers', data.customer_id);
           const customerSnap = await getDoc(customerRef);
           if (customerSnap.exists()) {
             const customerData = customerSnap.data();
-            customerName = customerData['customer_name'] || '[Không tên]';
+            if (customerData['customer_name']) {
+              customerName = customerData['customer_name'];
+            }
           }
-        } catch (error) {
-          console.warn('Không thể lấy customer_name:', error);
         }
-      }
+      } catch (error) {
+        console.warn('Lỗi khi truy xuất customer_name:', error);
+      }     
 
       const orderDate = data['order_time'] instanceof Timestamp
-        ? data['order_time'].toDate().toLocaleDateString()
-        : '';
+      ? data['order_time'].toDate().toLocaleString('vi-VN', {
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric'
+        })
+      : '';
 
       return {
         id: docSnap.id,
-        code: data['order_code'] || '',
+        code: docSnap.id, 
         status: data['order_status'] || '',
         value: data['order_value'] || 0,
         date: orderDate,
@@ -167,4 +194,19 @@ export class OrderComponent implements OnInit {
     this.selectedOrderIds = [];
     this.currentPage = 1;
   }
+
+  sortColumn: string = '';
+  sortDirection: 'asc' | 'desc' = 'asc';
+
+  toggleSort(column: string) {
+    if (this.sortColumn === column) {
+      // Đảo chiều nếu đang cùng cột
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      // Chọn cột mới, mặc định tăng dần
+      this.sortColumn = column;
+      this.sortDirection = 'asc';
+    }
+  } 
+
 }

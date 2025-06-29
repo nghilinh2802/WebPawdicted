@@ -97,15 +97,39 @@
           <td class="name-col">{{ item.name }}</td>
           <td class="center">
             <input
-              type="number"
-              [(ngModel)]="item.quantity"
-              min="1"
-              (change)="recalculateTotal()"
-              class="info-input quantity-input"
-            />
+            type="number"
+            [value]="item.quantity"
+            [readonly]="item.isDiscounted"
+            (focus)="showAlertIfDiscounted(item.isDiscounted)"
+            (input)="
+              item.quantity = $any($event.target).value;
+              recalculateTotal()
+            "
+            class="input-class"
+          />                    
           </td>
-          <td class="right">{{ item.price | number: '1.0-0' }} VNĐ</td>
-          <td class="right">{{ item.price * item.quantity | number: '1.0-0' }} VNĐ</td>
+          <td class="right">
+            <ng-container *ngIf="item.actual_unit_price !== item.price; else onePriceOnly">
+              <span style="font-weight: bold; color: #d32f2f;">
+                {{ item.actual_unit_price | number: '1.0-0' }} VNĐ
+              </span>
+              <br />
+              <span style="text-decoration: line-through; color: #999; font-style: italic; font-size: 12px;">
+                {{ item.price | number: '1.0-0' }} VNĐ
+              </span>
+            </ng-container>
+            <ng-template #onePriceOnly>
+              <span style="font-weight: 500;">
+                {{ item.price | number: '1.0-0' }} VNĐ
+              </span>
+            </ng-template>
+          </td>          
+          <td class="right">
+            {{
+              item.quantity * (item.actual_unit_price !== item.price ? item.actual_unit_price : item.price)
+              | number: '1.0-0'
+            }} VNĐ
+          </td>          
         </tr>
       </tbody>
     </table>

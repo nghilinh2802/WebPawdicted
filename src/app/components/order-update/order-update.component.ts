@@ -85,11 +85,11 @@ export class OrderUpdateComponent implements OnInit {
         for (const key of Object.keys(itemData)) {
           if (key.startsWith('product')) {
             const p = itemData[key];
-
+        
             let productName = p.product_id;
             let productImage = 'https://via.placeholder.com/60';
-            let price = 0;
-
+            let listedPrice = 0;
+        
             if (p.product_id) {
               const productRef = doc(this.firestore, 'products', p.product_id);
               const productSnap = await getDoc(productRef);
@@ -97,24 +97,30 @@ export class OrderUpdateComponent implements OnInit {
                 const productData = productSnap.data();
                 productName = productData['product_name'] || productName;
                 productImage = productData['product_image'] || productImage;
-                price = parseFloat(productData['price']) || 0;
+                listedPrice = parseFloat(productData['price']) || 0;
               }
             }
-
+        
             const quantity = Number(p.quantity);
-            const totalCost = price * quantity;
-            totalGoods += totalCost;
-
+            const totalCostOfGoods = Number(p.total_cost_of_goods || 0);
+            const actualUnitPrice = totalCostOfGoods && quantity ? totalCostOfGoods / quantity : listedPrice;
+        
+            const isDiscounted = actualUnitPrice < listedPrice;
+        
+            totalGoods += actualUnitPrice * quantity;
+        
             items.push({
               product_id: p.product_id,
               name: productName,
-              quantity: p.quantity,
-              price: price,
+              quantity: quantity,
+              price: listedPrice,
+              actual_unit_price: actualUnitPrice,
               image: productImage,
-              original_quantity: p.quantity 
+              original_quantity: quantity,
+              isDiscounted: isDiscounted
             });
           }
-        }
+        }        
       }
 
       // Gán tổng sản phẩm và phí giao hàng
@@ -331,4 +337,17 @@ export class OrderUpdateComponent implements OnInit {
   getTotal(): number {
     return this.order.total;
   }
+
+  warnIfDiscounted(isDiscounted: boolean): void {
+    if (isDiscounted) {
+      alert('Sản phẩm đã giảm giá không thể chỉnh sửa số lượng!');
+    }
+  }
+  
+  showAlertIfDiscounted(isDiscounted: boolean): void {
+    if (isDiscounted) {
+      alert('Sản phẩm đã giảm giá, bạn không thể thay đổi số lượng.');
+    }
+  }  
+  
 }

@@ -38,24 +38,52 @@ export class OrderViewComponent implements OnInit {
       // Lấy ghi chú khách hàng
       this.customerNote = orderData['customer_note'] || '[Không có ghi chú]';
   
-      // Lấy thông tin khách hàng từ bảng customers
+      // Lấy thông tin khách hàng từ địa chỉ cụ thể
       let customerInfo: any = {
         name: '[Không rõ tên]',
         phone: '[Không rõ số]',
         address: '[Không rõ địa chỉ]'
       };
-  
-      if (orderData['customer_id']) {
-        const customerRef = doc(this.firestore, 'customers', orderData['customer_id']);
-        const customerSnap = await getDoc(customerRef);
-        if (customerSnap.exists()) {
-          const customerData = customerSnap.data();
-          customerInfo = {
-            name: customerData['customer_name'] || '[Không rõ tên]',
-            phone: customerData['phone_number'] || '[Không rõ số]',
-            address: customerData['address'] || '[Không rõ địa chỉ]'
-          };
+
+      try {
+        if (orderData['customer_id'] && orderData['address_id']) {
+          const addressItemRef = doc(
+            this.firestore,
+            'addresses',
+            orderData['customer_id'],
+            'items',
+            orderData['address_id']
+          );
+          const addressSnap = await getDoc(addressItemRef);
+
+          if (addressSnap.exists()) {
+            const addressData = addressSnap.data();
+            customerInfo = {
+              name: addressData['name'] || customerInfo.name,
+              phone: addressData['phone'] || customerInfo.phone,
+              address: addressData['address'] || customerInfo.address
+            };
+          }
         }
+
+        // Nếu không có thông tin địa chỉ cụ thể, fallback sang bảng customers
+        if (
+          customerInfo.name === '[Không rõ tên]' &&
+          orderData['customer_id']
+        ) {
+          const customerRef = doc(this.firestore, 'customers', orderData['customer_id']);
+          const customerSnap = await getDoc(customerRef);
+          if (customerSnap.exists()) {
+            const customerData = customerSnap.data();
+            customerInfo = {
+              name: customerData['customer_name'] || customerInfo.name,
+              phone: customerData['phone_number'] || customerInfo.phone,
+              address: customerData['address'] || customerInfo.address
+            };
+          }
+        }
+      } catch (error) {
+        console.warn('Lỗi khi lấy thông tin khách hàng:', error);
       }
   
       // Thời gian đặt hàng
