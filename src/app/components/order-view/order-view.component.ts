@@ -32,6 +32,9 @@ export class OrderViewComponent implements OnInit {
       if (!orderSnap.exists()) return;
   
       const orderData = orderSnap.data();
+
+      console.log('🧾 orderData:', orderData);
+      console.log('🔍 order_status:', orderData['order_status']);
   
       // Lấy ghi chú khách hàng
       this.customerNote = orderData['customer_note'] || '[Không có ghi chú]';
@@ -91,28 +94,43 @@ export class OrderViewComponent implements OnInit {
   
             const totalCost = unitPrice * Number(p.quantity);
             totalGoods += totalCost;
+
+            const rating = p.rating || '';
+            const comment = p.comment || '';
   
             products.push({
               name: productName,
               quantity: p.quantity,
               price: unitPrice,
               total_cost: totalCost,
-              image: productImage
+              image: productImage,
+              rating: rating,
+              comment: comment
+            });
+  
+            // Cập nhật `total_cost_of_goods` cho từng sản phẩm trong `order_items`
+            const productKey = key; // Lấy key product
+            await updateDoc(orderItemRef, {
+              [productKey]: {
+                ...p,
+                total_cost_of_goods: totalCost  // Cập nhật total_cost_of_goods vào order_items
+              }
             });
           }
         }
       }
   
       this.productTotal = totalGoods;
-
-      // Tính tổng cộng và cập nhật lại order_value vào Firestore
+  
+      // Tính tổng cộng và cập nhật `total_cost_of_goods` và `order_value` vào bảng `orders`
       const shipping = parseFloat(orderData['shipping_fee']) || 0;
       const totalOrderValue = this.productTotal + shipping;
-      
+  
+      // Cập nhật `order_value` vào bảng `orders`
       await updateDoc(orderRef, {
-        order_value: totalOrderValue
+        order_value: totalOrderValue  // Lưu giá trị tổng đơn hàng vào bảng `orders`
       });
-        
+  
       // Định dạng các thời điểm
       const formatTime = (field: any): string =>
         field instanceof Timestamp ? field.toDate().toLocaleString('vi-VN') : '';
@@ -139,11 +157,65 @@ export class OrderViewComponent implements OnInit {
     } catch (error) {
       console.error('Lỗi tải chi tiết đơn hàng:', error);
     }
-  }  
+  }      
 
   getTotal(): number {
     const value = this.order?.value || 0;
     const shipping = this.order?.shipping_fee || 0;
     return value + shipping;
   }
+
+  async updateProductRating(orderItemRef: any, orderItemData: any) {
+    try {
+      // Lấy product_id từ order_item
+      const productId = orderItemData['product_id'];
+      console.log('productId: ', productId);  // Debug: kiểm tra productId
+  
+      // Lấy thông tin sản phẩm từ Firestore
+      const productRef = doc(this.firestore, 'products', productId);
+      const productSnap = await getDoc(productRef);
+  
+      if (productSnap.exists()) {
+        const productData = productSnap.data();
+  
+        // Lấy giá trị hiện tại của average_rating và rating_number
+        const currentAverageRating = parseFloat(productData['average_rating']) || 0;
+        const currentRatingNumber = productData['rating_number'] || 0;
+  
+        // Debug: In giá trị hiện tại
+        console.log('Current average rating:', currentAverageRating);
+        console.log('Current rating number:', currentRatingNumber);
+  
+        // Lấy giá trị rating từ order_item (được nạp từ client)
+        const newRating = parseFloat(orderItemData['rating']) || 0;
+  
+        // Debug: In rating mới
+        console.log('New rating:', newRating);
+  
+        // Tính toán average_rating mới
+        const newAverageRating = (currentAverageRating * currentRatingNumber + newRating) / (currentRatingNumber + 1);
+  
+        // Debug: In giá trị newAverageRating
+        console.log('New average rating:', newAverageRating);
+  
+        // Cập nhật rating_number (tăng thêm 1)
+        const newRatingNumber = currentRatingNumber + 1;
+  
+        // Debug: In giá trị newRatingNumber
+        console.log('New rating number:', newRatingNumber);
+  
+        // Cập nhật lại giá trị average_rating và rating_number vào bảng `products`
+        await updateDoc(productRef, {
+          average_rating: newAverageRating,  // Cập nhật average_rating mới
+          rating_number: newRatingNumber     // Cập nhật rating_number mới
+        });
+  
+        console.log('Cập nhật rating thành công!');
+      } else {
+        console.log('Sản phẩm không tồn tại trong Firestore');
+      }
+    } catch (error) {
+      console.error('Lỗi khi cập nhật rating của sản phẩm:', error);
+    }
+  }  
 }

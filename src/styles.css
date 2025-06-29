@@ -1,1 +1,29 @@
-/* You can add global styles to this file, and also import other style files */
+.status-Pending-Payment {
+    background-color: #faca77;
+    color: #782421;
+  }
+  .status-Shipped {
+    background-color: #ec6a44;
+    color: #fff;
+  }
+  .status-Delivered {
+    background-color: #9c162c;
+    color: #fff;
+  }
+  .status-Completed {
+    background-color: #4caf50;
+    color: #fff;
+  }
+  .status-Cancelled {
+    background-color: #9e9e9e;
+    color: #fff;
+  }
+  .status-Return-Refund {
+    background-color: #979b2d;
+    color: #fff;
+  }
+  .status-no-status {
+    background-color: #ccc;
+    color: #fff;
+  }
+  

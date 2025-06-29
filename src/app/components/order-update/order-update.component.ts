@@ -305,13 +305,16 @@ export class OrderUpdateComponent implements OnInit {
       const orderItemId = firestoreOrderData['order_item_id'];
       const orderItemRef = doc(this.firestore, 'order_items', orderItemId);
   
+      // Chỉ cập nhật sản phẩm đã có, không tạo mới
       const updatedItems: any = {};
       this.order.items.forEach((item: any, index: number) => {
         const key = `product${index + 1}`;
         updatedItems[key] = {
           product_id: item.product_id || item.name,
           quantity: Number(item.quantity),
-          total_cost_of_goods: Number(item.quantity) * Number(item.price)
+          total_cost_of_goods: Number(item.quantity) * Number(item.price),
+          rating: item.rating || '', // Cập nhật rating từ UI
+          comment: item.comment || ''  // Cập nhật comment từ UI
         };
       });
   

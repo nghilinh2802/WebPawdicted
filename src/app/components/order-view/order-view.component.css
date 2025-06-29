@@ -66,26 +66,40 @@
     color: #ffffff;
 }
 
-.status-pending {
-    background: #ff4757;
-}
-
-.status-processing {
-    background: #ffd700;
-    color: #424242;
-}
-
-.status-shipped {
-    background: #4CAF50;
-}
-
-.status-delivered {
-    background: #2196F3;
-}
-
-.status-cancelled {
-    background: #757575;
-}
+.status-Pending-Payment {
+    background-color: #faca77;
+    color: #782421;
+  }
+  
+  .status-Shipped {
+    background-color: #ec6a44;
+    color: #fff;
+  }
+  
+  .status-Delivered {
+    background-color: #9c162c;
+    color: #fff;
+  }
+  
+  .status-Completed {
+    background-color: #4caf50;
+    color: #fff;
+  }
+  
+  .status-Cancelled {
+    background-color: #9e9e9e;
+    color: #fff;
+  }
+  
+  .status-Return-Refund {
+    background-color: #979b2d;
+    color: #fff;
+  }
+  
+  .status-no-status {
+    background-color: #ccc;
+    color: #fff;
+  }
 
 /* =========================
    Product Table

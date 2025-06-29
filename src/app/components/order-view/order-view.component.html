@@ -25,7 +25,9 @@
     <div class="info-row">
       <span class="info-label">Status:</span>
       <span class="info-value">
-        <span class="status-pill" [ngClass]="'status-' + order?.status">{{ order?.status }}</span>
+        <span class="status-pill" [ngClass]="'status-' + (order?.status || 'no-status')">
+          {{ order?.status || '[Không có trạng thái]' }}
+        </span>
       </span>
     </div>
     <div class="info-row">
