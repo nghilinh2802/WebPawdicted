@@ -83,8 +83,26 @@
           </td>
           <td class="name-col">{{ item.name }}</td>
           <td class="center">{{ item.quantity }}</td>
-          <td class="right">{{ item.price | number: '1.0-0' }} VNĐ</td>
-          <td class="right">{{ item.quantity * item.price | number: '1.0-0' }} VNĐ</td>
+          <td class="unit-price">
+            <!-- Nếu 2 giá khác nhau -->
+            <ng-container *ngIf="item.actual_unit_price !== item.unit_price; else onePriceOnly">
+              {{ item.actual_unit_price | number:'1.0-0' }} VNĐ
+              <br>
+              <span style="text-decoration: line-through; color: gray; font-style: italic;">
+                {{ item.unit_price | number:'1.0-0' }} VNĐ
+              </span>
+            </ng-container>
+            <!-- Nếu 2 giá bằng nhau -->
+            <ng-template #onePriceOnly>
+              {{ item.unit_price | number:'1.0-0' }} VNĐ
+            </ng-template>
+          </td>
+          <td class="right">
+            {{
+              item.quantity * (item.actual_unit_price !== item.unit_price ? item.actual_unit_price : item.unit_price)
+              | number: '1.0-0'
+            }} VNĐ
+          </td>
         </tr>
       </tbody>
     </table>
@@ -94,7 +112,7 @@
   <div class="order-summary">
     <div class="summary-row">
       <span class="summary-label">Total Product Value:</span>
-      <span class="summary-value">{{ productTotal | number: '1.0-0' }} VNĐ</span>
+      <span class="summary-value">{{ (order?.value - order?.shipping_fee)  | number: '1.0-0' }} VNĐ</span>
     </div>
     <div class="summary-row">
       <span class="summary-label">Shipping Fee:</span>
