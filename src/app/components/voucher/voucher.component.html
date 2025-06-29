@@ -18,10 +18,10 @@
     <thead>
       <tr>
         <th>Voucher Code</th>
+        <th>Type</th>
         <th>Start Date</th>
         <th>End Date</th>
         <th>Discount</th>
-        <th>Type</th>
         <th>Min Order</th>
         <th>Status</th>
         <th>Actions</th>
@@ -30,6 +30,7 @@
     <tbody>
       <tr *ngFor="let voucher of filteredVouchers; let i = index">
         <td>{{ voucher.code }}</td>
+        <td>{{ voucher.type === 'merchandise' ? 'Merchandise' : 'Shipping' }}</td>
         <td>{{ voucher.startDate.toDate() | date: 'yyyy-MM-dd HH:mm' }}</td>
         <td>{{ voucher.endDate.toDate() | date: 'yyyy-MM-dd HH:mm' }}</td>
         <td>
@@ -40,7 +41,6 @@
             {{ voucher.discount | currency:'VND':' ' }}
           </ng-container>
         </td>
-        <td>{{ voucher.type === 'merchandise' ? 'Merchandise' : 'Shipping' }}</td>
         <td>{{ voucher.minOrderValue | currency:'VND':' ' }}</td>
         <td>{{ getVoucherStatus(voucher.startDate, voucher.endDate) }}</td>
         <td>
@@ -59,25 +59,19 @@
       <h2>Add New Voucher</h2>
       <label>Voucher Code</label>
       <input [(ngModel)]="newVoucher.code" placeholder="Enter voucher code" />
-
       <label>Start Date</label>
-      <input [(ngModel)]="startDateStr" type="datetime-local" required />
-
+      <input [(ngModel)]="startDateStr" type="datetime-local" />
       <label>End Date</label>
-      <input [(ngModel)]="endDateStr" type="datetime-local" required />
-
+      <input [(ngModel)]="endDateStr" type="datetime-local" />
       <label>Discount</label>
       <input [(ngModel)]="newVoucher.discount" type="number" placeholder="Discount" />
-
       <label>Type</label>
       <select [(ngModel)]="newVoucher.type">
         <option value="merchandise">Merchandise</option>
         <option value="shipping">Shipping</option>
       </select>
-
       <label>Minimum Order Value</label>
       <input [(ngModel)]="newVoucher.minOrderValue" type="number" placeholder="Minimum order value" />
-
       <div>
         <button (click)="addVoucher()">Save</button>
         <button class="close-btn" (click)="closeAddModal()">Cancel</button>
@@ -91,25 +85,19 @@
       <h2>Edit Voucher</h2>
       <label>Voucher Code</label>
       <input [(ngModel)]="editedVoucher.code" placeholder="Enter voucher code" />
-
       <label>Start Date</label>
       <input [(ngModel)]="editStartDateStr" type="datetime-local" />
-
       <label>End Date</label>
       <input [(ngModel)]="editEndDateStr" type="datetime-local" />
-
       <label>Discount</label>
       <input [(ngModel)]="editedVoucher.discount" type="number" placeholder="Discount" />
-
       <label>Type</label>
       <select [(ngModel)]="editedVoucher.type">
         <option value="merchandise">Merchandise</option>
         <option value="shipping">Shipping</option>
       </select>
-
       <label>Minimum Order Value</label>
       <input [(ngModel)]="editedVoucher.minOrderValue" type="number" placeholder="Minimum order value" />
-
       <div>
         <button (click)="updateVoucher()">Update</button>
         <button class="close-btn" (click)="isEditModalOpen = false">Cancel</button>

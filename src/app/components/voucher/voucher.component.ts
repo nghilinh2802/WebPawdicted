@@ -12,11 +12,7 @@ import { Timestamp } from 'firebase/firestore';
 export class VoucherComponent implements OnInit {
   isAddModalOpen = false;
   isEditModalOpen = false;
-
-  startDateStr = '';
-  endDateStr = '';
-  editStartDateStr = '';
-  editEndDateStr = '';
+  selectedVoucherIndex: number | null = null;
 
   newVoucher: Voucher = {
     code: '',
@@ -27,9 +23,22 @@ export class VoucherComponent implements OnInit {
     type: 'merchandise'
   };
 
-  editedVoucher: Voucher = { ...this.newVoucher };
+  editedVoucher: Voucher = {
+    code: '',
+    startDate: Timestamp.now(),
+    endDate: Timestamp.now(),
+    discount: 0,
+    minOrderValue: 0,
+    type: 'merchandise'
+  };
+
   vouchers: Voucher[] = [];
   filteredVouchers: Voucher[] = [];
+
+  startDateStr: string = '';
+  endDateStr: string = '';
+  editStartDateStr: string = '';
+  editEndDateStr: string = '';
 
   constructor(private voucherService: VoucherService) {}
 
@@ -39,107 +48,118 @@ export class VoucherComponent implements OnInit {
 
   loadVouchers() {
     this.voucherService.getVouchers().subscribe({
-      next: (data) => {
+      next: (data: Voucher[]) => {
         this.vouchers = data;
         this.filterVouchers();
       },
-      error: (err) => console.error('Error loading vouchers:', err)
+      error: (error: any) => console.error('Lỗi khi tải danh sách voucher:', error)
     });
   }
 
-  detectVoucherType(discount: number): 'merchandise' | 'shipping' {
-    return discount < 100 ? 'merchandise' : 'shipping';
-  }
-
-  getVoucherStatus(startDate: Timestamp, endDate: Timestamp): string {
-    const now = Date.now();
-    const start = startDate.toDate().getTime();
-    const end = endDate.toDate().getTime();
-
-    if (now < start) return 'scheduled';
-    if (now >= start && now <= end) return 'active';
-    return 'expired';
-  }
-
-
   openAddModal() {
+    this.isAddModalOpen = true;
     this.startDateStr = '';
     this.endDateStr = '';
-    this.isAddModalOpen = true;
+    this.resetForm();
   }
 
   closeAddModal() {
     this.isAddModalOpen = false;
   }
 
-  async addVoucher() {
-    try {
-      const start = new Date(this.startDateStr);
-      const end = new Date(this.endDateStr);
-      if (isNaN(start.getTime()) || isNaN(end.getTime())) throw new Error('Invalid date');
-
-      const voucher: Voucher = {
-        ...this.newVoucher,
-        startDate: Timestamp.fromDate(start),
-        endDate: Timestamp.fromDate(end),
-        type: this.detectVoucherType(this.newVoucher.discount)
-      };
-
-      await this.voucherService.addVoucher(voucher);
-      this.loadVouchers();
-      this.closeAddModal();
-    } catch (err) {
-      console.error('Lỗi khi thêm voucher:', err);
-    }
-  }
-
-  editVoucher(index: number) {
-    this.editedVoucher = { ...this.filteredVouchers[index] };
-    this.editStartDateStr = this.timestampToInputStr(this.editedVoucher.startDate);
-    this.editEndDateStr = this.timestampToInputStr(this.editedVoucher.endDate);
+  editVoucher(i: number) {
+    this.selectedVoucherIndex = i;
+    const voucher = this.filteredVouchers[i];
+    this.editedVoucher = { ...voucher };
+    this.editStartDateStr = voucher.startDate.toDate().toISOString().slice(0, 16);
+    this.editEndDateStr = voucher.endDate.toDate().toISOString().slice(0, 16);
     this.isEditModalOpen = true;
   }
 
-  timestampToInputStr(ts: Timestamp): string {
-    const d = ts.toDate();
-    return d.toISOString().slice(0, 16); // yyyy-MM-ddTHH:mm
+  async addVoucher() {
+    if (!this.validateVoucher(this.newVoucher)) {
+      alert('Vui lòng nhập đầy đủ thông tin.');
+      return;
+    }
+
+    try {
+      this.newVoucher.startDate = Timestamp.fromDate(new Date(this.startDateStr));
+      this.newVoucher.endDate = Timestamp.fromDate(new Date(this.endDateStr));
+      await this.voucherService.addVoucher(this.newVoucher);
+      this.loadVouchers();
+      this.isAddModalOpen = false;
+    } catch (error) {
+      console.error('Lỗi khi thêm voucher:', error);
+    }
   }
 
   async updateVoucher() {
+    if (!this.editedVoucher._id) return;
     try {
-      const start = new Date(this.editStartDateStr);
-      const end = new Date(this.editEndDateStr);
-      if (isNaN(start.getTime()) || isNaN(end.getTime())) throw new Error('Invalid date');
-
-      const updatedVoucher: Voucher = {
-        ...this.editedVoucher,
-        startDate: Timestamp.fromDate(start),
-        endDate: Timestamp.fromDate(end),
-        type: this.detectVoucherType(this.editedVoucher.discount)
-      };
-
-      await this.voucherService.updateVoucher(updatedVoucher);
+      this.editedVoucher.startDate = Timestamp.fromDate(new Date(this.editStartDateStr));
+      this.editedVoucher.endDate = Timestamp.fromDate(new Date(this.editEndDateStr));
+      await this.voucherService.updateVoucher(this.editedVoucher);
       this.loadVouchers();
       this.isEditModalOpen = false;
-    } catch (err) {
-      console.error('Lỗi khi cập nhật voucher:', err);
+    } catch (error) {
+      console.error('Lỗi khi cập nhật voucher:', error);
     }
   }
 
   async deleteVoucher(index: number) {
-    const id = this.filteredVouchers[index]._id;
-    if (id && confirm('Bạn có chắc muốn xóa?')) {
-      await this.voucherService.deleteVoucher(id);
-      this.loadVouchers();
+    const voucherToDelete = this.filteredVouchers[index];
+    if (!voucherToDelete || !voucherToDelete._id) {
+      console.error('Không tìm thấy voucher để xóa!');
+      return;
+    }
+
+    if (confirm('Bạn có chắc chắn muốn xóa mã giảm giá này?')) {
+      try {
+        await this.voucherService.deleteVoucher(voucherToDelete._id);
+        this.loadVouchers(); // Load lại để đồng bộ
+      } catch (error) {
+        console.error('Lỗi khi xóa voucher:', error);
+        alert('Xóa thất bại! Vui lòng thử lại.');
+      }
     }
   }
 
-  filterVouchers(event?: Event) {
-  const status = event ? (event.target as HTMLSelectElement).value : 'all';
+  validateVoucher(voucher: Voucher): boolean {
+    return voucher.code.trim() !== '' &&
+      this.startDateStr !== '' &&
+      this.endDateStr !== '' &&
+      voucher.discount !== null &&
+      voucher.minOrderValue !== null;
+  }
 
-  this.filteredVouchers = this.vouchers.filter(voucher => {
-    const voucherStatus = this.getVoucherStatus(voucher.startDate, voucher.endDate);
-    return status === 'all' || voucherStatus === status;
-  });
+  resetForm() {
+    this.newVoucher = {
+      code: '',
+      startDate: Timestamp.now(),
+      endDate: Timestamp.now(),
+      discount: 0,
+      minOrderValue: 0,
+      type: 'merchandise'
+    };
+  }
+
+  getVoucherStatus(start: Timestamp, end: Timestamp): string {
+    const now = new Date().getTime();
+    const startMs = start.toDate().getTime();
+    const endMs = end.toDate().getTime();
+    if (now < startMs) return 'scheduled';
+    if (now >= startMs && now <= endMs) return 'active';
+    return 'expired';
+  }
+
+  filterVouchers(event?: Event) {
+    const status = event ? (event.target as HTMLSelectElement).value : 'all';
+
+    this.filteredVouchers = this.vouchers
+      .filter(voucher => {
+        const voucherStatus = this.getVoucherStatus(voucher.startDate, voucher.endDate);
+        return status === 'all' || voucherStatus === status;
+      })
+      .sort((a, b) => a.type.localeCompare(b.type)); // Sort by type
   }
 }
