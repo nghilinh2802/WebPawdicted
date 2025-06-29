@@ -1,87 +1,107 @@
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
 
 <div class="voucher-container">
-    <h2>Voucher Management</h2>
-    <button (click)="openAddModal()" type="button">+ Add New Voucher</button>
+  <h2>Voucher Management</h2>
+  <button (click)="openAddModal()" type="button">+ Add New Voucher</button>
 
-    <div class="filter">
-        <label for="status-filter">Filter by:</label>
-        <select id="status-filter" (change)="filterVouchers($event)">
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="expired">Expired</option>
-            <option value="scheduled">Scheduled</option>
-        </select>
-    </div>
-    <table>
-        <thead>
-          <tr>
-            <th>Voucher Code</th>
-            <th>Start Date</th>
-            <th>End Date</th>
-            <th>Discount</th>
-            <th>Minimum Order Value</th>
-            <th>Status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let voucher of filteredVouchers; let i = index">
-            <td>{{ voucher.code }}</td>
-            <td>{{ voucher.startDate | date: 'yyyy-MM-dd HH:mm' }}</td>
-            <td>{{ voucher.endDate | date: 'yyyy-MM-dd HH:mm' }}</td>
-            <td>{{ voucher.discount }}%</td>
-            <td>{{ voucher.minOrderValue | currency:'VND':' ' }}</td>
-            <td>{{ getVoucherStatus(voucher.startDate, voucher.endDate) }}</td>
-            <td>
-                <div class="modal-actions">
-                    <button (click)="editVoucher(i)"><i class="fa-solid fa-pen"></i></button>
-                    <button (click)="deleteVoucher(i)"><i class="fa-solid fa-trash"></i></button>
-                </div>
-            </td>
-          </tr>
-        </tbody>
-    </table>
+  <div class="filter">
+    <label for="status-filter">Filter by:</label>
+    <select id="status-filter" (change)="filterVouchers($event)">
+      <option value="all">All</option>
+      <option value="active">Active</option>
+      <option value="expired">Expired</option>
+      <option value="scheduled">Scheduled</option>
+    </select>
+  </div>
 
-    <!-- Modal thêm voucher -->
-    <div *ngIf="isAddModalOpen" class="modal">
-      <div class="modal-content">
-          <h2>Add New Voucher</h2>
-          <label>Voucher Code</label>
-          <input [(ngModel)]="newVoucher.code" placeholder="Enter voucher code" />
-          <label>Start Date</label>
-          <input [(ngModel)]="newVoucher.startDate" type="datetime-local" />
-          <label>End Date</label>
-          <input [(ngModel)]="newVoucher.endDate" type="datetime-local" />
-          <label>Discount</label>
-          <input [(ngModel)]="newVoucher.discount" type="number" placeholder="Discount (%)" />
-          <label>Minimum Order Value</label>
-          <input [(ngModel)]="newVoucher.minOrderValue" type="number" placeholder="Minimum order value" />
-          <div>
-              <button (click)="addVoucher()">Save</button>
-              <button class="close-btn" (click)="closeAddModal()">Cancel</button>
+  <table>
+    <thead>
+      <tr>
+        <th>Voucher Code</th>
+        <th>Type</th>
+        <th>Start Date</th>
+        <th>End Date</th>
+        <th>Discount</th>
+        <th>Min Order</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let voucher of filteredVouchers; let i = index">
+        <td>{{ voucher.code }}</td>
+        <td>{{ voucher.type === 'merchandise' ? 'Merchandise' : 'Shipping' }}</td>
+        <td>{{ voucher.startDate.toDate() | date: 'yyyy-MM-dd HH:mm' }}</td>
+        <td>{{ voucher.endDate.toDate() | date: 'yyyy-MM-dd HH:mm' }}</td>
+        <td>
+          <ng-container *ngIf="voucher.discount < 100">
+            {{ voucher.discount }}%
+          </ng-container>
+          <ng-container *ngIf="voucher.discount >= 1000">
+            {{ voucher.discount | currency:'VND':' ' }}
+          </ng-container>
+        </td>
+        <td>{{ voucher.minOrderValue | currency:'VND':' ' }}</td>
+        <td>{{ getVoucherStatus(voucher.startDate, voucher.endDate) }}</td>
+        <td>
+          <div class="modal-actions">
+            <button (click)="editVoucher(i)"><i class="fa-solid fa-pen"></i></button>
+            <button (click)="deleteVoucher(i)"><i class="fa-solid fa-trash"></i></button>
           </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Add Modal -->
+  <div *ngIf="isAddModalOpen" class="modal">
+    <div class="modal-content">
+      <h2>Add New Voucher</h2>
+      <label>Voucher Code</label>
+      <input [(ngModel)]="newVoucher.code" placeholder="Enter voucher code" />
+      <label>Start Date</label>
+      <input [(ngModel)]="startDateStr" type="datetime-local" />
+      <label>End Date</label>
+      <input [(ngModel)]="endDateStr" type="datetime-local" />
+      <label>Discount</label>
+      <input [(ngModel)]="newVoucher.discount" type="number" placeholder="Discount" />
+      <label>Type</label>
+      <select [(ngModel)]="newVoucher.type">
+        <option value="merchandise">Merchandise</option>
+        <option value="shipping">Shipping</option>
+      </select>
+      <label>Minimum Order Value</label>
+      <input [(ngModel)]="newVoucher.minOrderValue" type="number" placeholder="Minimum order value" />
+      <div>
+        <button (click)="addVoucher()">Save</button>
+        <button class="close-btn" (click)="closeAddModal()">Cancel</button>
       </div>
     </div>
+  </div>
 
-    <!-- Modal chỉnh sửa voucher -->
-    <div *ngIf="isEditModalOpen" class="modal">
-      <div class="modal-content">
-          <h2>Edit Voucher</h2>
-          <label>Voucher Code</label>
-          <input [(ngModel)]="editedVoucher.code" placeholder="Enter voucher code" />
-          <label>Start Date</label>
-          <input [(ngModel)]="editedVoucher.startDate" type="datetime-local" />
-          <label>End Date</label>
-          <input [(ngModel)]="editedVoucher.endDate" type="datetime-local" />
-          <label>Discount</label>
-          <input [(ngModel)]="editedVoucher.discount" type="number" placeholder="Discount (%)" />
-          <label>Minimum Order Value</label>
-          <input [(ngModel)]="editedVoucher.minOrderValue" type="number" placeholder="Minimum order value" />
-          <div>
-              <button (click)="updateVoucher()">Update</button>
-              <button class="close-btn" (click)="isEditModalOpen = false">Cancel</button>
-          </div>
+  <!-- Edit Modal -->
+  <div *ngIf="isEditModalOpen" class="modal">
+    <div class="modal-content">
+      <h2>Edit Voucher</h2>
+      <label>Voucher Code</label>
+      <input [(ngModel)]="editedVoucher.code" placeholder="Enter voucher code" />
+      <label>Start Date</label>
+      <input [(ngModel)]="editStartDateStr" type="datetime-local" />
+      <label>End Date</label>
+      <input [(ngModel)]="editEndDateStr" type="datetime-local" />
+      <label>Discount</label>
+      <input [(ngModel)]="editedVoucher.discount" type="number" placeholder="Discount" />
+      <label>Type</label>
+      <select [(ngModel)]="editedVoucher.type">
+        <option value="merchandise">Merchandise</option>
+        <option value="shipping">Shipping</option>
+      </select>
+      <label>Minimum Order Value</label>
+      <input [(ngModel)]="editedVoucher.minOrderValue" type="number" placeholder="Minimum order value" />
+      <div>
+        <button (click)="updateVoucher()">Update</button>
+        <button class="close-btn" (click)="isEditModalOpen = false">Cancel</button>
       </div>
     </div>
+  </div>
 </div>
