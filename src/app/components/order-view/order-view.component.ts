@@ -201,4 +201,10 @@ export class OrderViewComponent implements OnInit {
       console.error('Lỗi khi cập nhật rating của sản phẩm:', error);
     }
   }
+
+  getStatusClass(status: string | undefined | null): string {
+    if (!status) return 'status-no-status';
+    return 'status-' + status.replace(/\s+/g, '-');
+  }
+  
 }
