@@ -2,14 +2,19 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Firestore, doc, getDoc, updateDoc } from '@angular/fire/firestore';
 import { Timestamp } from 'firebase/firestore';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-order-update',
   standalone: false,
   templateUrl: './order-update.component.html',
-  styleUrls: ['./order-update.component.css']
+  styleUrls: ['./order-update.component.css'],
+  
 })
 export class OrderUpdateComponent implements OnInit {
+
+  hasShownAlert: boolean = false;
+
   orderId!: string;
 
   productTotal: number = 0;
@@ -36,7 +41,8 @@ export class OrderUpdateComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private firestore: Firestore
+    private firestore: Firestore,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -101,14 +107,15 @@ export class OrderUpdateComponent implements OnInit {
               }
             }
         
-            const quantity = Number(p.quantity);
-            const totalCostOfGoods = Number(p.total_cost_of_goods || 0);
-            const actualUnitPrice = totalCostOfGoods && quantity ? totalCostOfGoods / quantity : listedPrice;
-        
+            const quantity = parseFloat(p.quantity) || 0;
+            const totalCostOfGoods = parseFloat(p.total_cost_of_goods) || 0;
+            const actualUnitPrice =
+              totalCostOfGoods > 0 && quantity > 0 ? totalCostOfGoods / quantity : listedPrice;
+            
             const isDiscounted = actualUnitPrice < listedPrice;
-        
+            
             totalGoods += actualUnitPrice * quantity;
-        
+            
             items.push({
               product_id: p.product_id,
               name: productName,
@@ -118,7 +125,7 @@ export class OrderUpdateComponent implements OnInit {
               image: productImage,
               original_quantity: quantity,
               isDiscounted: isDiscounted
-            });
+            });            
           }
         }        
       }
@@ -128,7 +135,7 @@ export class OrderUpdateComponent implements OnInit {
       this.shippingFee = parseFloat(orderData['shipping_fee']) || 0;
 
       const newOrder: any = {
-        id: orderData['order_code'],
+        id: this.orderId,
         customer: orderData['customer_name'] || '',
         status: orderData['order_status'],
         date: formattedDate,
@@ -163,7 +170,7 @@ export class OrderUpdateComponent implements OnInit {
             };
           }
         } catch (err) {
-          console.warn('Lỗi khi lấy thông tin khách hàng:', err);
+          console.warn('Error when getting customer information:', err);
         }
       }
 
@@ -172,17 +179,19 @@ export class OrderUpdateComponent implements OnInit {
       this.recalculateTotal();
 
     } catch (err) {
-      console.error('Lỗi tải đơn hàng:', err);
+      console.error('Error when loading order:', err);
     }
   }
 
   recalculateTotal(): void {
     this.productTotal = this.order.items.reduce(
-      (sum: number, item: any) => sum + Number(item.quantity) * Number(item.price),
+      (sum: number, item: any) =>
+        sum + Number(item.quantity) * (item.actual_unit_price !== item.price ? item.actual_unit_price : item.price),
       0
     );
-    this.order.total = this.productTotal + this.shippingFee;
-  }
+  
+    this.order.total = this.productTotal + Number(this.shippingFee || 0);
+  }  
   
   async saveOrder(): Promise<void> {
     try {
@@ -193,7 +202,7 @@ export class OrderUpdateComponent implements OnInit {
   
       // Lấy đơn hàng gốc để kiểm tra trạng thái hiện tại
       const orderSnap = await getDoc(orderRef);
-      if (!orderSnap.exists()) throw new Error("Không tìm thấy đơn hàng.");
+      if (!orderSnap.exists()) throw new Error("No order found.");
       const firestoreOrderData = orderSnap.data();
       const oldStatus = firestoreOrderData['order_status'];
       const newStatus = this.order.status;
@@ -215,13 +224,13 @@ export class OrderUpdateComponent implements OnInit {
   
       if (!isCancelled && newStatus !== oldStatus) {
         if (oldIndex === -1 || newIndex === -1 || newIndex !== oldIndex + 1) {
-          alert(`Không thể chuyển từ trạng thái "${oldStatus}" sang "${newStatus}".`);
+          alert(`Cannot change status from "${oldStatus}" to "${newStatus}".`);
           return;
         }
       }
   
       if (isCancelled && !this.cancelReason.trim()) {
-        alert('Vui lòng nhập lý do huỷ đơn hàng!');
+        alert('Please enter reason for canceling order!');
         return;
       }
   
@@ -315,22 +324,27 @@ export class OrderUpdateComponent implements OnInit {
       const updatedItems: any = {};
       this.order.items.forEach((item: any, index: number) => {
         const key = `product${index + 1}`;
+      
+        // Không cho phép cập nhật số lượng nếu sản phẩm đã giảm giá
+        const updatedQty = item.isDiscounted ? item.original_quantity : Number(item.quantity);
+        const unitPrice = item.actual_unit_price !== item.price ? item.actual_unit_price : item.price;
+      
         updatedItems[key] = {
           product_id: item.product_id || item.name,
-          quantity: Number(item.quantity),
-          total_cost_of_goods: Number(item.quantity) * Number(item.price),
-          rating: item.rating || '', // Cập nhật rating từ UI
-          comment: item.comment || ''  // Cập nhật comment từ UI
+          quantity: updatedQty,
+          total_cost_of_goods: updatedQty * unitPrice,
+          rating: item.rating || '',
+          comment: item.comment || ''
         };
-      });
+      });      
   
       await updateDoc(orderItemRef, updatedItems);
   
-      alert('Cập nhật đơn hàng thành công!');
+      alert('Order updated successfully!');
       this.router.navigate(['/order']);
     } catch (err) {
-      console.error('Lỗi lưu đơn hàng:', err);
-      alert('Có lỗi xảy ra khi lưu đơn hàng!');
+      console.error('Error saving order:', err);
+      alert('An error occurred while saving the order!');
     }
   }  
 
@@ -340,14 +354,29 @@ export class OrderUpdateComponent implements OnInit {
 
   warnIfDiscounted(isDiscounted: boolean): void {
     if (isDiscounted) {
-      alert('Sản phẩm đã giảm giá không thể chỉnh sửa số lượng!');
+      alert('⚠️ The product has been discounted, you cannot change the quantity!');
     }
   }
   
   showAlertIfDiscounted(isDiscounted: boolean): void {
-    if (isDiscounted) {
-      alert('Sản phẩm đã giảm giá, bạn không thể thay đổi số lượng.');
+    if (isDiscounted && !this.hasShownAlert) {
+      this.hasShownAlert = true;
+  
+      this.snackBar.open(
+        '⚠️ The product has been discounted, you cannot change the quantity!',
+        'Close',
+        {
+          duration: 3000,
+          horizontalPosition: 'center',
+          verticalPosition: 'bottom',
+          panelClass: ['custom-snackbar']
+        }
+      );
+  
+      setTimeout(() => {
+        this.hasShownAlert = false;
+      }, 3000);
     }
   }  
-  
+   
 }

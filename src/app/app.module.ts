@@ -34,6 +34,7 @@ import { PromotionsComponent } from './components/promotions/promotions.componen
 import { FlashsaleManagementComponent } from './components/flashsale/flashsale.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ReportComponent } from './components/report/report.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 // Import chat component mới
 import { ChatComponent } from './components/chat/chat.component';
@@ -73,7 +74,8 @@ import { RouterModule } from '@angular/router';
     ReportComponent,
 
     ChatComponent, // Thêm component chat mới
-    QuillModule.forRoot()
+    QuillModule.forRoot(),
+    MatSnackBarModule
   ],
   providers: [
     provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
